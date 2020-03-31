@@ -10,6 +10,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const awsServerlessExpressMiddleware = require("aws-serverless-express/middleware");
 
+const { searchHandler } = require("./SearchHandler");
+
 const app = express();
 app.use(bodyParser.json());
 app.use(awsServerlessExpressMiddleware.eventContext());
@@ -20,9 +22,7 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.get("/search", function(req, res) {
-  res.json({success: 'get call succeed!', url: req.url});
-});
+app.get("/search", searchHandler);
 
 app.listen(3000, function() {
   console.log("App started");
