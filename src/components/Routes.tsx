@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Switch, Route } from "react-router-dom";
-import SignInPage from "./SignInPage";
-import UserPage from "./UserPage";
+
+const UserPage = lazy(() => import("./UserPage"));
+const SignInPage = lazy(() => import("./SignInPage"));
 
 export const Routes: React.FC = () => {
   return (
-    <Switch>
-      <Route exact path="/" component={UserPage} />
-      <Route exact path="/signin" component={SignInPage} />
-      <Route path="*" component={SignInPage} />
-    </Switch>
+    <Suspense fallback={<div>loading...</div>}>
+      <Switch>
+        <Route exact path="/" component={UserPage} />
+        <Route exact path="/signin" component={SignInPage} />
+        <Route path="*" component={SignInPage} />
+      </Switch>
+    </Suspense>
   );
 };
 
