@@ -1,20 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Hub } from "@aws-amplify/core";
 import { useHistory } from "react-router-dom";
 import './App.css';
 import { currentSession } from "./amplify/Auth";
 import { Routes } from "./components/Routes";
+import { User, emptyUser } from "./model/User";
+import { UserContext } from "./context/UserContext";
 
-type User = {
-  id: string;
-  name: string;
-}
-const emptyUser = {
-  id: "",
-  name: "",
-};
 export const App: React.FC = () => {
   const [user, setUser] = useState<User>(emptyUser);
+  const value = useMemo(() => ({ user, setUser}), [user, setUser]);
+
   const history = useHistory();
 
   const setLoginUser = async () => {
@@ -48,8 +44,10 @@ export const App: React.FC = () => {
   }, [history]);
 
   return (
-    <div className="App">
-      <Routes />
-    </div>
+    <UserContext.Provider value={value}>
+      <div className="App">
+          <Routes />
+      </div>
+    </UserContext.Provider>
   );
 };
