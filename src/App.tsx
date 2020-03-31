@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Amplify, { Hub } from "@aws-amplify/core";
-import Auth, { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
-import awsmobile from "./aws-exports";
+import { Hub } from "@aws-amplify/core";
 import './App.css';
-
-Amplify.configure(awsmobile);
+import { currentSession, signInGoogle, signOut } from "./amplify/Auth";
 
 type User = {
   id: string;
@@ -19,7 +16,7 @@ export const App: React.FC = () => {
 
   const setLoginUser = async () => {
     try {
-      const session = await Auth.currentSession();
+      const session = await currentSession();
       const { email, sub } = session.getIdToken().payload;
       setUser({
         id: sub,
@@ -44,14 +41,6 @@ export const App: React.FC = () => {
     });
     setLoginUser();
   }, []);
-
-  const signInGoogle = async () => {
-    await Auth.federatedSignIn({ provider: CognitoHostedUIIdentityProvider.Google });
-  };
-
-  const signOut = async () => {
-    await Auth.signOut();
-  };
 
   return (
     <div className="App">
