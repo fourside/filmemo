@@ -1,0 +1,40 @@
+{
+    "paths": [
+        {
+            "name": "/search",
+            "lambdaFunction": "searchomdb",
+            "privacy": {
+                "private": true,
+                "auth": [
+                    "/POST",
+                    "/GET",
+                    "/PUT",
+                    "/PATCH"
+                ]
+            }
+        }
+    ],
+    "resourceName": "searchomdb",
+    "apiName": "searchomdb",
+    "functionArns": [
+        {
+            "lambdaFunction": "searchomdb"
+        }
+    ],
+    "privacy": {
+        "auth": 1,
+        "unauth": 0,
+        "authRoleName": "amplify-filmemo-dev-194214-authRole",
+        "unAuthRoleName": "amplify-filmemo-dev-194214-unauthRole"
+    },
+    "dependsOn": [
+        {
+            "category": "function",
+            "resourceName": "searchomdb",
+            "attributes": [
+                "Name",
+                "Arn"
+            ]
+        }
+    ]
+}
