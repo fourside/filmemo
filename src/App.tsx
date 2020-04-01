@@ -6,6 +6,7 @@ import { currentSession } from "./amplify/Auth";
 import { Routes } from "./components/Routes";
 import { User, emptyUser } from "./model/User";
 import { UserContext } from "./context/UserContext";
+import { Header } from "./components/Header";
 
 export const App: React.FC = () => {
   const [user, setUser] = useState<User>(emptyUser);
@@ -46,7 +47,8 @@ export const App: React.FC = () => {
   return (
     <UserContext.Provider value={value}>
       <div className="App">
-          <Routes />
+        <Header />
+        <Routes />
       </div>
     </UserContext.Provider>
   );
