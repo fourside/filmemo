@@ -1,7 +1,23 @@
 import React, { useState, FormEvent, ChangeEvent } from 'react';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import SearchIcon from '@material-ui/icons/Search';
+import Typography from "@material-ui/core/Typography";
 import { search } from '../amplify/API';
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+    },
+  }),
+);
+
 export const SearchForm: React.FC = () => {
+  const classes = useStyles();
   const [form, setForm] = useState({
     title: "",
     processing: false,
@@ -45,9 +61,10 @@ export const SearchForm: React.FC = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={form.title} name="title" onChange={handleChange} />
-      <button>search</button>
+    <form className={classes.root} onSubmit={handleSubmit}>
+      <Typography>Search films by title</Typography>
+      <TextField value={form.title} id="title" label="Title" name="title" onChange={handleChange} />
+      <Button variant="contained" type="submit" startIcon={<SearchIcon />}>Search</Button>
       <pre>{JSON.stringify(result, null, 2)}</pre>
     </form>
   );
