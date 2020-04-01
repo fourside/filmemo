@@ -21,19 +21,25 @@ export const SearchForm: React.FC = () => {
   const [form, setForm] = useState({
     title: "",
     processing: false,
+    valid: false,
   });
   const [result, setResult] = useState({});
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
+    const valid = !!value;
     setForm({
       ...form,
       title: value,
+      valid,
     });
   };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    if (!form.valid) {
+      return;
+    }
     setForm({
       ...form,
       processing: true,
@@ -53,6 +59,7 @@ export const SearchForm: React.FC = () => {
       ...form,
       title: "",
       processing: false,
+      valid: false,
     });
   };
 
@@ -64,7 +71,7 @@ export const SearchForm: React.FC = () => {
     <form className={classes.root} onSubmit={handleSubmit}>
       <Typography>Search films by title</Typography>
       <TextField value={form.title} id="title" label="Title" name="title" onChange={handleChange} />
-      <Button variant="contained" type="submit" startIcon={<SearchIcon />}>Search</Button>
+      <Button variant="contained" type="submit" disabled={!form.valid || form.processing} startIcon={<SearchIcon />}>Search</Button>
       <pre>{JSON.stringify(result, null, 2)}</pre>
     </form>
   );
