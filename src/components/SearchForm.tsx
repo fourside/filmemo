@@ -4,7 +4,6 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import SearchIcon from '@material-ui/icons/Search';
 import Typography from "@material-ui/core/Typography";
-import { search } from '../amplify/API';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,14 +15,16 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-export const SearchForm: React.FC = () => {
+interface Props {
+  processing: boolean;
+  handleSearch: (title: string) => void;
+}
+export const SearchForm: React.FC<Props> = (props) => {
   const classes = useStyles();
   const [form, setForm] = useState({
     title: "",
-    processing: false,
     valid: false,
   });
-  const [result, setResult] = useState({});
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -35,44 +36,24 @@ export const SearchForm: React.FC = () => {
     });
   };
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     if (!form.valid) {
       return;
     }
-    setForm({
-      ...form,
-      processing: true,
-    });
     try {
-      const result = await search(form.title);
-      setResult(result);
+      props.handleSearch(form.title);
     } catch (err) {
       console.log(err);
-      setForm({
-        ...form,
-        processing: false,
-      });
       return;
     }
-    setForm({
-      ...form,
-      title: "",
-      processing: false,
-      valid: false,
-    });
   };
-
-  if (form.processing) {
-    return <div>searching...</div>
-  }
 
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <Typography>Search films by title</Typography>
       <TextField value={form.title} id="title" label="Title" name="title" onChange={handleChange} />
-      <Button variant="contained" type="submit" disabled={!form.valid || form.processing} startIcon={<SearchIcon />}>Search</Button>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
+      <Button variant="contained" type="submit" disabled={!form.valid || props.processing} startIcon={<SearchIcon />}>Search</Button>
     </form>
   );
 };
