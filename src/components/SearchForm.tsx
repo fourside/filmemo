@@ -52,7 +52,7 @@ export const SearchForm: React.FC<Props> = (props) => {
   return (
     <form className={classes.root} onSubmit={handleSubmit}>
       <Typography>Search films by title</Typography>
-      <TextField value={form.title} id="title" label="Title" name="title" onChange={handleChange} />
+      <TextField value={form.title} autoFocus id="title" label="Title" name="title" onChange={handleChange} />
       <Button variant="contained" type="submit" disabled={!form.valid || props.processing} startIcon={<SearchIcon />}>Search</Button>
     </form>
   );
