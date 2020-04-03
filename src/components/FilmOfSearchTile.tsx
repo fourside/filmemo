@@ -8,9 +8,16 @@ import { FilmOfSearch } from '../model/FilmOfSearch';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    tile: {
+      marginBottom: "10px",
+      marginRight: "20px",
+    },
     icon: {
       color: 'rgba(255, 255, 255, 0.54)',
     },
+    img: {
+      width: "200px",
+    }
   }),
 );
 
@@ -20,8 +27,8 @@ interface Props {
 export const FilmOfSearchTile: React.FC<Props> = (props) => {
   const classes = useStyles();
   return (
-    <GridListTile>
-      <img src={props.film.Poster} alt={props.film.Title} />
+    <GridListTile className={classes.tile}>
+      <img src={props.film.Poster} alt={props.film.Title} className={classes.img} />
       <GridListTileBar
         title={props.film.Title}
         actionIcon={
