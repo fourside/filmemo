@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme: Theme) =>
     title: {
       flexGrow: 1,
     },
+    headerMenuTitle: {
+      marginLeft: "0.25em",
+      marginRight: "1em",
+    }
   })
 );
 
@@ -44,18 +48,18 @@ export const Header: React.FC = () => {
           {user.id ? (
             <>
               <AccountCircle />
-              <Typography variant="subtitle2">
+              <Typography variant="subtitle2" className={classes.headerMenuTitle}>
                 {user.name}
               </Typography>
               <Input />
-              <Typography variant="subtitle2">
+              <Typography variant="subtitle2" className={classes.headerMenuTitle}>
                 <Link href="#" onClick={handleClickSignOut} color="inherit">Sign out</Link>
               </Typography>
             </>
           ) : (
             <>
               <Input />
-              <Typography variant="subtitle2">
+              <Typography variant="subtitle2" className={classes.headerMenuTitle}>
                 <Link href="#" onClick={handleClickSignIn} color="inherit">Sign in</Link>
               </Typography>
             </>
