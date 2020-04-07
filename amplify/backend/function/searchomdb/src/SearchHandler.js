@@ -4,12 +4,20 @@ const omdbUrl = "http://www.omdbapi.com/";
 const apiKey = process.env.APIKEY;
 
 async function searchHandler(req, res) {
-  const { title } = req.query;
-  const url = `${omdbUrl}?s=${title}&apikey=${apiKey}`;
   try {
     if (!apiKey) {
       throw new Error("not prepared");
     }
+    const { title, imdbID } = req.query;
+    let url;
+    if (title) {
+      url = `${omdbUrl}?s=${title}&apikey=${apiKey}`;
+    } else if (imdbID) {
+      url = `${omdbUrl}?i=${imdbID}&apikey=${apiKey}`;
+    } else {
+      throw new Error("pass title or imdbID");
+    }
+
     const result = await httpClient.get(url);
     res.json(result);
     console.log("success");
