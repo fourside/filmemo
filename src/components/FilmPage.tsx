@@ -6,6 +6,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import Link from "@material-ui/core/Link";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faImdb } from '@fortawesome/free-brands-svg-icons'
 
 import { searchById } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
@@ -37,6 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
+const IMDB_URL = "https://www.imdb.com/title/";
 interface Props extends RouteComponentProps<{ imdbID: string }> {
 }
 const FilmPage: React.FC<Props> = (props) => {
@@ -67,7 +71,6 @@ const FilmPage: React.FC<Props> = (props) => {
           <Typography component="h5" variant="h5">
             {film.Title}
           </Typography>
-
           <Card className={classes.details} elevation={0}>
             <DetailItem title={"Released"} value={film.Released} />
             <DetailItem title={"Genre"} value={film.Genre} />
@@ -76,9 +79,15 @@ const FilmPage: React.FC<Props> = (props) => {
             <DetailItem title={"Actors"} value={film.Actors} />
             <DetailItem title={"Runtime"} value={film.Runtime} />
             <DetailItem title={"Production"} value={film.Production} />
-            <DetailItem title={"imdbRating"} value={film.imdbRating} />
+            <DetailItem title={"Imdb Rating"} value={film.imdbRating} />
           </Card>
+          <Typography variant="body1">
+            <Link href={`${IMDB_URL}${film.imdbID}/`} target="_blank" rel="noopener noreferrer">
+              <FontAwesomeIcon icon={faImdb} /> go to imdb
+            </Link>
+          </Typography>
         </CardContent>
+
       </Card>
 
     </Container>
