@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Container from '@material-ui/core/Container';
+import { useHistory } from "react-router-dom";
 import { SearchForm } from "./SearchForm";
 import { searchByTitle } from '../amplify/API';
 import { FilmList } from './FilmList';
 import { Film } from '../model/Film';
 import { ErrorAlert } from "./ErrorAlert";
+import { getLoginUser } from '../amplify/Auth';
 
 const UserPage: React.FC = () => {
   const [search, setSearch] = useState({
@@ -12,6 +14,16 @@ const UserPage: React.FC = () => {
     processing: false,
     error: "",
   });
+  const history = useHistory();
+
+  useEffect(() => {
+    (async () => {
+      const user = await getLoginUser();
+      if (!user.id) {
+        history.push("/signin");
+      }
+    })();
+  }, [history]);
 
   const handleSearch = async (title: string) => {
     setSearch({

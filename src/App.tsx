@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Hub } from "@aws-amplify/core";
 import { useHistory } from "react-router-dom";
 import './App.css';
-import { currentSession } from "./amplify/Auth";
+import { getLoginUser } from "./amplify/Auth";
 import { Routes } from "./components/Routes";
 import { User, emptyUser } from "./model/User";
 import { UserContext } from "./context/UserContext";
@@ -16,12 +16,10 @@ export const App: React.FC = () => {
 
   const setLoginUser = async () => {
     try {
-      const session = await currentSession();
-      const { email, sub } = session.getIdToken().payload;
-      setUser({
-        id: sub,
-        name: email,
-      });
+      const user = await getLoginUser();
+      if (user.id) {
+        setUser(user);
+      }
     } catch (err) {
       console.log(err);
     }
