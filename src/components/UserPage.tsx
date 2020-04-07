@@ -6,21 +6,28 @@ import { FilmList } from './FilmList';
 import { Film } from '../model/Film';
 
 const UserPage: React.FC = () => {
-  const [films, setFilms] = useState<Film[]>([])
-  const [processing, setProcessing] = useState(false);
+  const [search, setSearch] = useState({
+    films: [] as Film[],
+    processing: false,
+  });
 
   const handleSearch = async (title: string) => {
-    setProcessing(true);
+    setSearch({
+      ...search,
+      processing: true,
+    });
     const result = await searchByTitle(title);
     const films = result.Search as Film[];
-    setFilms(films);
-    setProcessing(false);
+    setSearch({
+      films,
+      processing: false,
+    });
   };
 
   return (
     <Container maxWidth="lg">
-      <SearchForm processing={processing} handleSearch={handleSearch} />
-      <FilmList processing={processing} films={films} />
+      <SearchForm processing={search.processing} handleSearch={handleSearch} />
+      <FilmList processing={search.processing} films={search.films} />
     </Container>
   );
 };
