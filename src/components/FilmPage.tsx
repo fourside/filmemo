@@ -14,6 +14,7 @@ import { searchById } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
+import { ActionCard } from "./ActionCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -81,6 +82,7 @@ const FilmPage: React.FC<Props> = (props) => {
             <DetailItem title={"Production"} value={film.Production} />
             <DetailItem title={"Imdb Rating"} value={film.imdbRating} />
           </Card>
+          <ActionCard />
           <Typography variant="body1">
             <Link href={`${IMDB_URL}${film.imdbID}/`} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faImdb} /> go to imdb
