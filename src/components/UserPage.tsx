@@ -1,26 +1,27 @@
 import React, { useState } from 'react';
+import Container from '@material-ui/core/Container';
 import { SearchForm } from "./SearchForm";
-import { search } from '../amplify/API';
+import { searchByTitle } from '../amplify/API';
 import { FilmList } from './FilmList';
-import { FilmOfSearch } from '../model/FilmOfSearch';
+import { Film } from '../model/Film';
 
 const UserPage: React.FC = () => {
-  const [films, setFilms] = useState<FilmOfSearch[]>([])
+  const [films, setFilms] = useState<Film[]>([])
   const [processing, setProcessing] = useState(false);
 
   const handleSearch = async (title: string) => {
     setProcessing(true);
-    const result = await search(title);
-    const films = result.Search as FilmOfSearch[];
+    const result = await searchByTitle(title);
+    const films = result.Search as Film[];
     setFilms(films);
     setProcessing(false);
   };
 
   return (
-    <>
+    <Container maxWidth="lg">
       <SearchForm processing={processing} handleSearch={handleSearch} />
       <FilmList processing={processing} films={films} />
-    </>
+    </Container>
   );
 };
 

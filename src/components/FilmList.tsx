@@ -1,10 +1,10 @@
 import React from 'react';
 import GridList from '@material-ui/core/GridList';
-import { FilmOfSearch } from '../model/FilmOfSearch';
-import { FilmOfSearchTile } from './FilmOfSearchTile';
+import { Film } from '../model/Film';
+import { FilmTile } from './FilmTile';
 
 interface Props {
-  films: FilmOfSearch[];
+  films: Film[];
   processing: boolean;
 }
 export const FilmList: React.FC<Props> = (props) => {
@@ -15,7 +15,7 @@ export const FilmList: React.FC<Props> = (props) => {
   return (
     <GridList>
       {props.films.map(film => (
-        <FilmOfSearchTile key={film.Title} film={film} />
+        <FilmTile key={film.Title} film={film} />
       ))}
     </GridList>
   );

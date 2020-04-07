@@ -4,7 +4,12 @@ API.configure(awsmobile);
 
 const apiName = "searchomdb";
 
-export async function search(title: string) {
+export async function searchByTitle(title: string) {
   const path = `/search?title=${title}`;
+  return await API.get(apiName, path, {});
+}
+
+export async function searchById(imdbID: string) {
+  const path = `/search?imdbID=${imdbID}`;
   return await API.get(apiName, path, {});
 }
