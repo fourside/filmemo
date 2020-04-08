@@ -2,21 +2,17 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateTaskInput = {
+export type CreateStockInput = {
   id?: string | null,
-  title: string,
-  description?: string | null,
-  status?: string | null,
+  imdbID: string,
   _version?: number | null,
 };
 
-export type ModelTaskConditionInput = {
-  title?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  status?: ModelStringInput | null,
-  and?: Array< ModelTaskConditionInput | null > | null,
-  or?: Array< ModelTaskConditionInput | null > | null,
-  not?: ModelTaskConditionInput | null,
+export type ModelStockConditionInput = {
+  imdbID?: ModelStringInput | null,
+  and?: Array< ModelStockConditionInput | null > | null,
+  or?: Array< ModelStockConditionInput | null > | null,
+  not?: ModelStockConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -59,51 +55,23 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type UpdateTaskInput = {
+export type UpdateStockInput = {
   id: string,
-  title?: string | null,
-  description?: string | null,
-  status?: string | null,
+  imdbID?: string | null,
   _version?: number | null,
 };
 
-export type DeleteTaskInput = {
+export type DeleteStockInput = {
   id?: string | null,
   _version?: number | null,
 };
 
-export type CreatePrivateNoteInput = {
-  id?: string | null,
-  content: string,
-  _version?: number | null,
-};
-
-export type ModelPrivateNoteConditionInput = {
-  content?: ModelStringInput | null,
-  and?: Array< ModelPrivateNoteConditionInput | null > | null,
-  or?: Array< ModelPrivateNoteConditionInput | null > | null,
-  not?: ModelPrivateNoteConditionInput | null,
-};
-
-export type UpdatePrivateNoteInput = {
-  id: string,
-  content?: string | null,
-  _version?: number | null,
-};
-
-export type DeletePrivateNoteInput = {
-  id?: string | null,
-  _version?: number | null,
-};
-
-export type ModelTaskFilterInput = {
+export type ModelStockFilterInput = {
   id?: ModelIDInput | null,
-  title?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  status?: ModelStringInput | null,
-  and?: Array< ModelTaskFilterInput | null > | null,
-  or?: Array< ModelTaskFilterInput | null > | null,
-  not?: ModelTaskFilterInput | null,
+  imdbID?: ModelStringInput | null,
+  and?: Array< ModelStockFilterInput | null > | null,
+  or?: Array< ModelStockFilterInput | null > | null,
+  not?: ModelStockFilterInput | null,
 };
 
 export type ModelIDInput = {
@@ -122,78 +90,22 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type ModelPrivateNoteFilterInput = {
-  id?: ModelIDInput | null,
-  content?: ModelStringInput | null,
-  and?: Array< ModelPrivateNoteFilterInput | null > | null,
-  or?: Array< ModelPrivateNoteFilterInput | null > | null,
-  not?: ModelPrivateNoteFilterInput | null,
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
+export type CreateStockMutationVariables = {
+  input: CreateStockInput,
+  condition?: ModelStockConditionInput | null,
 };
 
-export type CreateTaskMutationVariables = {
-  input: CreateTaskInput,
-  condition?: ModelTaskConditionInput | null,
-};
-
-export type CreateTaskMutation = {
-  createTask:  {
-    __typename: "Task",
+export type CreateStockMutation = {
+  createStock:  {
+    __typename: "Stock",
     id: string,
-    title: string,
-    description: string | null,
-    status: string | null,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type UpdateTaskMutationVariables = {
-  input: UpdateTaskInput,
-  condition?: ModelTaskConditionInput | null,
-};
-
-export type UpdateTaskMutation = {
-  updateTask:  {
-    __typename: "Task",
-    id: string,
-    title: string,
-    description: string | null,
-    status: string | null,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type DeleteTaskMutationVariables = {
-  input: DeleteTaskInput,
-  condition?: ModelTaskConditionInput | null,
-};
-
-export type DeleteTaskMutation = {
-  deleteTask:  {
-    __typename: "Task",
-    id: string,
-    title: string,
-    description: string | null,
-    status: string | null,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type CreatePrivateNoteMutationVariables = {
-  input: CreatePrivateNoteInput,
-  condition?: ModelPrivateNoteConditionInput | null,
-};
-
-export type CreatePrivateNoteMutation = {
-  createPrivateNote:  {
-    __typename: "PrivateNote",
-    id: string,
-    content: string,
+    imdbID: string,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -201,16 +113,16 @@ export type CreatePrivateNoteMutation = {
   } | null,
 };
 
-export type UpdatePrivateNoteMutationVariables = {
-  input: UpdatePrivateNoteInput,
-  condition?: ModelPrivateNoteConditionInput | null,
+export type UpdateStockMutationVariables = {
+  input: UpdateStockInput,
+  condition?: ModelStockConditionInput | null,
 };
 
-export type UpdatePrivateNoteMutation = {
-  updatePrivateNote:  {
-    __typename: "PrivateNote",
+export type UpdateStockMutation = {
+  updateStock:  {
+    __typename: "Stock",
     id: string,
-    content: string,
+    imdbID: string,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -218,16 +130,16 @@ export type UpdatePrivateNoteMutation = {
   } | null,
 };
 
-export type DeletePrivateNoteMutationVariables = {
-  input: DeletePrivateNoteInput,
-  condition?: ModelPrivateNoteConditionInput | null,
+export type DeleteStockMutationVariables = {
+  input: DeleteStockInput,
+  condition?: ModelStockConditionInput | null,
 };
 
-export type DeletePrivateNoteMutation = {
-  deletePrivateNote:  {
-    __typename: "PrivateNote",
+export type DeleteStockMutation = {
+  deleteStock:  {
+    __typename: "Stock",
     id: string,
-    content: string,
+    imdbID: string,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -235,86 +147,20 @@ export type DeletePrivateNoteMutation = {
   } | null,
 };
 
-export type SyncTasksQueryVariables = {
-  filter?: ModelTaskFilterInput | null,
+export type SyncStocksQueryVariables = {
+  filter?: ModelStockFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
   lastSync?: number | null,
 };
 
-export type SyncTasksQuery = {
-  syncTasks:  {
-    __typename: "ModelTaskConnection",
+export type SyncStocksQuery = {
+  syncStocks:  {
+    __typename: "ModelStockConnection",
     items:  Array< {
-      __typename: "Task",
+      __typename: "Stock",
       id: string,
-      title: string,
-      description: string | null,
-      status: string | null,
-      _version: number,
-      _deleted: boolean | null,
-      _lastChangedAt: number,
-    } | null > | null,
-    nextToken: string | null,
-    startedAt: number | null,
-  } | null,
-};
-
-export type GetTaskQueryVariables = {
-  id: string,
-};
-
-export type GetTaskQuery = {
-  getTask:  {
-    __typename: "Task",
-    id: string,
-    title: string,
-    description: string | null,
-    status: string | null,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type ListTasksQueryVariables = {
-  filter?: ModelTaskFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-};
-
-export type ListTasksQuery = {
-  listTasks:  {
-    __typename: "ModelTaskConnection",
-    items:  Array< {
-      __typename: "Task",
-      id: string,
-      title: string,
-      description: string | null,
-      status: string | null,
-      _version: number,
-      _deleted: boolean | null,
-      _lastChangedAt: number,
-    } | null > | null,
-    nextToken: string | null,
-    startedAt: number | null,
-  } | null,
-};
-
-export type SyncPrivateNotesQueryVariables = {
-  filter?: ModelPrivateNoteFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncPrivateNotesQuery = {
-  syncPrivateNotes:  {
-    __typename: "ModelPrivateNoteConnection",
-    items:  Array< {
-      __typename: "PrivateNote",
-      id: string,
-      content: string,
+      imdbID: string,
       _version: number,
       _deleted: boolean | null,
       _lastChangedAt: number,
@@ -325,15 +171,15 @@ export type SyncPrivateNotesQuery = {
   } | null,
 };
 
-export type GetPrivateNoteQueryVariables = {
+export type GetStockQueryVariables = {
   id: string,
 };
 
-export type GetPrivateNoteQuery = {
-  getPrivateNote:  {
-    __typename: "PrivateNote",
+export type GetStockQuery = {
+  getStock:  {
+    __typename: "Stock",
     id: string,
-    content: string,
+    imdbID: string,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -341,19 +187,19 @@ export type GetPrivateNoteQuery = {
   } | null,
 };
 
-export type ListPrivateNotesQueryVariables = {
-  filter?: ModelPrivateNoteFilterInput | null,
+export type ListStocksQueryVariables = {
+  filter?: ModelStockFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListPrivateNotesQuery = {
-  listPrivateNotes:  {
-    __typename: "ModelPrivateNoteConnection",
+export type ListStocksQuery = {
+  listStocks:  {
+    __typename: "ModelStockConnection",
     items:  Array< {
-      __typename: "PrivateNote",
+      __typename: "Stock",
       id: string,
-      content: string,
+      imdbID: string,
       _version: number,
       _deleted: boolean | null,
       _lastChangedAt: number,
@@ -364,54 +210,40 @@ export type ListPrivateNotesQuery = {
   } | null,
 };
 
-export type OnCreateTaskSubscription = {
-  onCreateTask:  {
-    __typename: "Task",
-    id: string,
-    title: string,
-    description: string | null,
-    status: string | null,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
+export type StocksByImdbIdQueryVariables = {
+  imdbID?: string | null,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelStockFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type StocksByImdbIdQuery = {
+  stocksByImdbID:  {
+    __typename: "ModelStockConnection",
+    items:  Array< {
+      __typename: "Stock",
+      id: string,
+      imdbID: string,
+      _version: number,
+      _deleted: boolean | null,
+      _lastChangedAt: number,
+      owner: string | null,
+    } | null > | null,
+    nextToken: string | null,
+    startedAt: number | null,
   } | null,
 };
 
-export type OnUpdateTaskSubscription = {
-  onUpdateTask:  {
-    __typename: "Task",
-    id: string,
-    title: string,
-    description: string | null,
-    status: string | null,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type OnDeleteTaskSubscription = {
-  onDeleteTask:  {
-    __typename: "Task",
-    id: string,
-    title: string,
-    description: string | null,
-    status: string | null,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
-  } | null,
-};
-
-export type OnCreatePrivateNoteSubscriptionVariables = {
+export type OnCreateStockSubscriptionVariables = {
   owner: string,
 };
 
-export type OnCreatePrivateNoteSubscription = {
-  onCreatePrivateNote:  {
-    __typename: "PrivateNote",
+export type OnCreateStockSubscription = {
+  onCreateStock:  {
+    __typename: "Stock",
     id: string,
-    content: string,
+    imdbID: string,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -419,15 +251,15 @@ export type OnCreatePrivateNoteSubscription = {
   } | null,
 };
 
-export type OnUpdatePrivateNoteSubscriptionVariables = {
+export type OnUpdateStockSubscriptionVariables = {
   owner: string,
 };
 
-export type OnUpdatePrivateNoteSubscription = {
-  onUpdatePrivateNote:  {
-    __typename: "PrivateNote",
+export type OnUpdateStockSubscription = {
+  onUpdateStock:  {
+    __typename: "Stock",
     id: string,
-    content: string,
+    imdbID: string,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,
@@ -435,15 +267,15 @@ export type OnUpdatePrivateNoteSubscription = {
   } | null,
 };
 
-export type OnDeletePrivateNoteSubscriptionVariables = {
+export type OnDeleteStockSubscriptionVariables = {
   owner: string,
 };
 
-export type OnDeletePrivateNoteSubscription = {
-  onDeletePrivateNote:  {
-    __typename: "PrivateNote",
+export type OnDeleteStockSubscription = {
+  onDeleteStock:  {
+    __typename: "Stock",
     id: string,
-    content: string,
+    imdbID: string,
     _version: number,
     _deleted: boolean | null,
     _lastChangedAt: number,

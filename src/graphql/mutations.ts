@@ -2,95 +2,38 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
 
-export const createTask = /* GraphQL */ `
-  mutation CreateTask(
-    $input: CreateTaskInput!
-    $condition: ModelTaskConditionInput
+export const createStock = /* GraphQL */ `
+  mutation CreateStock(
+    $input: CreateStockInput!
+    $condition: ModelStockConditionInput
   ) {
-    createTask(input: $input, condition: $condition) {
+    createStock(input: $input, condition: $condition) {
       id
-      title
-      description
-      status
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const updateTask = /* GraphQL */ `
-  mutation UpdateTask(
-    $input: UpdateTaskInput!
-    $condition: ModelTaskConditionInput
-  ) {
-    updateTask(input: $input, condition: $condition) {
-      id
-      title
-      description
-      status
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const deleteTask = /* GraphQL */ `
-  mutation DeleteTask(
-    $input: DeleteTaskInput!
-    $condition: ModelTaskConditionInput
-  ) {
-    deleteTask(input: $input, condition: $condition) {
-      id
-      title
-      description
-      status
-      _version
-      _deleted
-      _lastChangedAt
-    }
-  }
-`;
-export const createPrivateNote = /* GraphQL */ `
-  mutation CreatePrivateNote(
-    $input: CreatePrivateNoteInput!
-    $condition: ModelPrivateNoteConditionInput
-  ) {
-    createPrivateNote(input: $input, condition: $condition) {
-      id
-      content
-      _version
-      _deleted
-      _lastChangedAt
+      imdbID
       owner
     }
   }
 `;
-export const updatePrivateNote = /* GraphQL */ `
-  mutation UpdatePrivateNote(
-    $input: UpdatePrivateNoteInput!
-    $condition: ModelPrivateNoteConditionInput
+export const updateStock = /* GraphQL */ `
+  mutation UpdateStock(
+    $input: UpdateStockInput!
+    $condition: ModelStockConditionInput
   ) {
-    updatePrivateNote(input: $input, condition: $condition) {
+    updateStock(input: $input, condition: $condition) {
       id
-      content
-      _version
-      _deleted
-      _lastChangedAt
+      imdbID
       owner
     }
   }
 `;
-export const deletePrivateNote = /* GraphQL */ `
-  mutation DeletePrivateNote(
-    $input: DeletePrivateNoteInput!
-    $condition: ModelPrivateNoteConditionInput
+export const deleteStock = /* GraphQL */ `
+  mutation DeleteStock(
+    $input: DeleteStockInput!
+    $condition: ModelStockConditionInput
   ) {
-    deletePrivateNote(input: $input, condition: $condition) {
+    deleteStock(input: $input, condition: $condition) {
       id
-      content
-      _version
-      _deleted
-      _lastChangedAt
+      imdbID
       owner
     }
   }
