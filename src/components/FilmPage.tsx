@@ -46,38 +46,65 @@ const useStyles = makeStyles((theme: Theme) =>
 const IMDB_URL = "https://www.imdb.com/title/";
 interface Props extends RouteComponentProps<{ imdbID: string }> {
 }
+interface State {
+  film?: FilmDetail;
+  stock?: Stock;
+  processing: boolean;
+}
 const FilmPage: React.FC<Props> = (props) => {
   const { imdbID } = props.match.params;
-  const [film, setFilm] = useState<FilmDetail | undefined>(undefined);
-  const [stock, setStock] = useState<Stock | undefined>(undefined);
-  const [processing, setProcessing] = useState(false);
+  const [state, setState] = useState<State>({
+    film: undefined,
+    stock: undefined,
+    processing: false,
+  });
   const classes = useStyles();
 
   useEffect(() => {
     (async () => {
-      const film = await searchById(imdbID);
-      setFilm(film);
-
-      setProcessing(true);
-      const stock = await getStock(imdbID);
-      setStock(stock);
-      setProcessing(false);
+      setState(prev => {
+        return {
+          ...prev,
+          processing: true,
+        };
+      });
+      const results = await Promise.all([
+        searchById(imdbID),
+        getStock(imdbID),
+      ]);
+      setState(prev => {
+        return {
+          ...prev,
+          film: results[0],
+          stock: results[1],
+          processing: false,
+        };
+      });
     })();
   }, [imdbID]);
 
   const handleAddStock = async () => {
     try {
-      setProcessing(true);
+      setState({
+        ...state,
+        processing: true,
+      });
       const stock = await createStock(imdbID);
-      setStock(stock);
+      setState({
+        ...state,
+        stock,
+        processing: false,
+      });
     } catch (err) {
       console.log(err);
-    } finally {
-      setProcessing(false);
+      setState({
+        ...state,
+        processing: false,
+      });
     }
   };
 
-  if (!film) {
+  if (!state.film) {
     return <Loading />
   }
 
@@ -86,30 +113,30 @@ const FilmPage: React.FC<Props> = (props) => {
       <Card className={classes.card}>
         <CardMedia
           className={classes.cover}
-          image={film.Poster}
-          title={film.Title}
+          image={state.film.Poster}
+          title={state.film.Title}
         />
         <CardContent className={classes.content}>
           <Typography component="h5" variant="h5">
-            {film.Title}
+            {state.film.Title}
           </Typography>
           <Card className={classes.details} elevation={0}>
-            <DetailItem title={"Released"} value={film.Released} />
-            <DetailItem title={"Genre"} value={film.Genre} />
-            <DetailItem title={"Director"} value={film.Director} />
-            <DetailItem title={"Writer"} value={film.Writer} />
-            <DetailItem title={"Actors"} value={film.Actors} />
-            <DetailItem title={"Runtime"} value={film.Runtime} />
-            <DetailItem title={"Production"} value={film.Production} />
-            <DetailItem title={"Imdb Rating"} value={film.imdbRating} />
+            <DetailItem title={"Released"} value={state.film.Released} />
+            <DetailItem title={"Genre"} value={state.film.Genre} />
+            <DetailItem title={"Director"} value={state.film.Director} />
+            <DetailItem title={"Writer"} value={state.film.Writer} />
+            <DetailItem title={"Actors"} value={state.film.Actors} />
+            <DetailItem title={"Runtime"} value={state.film.Runtime} />
+            <DetailItem title={"Production"} value={state.film.Production} />
+            <DetailItem title={"Imdb Rating"} value={state.film.imdbRating} />
           </Card>
           <ActionCard
             handleAddStock={handleAddStock}
-            hasStock={!!stock}
-            processing={processing}
+            hasStock={!!state.stock}
+            processing={state.processing}
           />
           <Typography variant="body1">
-            <Link href={`${IMDB_URL}${film.imdbID}/`} target="_blank" rel="noopener noreferrer">
+            <Link href={`${IMDB_URL}${state.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faImdb} /> go to imdb
             </Link>
           </Typography>
