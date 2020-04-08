@@ -2,22 +2,22 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
 
-export const getStock = /* GraphQL */ `
-  query GetStock($id: ID!) {
-    getStock(id: $id) {
+export const getBookmark = /* GraphQL */ `
+  query GetBookmark($id: ID!) {
+    getBookmark(id: $id) {
       id
       imdbID
       owner
     }
   }
 `;
-export const listStocks = /* GraphQL */ `
-  query ListStocks(
-    $filter: ModelStockFilterInput
+export const listBookmarks = /* GraphQL */ `
+  query ListBookmarks(
+    $filter: ModelBookmarkFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listStocks(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listBookmarks(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         imdbID
@@ -27,15 +27,15 @@ export const listStocks = /* GraphQL */ `
     }
   }
 `;
-export const stocksByImdbId = /* GraphQL */ `
-  query StocksByImdbId(
+export const bookmarksByImdbId = /* GraphQL */ `
+  query BookmarksByImdbId(
     $imdbID: String
     $sortDirection: ModelSortDirection
-    $filter: ModelStockFilterInput
+    $filter: ModelBookmarkFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    stocksByImdbID(
+    bookmarksByImdbID(
       imdbID: $imdbID
       sortDirection: $sortDirection
       filter: $filter

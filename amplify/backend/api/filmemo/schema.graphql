@@ -1,7 +1,7 @@
-type Stock
+type Bookmark
   @model
   @auth(rules: [{allow: owner}])
-  @key(name: "ByImdbID", fields: ["imdbID"], queryField: "stocksByImdbID")
+  @key(name: "ByImdbID", fields: ["imdbID"], queryField: "bookmarksByImdbID")
 {
   id: ID!
   imdbID: String!

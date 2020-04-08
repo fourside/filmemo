@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
-import { Stock } from '../model/Stock';
-import { listStock } from '../amplify/API';
+import { Bookmark } from '../model/Bookmark';
+import { listBookmarks } from '../amplify/API';
 
 interface State {
-  stockList: Stock[];
+  bookmarks: Bookmark[];
   processing: boolean;
 }
-const StockPage: React.FC = () => {
+const BookmarkListPage: React.FC = () => {
   const [state, setState] = useState<State>({
-    stockList: [],
+    bookmarks: [],
     processing: false,
   });
 
@@ -22,11 +22,11 @@ const StockPage: React.FC = () => {
             processing: true,
           };
         });
-        const stockList = await listStock();
+        const bookmarks = await listBookmarks();
         setState(prev => {
           return {
             ...prev,
-            stockList,
+            bookmarks,
             processing: false,
           };
         });
@@ -44,11 +44,11 @@ const StockPage: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      {state.stockList.map(stock => (
-        <div key={stock.id}>{stock.imdbID}</div>
+      {state.bookmarks.map(bookmark => (
+        <div key={bookmark.id}>{bookmark.imdbID}</div>
       ))}
     </Container>
   );
 };
 
-export default StockPage;
+export default BookmarkListPage;

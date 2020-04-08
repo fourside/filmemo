@@ -11,12 +11,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImdb } from '@fortawesome/free-brands-svg-icons'
 
 import { searchById } from "../amplify/API";
-import { createStock, getStock, deleteStock } from "../amplify/API";
+import { createBookmark, getBookmark, deleteBookmark } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
-import { Stock } from "../model/Stock";
+import { Bookmark } from "../model/Bookmark";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,14 +48,14 @@ interface Props extends RouteComponentProps<{ imdbID: string }> {
 }
 interface State {
   film?: FilmDetail;
-  stock?: Stock;
+  bookmark?: Bookmark;
   processing: boolean;
 }
 const FilmPage: React.FC<Props> = (props) => {
   const { imdbID } = props.match.params;
   const [state, setState] = useState<State>({
     film: undefined,
-    stock: undefined,
+    bookmark: undefined,
     processing: false,
   });
   const classes = useStyles();
@@ -70,29 +70,29 @@ const FilmPage: React.FC<Props> = (props) => {
       });
       const results = await Promise.all([
         searchById(imdbID),
-        getStock(imdbID),
+        getBookmark(imdbID),
       ]);
       setState(prev => {
         return {
           ...prev,
           film: results[0],
-          stock: results[1],
+          bookmark: results[1],
           processing: false,
         };
       });
     })();
   }, [imdbID]);
 
-  const handleAddStock = async () => {
+  const handleAddBookmark = async () => {
     try {
       setState({
         ...state,
         processing: true,
       });
-      const stock = await createStock(imdbID);
+      const bookmark = await createBookmark(imdbID);
       setState({
         ...state,
-        stock,
+        bookmark,
         processing: false,
       });
     } catch (err) {
@@ -104,16 +104,16 @@ const FilmPage: React.FC<Props> = (props) => {
     }
   };
 
-  const handleRemoveStock = async () => {
+  const handleRemoveBookmark = async () => {
     try {
       setState({
         ...state,
         processing: true,
       });
-      await deleteStock(imdbID);
+      await deleteBookmark(imdbID);
       setState({
         ...state,
-        stock: undefined,
+        bookmark: undefined,
         processing: false,
       });
     } catch (err) {
@@ -152,9 +152,9 @@ const FilmPage: React.FC<Props> = (props) => {
             <DetailItem title={"Imdb Rating"} value={state.film.imdbRating} />
           </Card>
           <ActionCard
-            handleAddStock={handleAddStock}
-            handleRemoveStock={handleRemoveStock}
-            hasStock={!!state.stock}
+            handleAddBookmark={handleAddBookmark}
+            handleRemoveBookmark={handleRemoveBookmark}
+            hasBookmark={!!state.bookmark}
             processing={state.processing}
           />
           <Typography variant="body1">

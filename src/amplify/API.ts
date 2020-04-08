@@ -3,7 +3,7 @@ import awsmobile from "../aws-exports";
 import { Film, FilmDetail } from "../model/Film";
 import * as mutations from "../graphql/mutations";
 import * as queries from "../graphql/queries";
-import { Stock } from "../model/Stock";
+import { Bookmark } from "../model/Bookmark";
 
 API.configure(awsmobile);
 
@@ -27,28 +27,28 @@ export async function searchById(imdbID: string) {
   return response as FilmDetail;
 }
 
-export async function getStock(imdbID: string) {
-  const result = await API.graphql(graphqlOperation(queries.stocksByImdbId, { imdbID }));
-  const items = result.data.stocksByImdbID.items;
-  return items[0] as Stock;
+export async function getBookmark(imdbID: string) {
+  const result = await API.graphql(graphqlOperation(queries.bookmarksByImdbId, { imdbID }));
+  const items = result.data.bookmarksByImdbId.items;
+  return items[0] as Bookmark;
 }
 
-export async function createStock(imdbID: string) {
+export async function createBookmark(imdbID: string) {
   const input = { imdbID };
-  const result = await API.graphql(graphqlOperation(mutations.createStock, { input }));
+  const result = await API.graphql(graphqlOperation(mutations.createBookmark, { input }));
   if (result.data) {
-    return result.data.createStock as Stock;
+    return result.data.createBookmark as Bookmark;
   }
   console.log(result);
   throw new Error(); // should be error message
 }
 
-export async function deleteStock(id: string) {
+export async function deleteBookmark(id: string) {
   const input = { id };
-  return API.graphql(graphqlOperation(mutations.deleteStock, { input }));
+  return API.graphql(graphqlOperation(mutations.deleteBookmark, { input }));
 }
 
-export async function listStock() {
-  const result = await API.graphql(graphqlOperation(queries.listStocks));
-  return result.data.listStocks.items as Stock[];
+export async function listBookmarks() {
+  const result = await API.graphql(graphqlOperation(queries.listBookmarks));
+  return result.data.listBookmarks.items as Bookmark[];
 }

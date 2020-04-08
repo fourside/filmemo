@@ -2,16 +2,16 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateStockInput = {
+export type CreateBookmarkInput = {
   id?: string | null,
   imdbID: string,
 };
 
-export type ModelStockConditionInput = {
+export type ModelBookmarkConditionInput = {
   imdbID?: ModelStringInput | null,
-  and?: Array< ModelStockConditionInput | null > | null,
-  or?: Array< ModelStockConditionInput | null > | null,
-  not?: ModelStockConditionInput | null,
+  and?: Array< ModelBookmarkConditionInput | null > | null,
+  or?: Array< ModelBookmarkConditionInput | null > | null,
+  not?: ModelBookmarkConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -54,21 +54,21 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type UpdateStockInput = {
+export type UpdateBookmarkInput = {
   id: string,
   imdbID?: string | null,
 };
 
-export type DeleteStockInput = {
+export type DeleteBookmarkInput = {
   id?: string | null,
 };
 
-export type ModelStockFilterInput = {
+export type ModelBookmarkFilterInput = {
   id?: ModelIDInput | null,
   imdbID?: ModelStringInput | null,
-  and?: Array< ModelStockFilterInput | null > | null,
-  or?: Array< ModelStockFilterInput | null > | null,
-  not?: ModelStockFilterInput | null,
+  and?: Array< ModelBookmarkFilterInput | null > | null,
+  or?: Array< ModelBookmarkFilterInput | null > | null,
+  not?: ModelBookmarkFilterInput | null,
 };
 
 export type ModelIDInput = {
@@ -93,72 +93,72 @@ export enum ModelSortDirection {
 }
 
 
-export type CreateStockMutationVariables = {
-  input: CreateStockInput,
-  condition?: ModelStockConditionInput | null,
+export type CreateBookmarkMutationVariables = {
+  input: CreateBookmarkInput,
+  condition?: ModelBookmarkConditionInput | null,
 };
 
-export type CreateStockMutation = {
-  createStock:  {
-    __typename: "Stock",
+export type CreateBookmarkMutation = {
+  createBookmark:  {
+    __typename: "Bookmark",
     id: string,
     imdbID: string,
     owner: string | null,
   } | null,
 };
 
-export type UpdateStockMutationVariables = {
-  input: UpdateStockInput,
-  condition?: ModelStockConditionInput | null,
+export type UpdateBookmarkMutationVariables = {
+  input: UpdateBookmarkInput,
+  condition?: ModelBookmarkConditionInput | null,
 };
 
-export type UpdateStockMutation = {
-  updateStock:  {
-    __typename: "Stock",
+export type UpdateBookmarkMutation = {
+  updateBookmark:  {
+    __typename: "Bookmark",
     id: string,
     imdbID: string,
     owner: string | null,
   } | null,
 };
 
-export type DeleteStockMutationVariables = {
-  input: DeleteStockInput,
-  condition?: ModelStockConditionInput | null,
+export type DeleteBookmarkMutationVariables = {
+  input: DeleteBookmarkInput,
+  condition?: ModelBookmarkConditionInput | null,
 };
 
-export type DeleteStockMutation = {
-  deleteStock:  {
-    __typename: "Stock",
+export type DeleteBookmarkMutation = {
+  deleteBookmark:  {
+    __typename: "Bookmark",
     id: string,
     imdbID: string,
     owner: string | null,
   } | null,
 };
 
-export type GetStockQueryVariables = {
+export type GetBookmarkQueryVariables = {
   id: string,
 };
 
-export type GetStockQuery = {
-  getStock:  {
-    __typename: "Stock",
+export type GetBookmarkQuery = {
+  getBookmark:  {
+    __typename: "Bookmark",
     id: string,
     imdbID: string,
     owner: string | null,
   } | null,
 };
 
-export type ListStocksQueryVariables = {
-  filter?: ModelStockFilterInput | null,
+export type ListBookmarksQueryVariables = {
+  filter?: ModelBookmarkFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListStocksQuery = {
-  listStocks:  {
-    __typename: "ModelStockConnection",
+export type ListBookmarksQuery = {
+  listBookmarks:  {
+    __typename: "ModelBookmarkConnection",
     items:  Array< {
-      __typename: "Stock",
+      __typename: "Bookmark",
       id: string,
       imdbID: string,
       owner: string | null,
@@ -167,19 +167,19 @@ export type ListStocksQuery = {
   } | null,
 };
 
-export type StocksByImdbIdQueryVariables = {
+export type BookmarksByImdbIdQueryVariables = {
   imdbID?: string | null,
   sortDirection?: ModelSortDirection | null,
-  filter?: ModelStockFilterInput | null,
+  filter?: ModelBookmarkFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type StocksByImdbIdQuery = {
-  stocksByImdbID:  {
-    __typename: "ModelStockConnection",
+export type BookmarksByImdbIdQuery = {
+  bookmarksByImdbID:  {
+    __typename: "ModelBookmarkConnection",
     items:  Array< {
-      __typename: "Stock",
+      __typename: "Bookmark",
       id: string,
       imdbID: string,
       owner: string | null,
@@ -188,39 +188,39 @@ export type StocksByImdbIdQuery = {
   } | null,
 };
 
-export type OnCreateStockSubscriptionVariables = {
+export type OnCreateBookmarkSubscriptionVariables = {
   owner: string,
 };
 
-export type OnCreateStockSubscription = {
-  onCreateStock:  {
-    __typename: "Stock",
+export type OnCreateBookmarkSubscription = {
+  onCreateBookmark:  {
+    __typename: "Bookmark",
     id: string,
     imdbID: string,
     owner: string | null,
   } | null,
 };
 
-export type OnUpdateStockSubscriptionVariables = {
+export type OnUpdateBookmarkSubscriptionVariables = {
   owner: string,
 };
 
-export type OnUpdateStockSubscription = {
-  onUpdateStock:  {
-    __typename: "Stock",
+export type OnUpdateBookmarkSubscription = {
+  onUpdateBookmark:  {
+    __typename: "Bookmark",
     id: string,
     imdbID: string,
     owner: string | null,
   } | null,
 };
 
-export type OnDeleteStockSubscriptionVariables = {
+export type OnDeleteBookmarkSubscriptionVariables = {
   owner: string,
 };
 
-export type OnDeleteStockSubscription = {
-  onDeleteStock:  {
-    __typename: "Stock",
+export type OnDeleteBookmarkSubscription = {
+  onDeleteBookmark:  {
+    __typename: "Bookmark",
     id: string,
     imdbID: string,
     owner: string | null,

@@ -18,9 +18,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   processing: boolean;
-  hasStock: boolean;
-  handleAddStock: () => void;
-  handleRemoveStock: () => void;
+  hasBookmark: boolean;
+  handleAddBookmark: () => void;
+  handleRemoveBookmark: () => void;
 }
 export const ActionCard: React.FC<Props> = (props) => {
   const classes = useStyles();
@@ -28,32 +28,32 @@ export const ActionCard: React.FC<Props> = (props) => {
   const AddButton: React.FC = () => (
     <Button
       className={classes.button}
-      aria-label="add this to stock"
+      aria-label="bookmark"
       color="primary"
-      onClick={props.handleAddStock}
+      onClick={props.handleAddBookmark}
       startIcon={<FontAwesomeIcon icon={faBookmark} />}
-      disabled={props.processing || !!props.hasStock}
+      disabled={props.processing || !!props.hasBookmark}
     >
-      add this to stock
+      bookmark
     </Button>
   );
 
   const RemoveButton: React.FC = () => (
     <Button
       className={classes.button}
-      aria-label="remove this to stock"
+      aria-label="remove bookmark"
       color="secondary"
-      onClick={props.handleRemoveStock}
+      onClick={props.handleRemoveBookmark}
       startIcon={<FontAwesomeIcon icon={faBookmark} />}
-      disabled={props.processing || !props.hasStock}
+      disabled={props.processing || !props.hasBookmark}
     >
-      remove this from stock
+      remove bookmark
     </Button>
   );
 
   return (
     <CardActions className={classes.root}>
-      {props.hasStock ? <RemoveButton /> : <AddButton />}
+      {props.hasBookmark ? <RemoveButton /> : <AddButton />}
     </CardActions>
   );
 };

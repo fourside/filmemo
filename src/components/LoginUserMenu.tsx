@@ -41,8 +41,8 @@ export const LoginUserMenu: React.FC<Props> = (props) => {
     setAnchorEl(undefined);
   };
 
-  const handleStockList = () => {
-    history.push("/stock");
+  const handleBookmarkList = () => {
+    history.push("/bookmarks");
   };
 
   return (
@@ -73,7 +73,7 @@ export const LoginUserMenu: React.FC<Props> = (props) => {
           horizontal: 'center',
         }}
       >
-        <MenuItem onClick={handleStockList}>Stock</MenuItem>
+        <MenuItem onClick={handleBookmarkList}>Bookmarks</MenuItem>
       </Menu>
     </div>
   );

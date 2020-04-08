@@ -5,7 +5,7 @@ import { Loading } from "./Loading";
 const UserPage = lazy(() => import("./UserPage"));
 const SignInPage = lazy(() => import("./SignInPage"));
 const FilmPage = lazy(() => import("./FilmPage"));
-const StockPage = lazy(() => import("./StockPage"));
+const BookmarkListPage = lazy(() => import("./BookmarkListPage"));
 
 export const Routes: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ export const Routes: React.FC = () => {
         <Route exact path="/" component={UserPage} />
         <Route exact path="/signin" component={SignInPage} />
         <Route exact path="/films/:imdbID" component={FilmPage} />
-        <Route exact path="/stock" component={StockPage} />
+        <Route exact path="/bookmarks" component={BookmarkListPage} />
         <Route path="*" component={SignInPage} />
       </Switch>
     </Suspense>

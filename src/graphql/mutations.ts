@@ -2,36 +2,36 @@
 // eslint-disable
 // this is an auto generated file. This will be overwritten
 
-export const createStock = /* GraphQL */ `
-  mutation CreateStock(
-    $input: CreateStockInput!
-    $condition: ModelStockConditionInput
+export const createBookmark = /* GraphQL */ `
+  mutation CreateBookmark(
+    $input: CreateBookmarkInput!
+    $condition: ModelBookmarkConditionInput
   ) {
-    createStock(input: $input, condition: $condition) {
+    createBookmark(input: $input, condition: $condition) {
       id
       imdbID
       owner
     }
   }
 `;
-export const updateStock = /* GraphQL */ `
-  mutation UpdateStock(
-    $input: UpdateStockInput!
-    $condition: ModelStockConditionInput
+export const updateBookmark = /* GraphQL */ `
+  mutation UpdateBookmark(
+    $input: UpdateBookmarkInput!
+    $condition: ModelBookmarkConditionInput
   ) {
-    updateStock(input: $input, condition: $condition) {
+    updateBookmark(input: $input, condition: $condition) {
       id
       imdbID
       owner
     }
   }
 `;
-export const deleteStock = /* GraphQL */ `
-  mutation DeleteStock(
-    $input: DeleteStockInput!
-    $condition: ModelStockConditionInput
+export const deleteBookmark = /* GraphQL */ `
+  mutation DeleteBookmark(
+    $input: DeleteBookmarkInput!
+    $condition: ModelBookmarkConditionInput
   ) {
-    deleteStock(input: $input, condition: $condition) {
+    deleteBookmark(input: $input, condition: $condition) {
       id
       imdbID
       owner
