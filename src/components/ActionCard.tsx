@@ -20,22 +20,40 @@ interface Props {
   processing: boolean;
   hasStock: boolean;
   handleAddStock: () => void;
+  handleRemoveStock: () => void;
 }
 export const ActionCard: React.FC<Props> = (props) => {
   const classes = useStyles();
 
+  const AddButton: React.FC = () => (
+    <Button
+      className={classes.button}
+      aria-label="add this to stock"
+      color="primary"
+      onClick={props.handleAddStock}
+      startIcon={<FontAwesomeIcon icon={faBookmark} />}
+      disabled={props.processing || !!props.hasStock}
+    >
+      add this to stock
+    </Button>
+  );
+
+  const RemoveButton: React.FC = () => (
+    <Button
+      className={classes.button}
+      aria-label="remove this to stock"
+      color="secondary"
+      onClick={props.handleRemoveStock}
+      startIcon={<FontAwesomeIcon icon={faBookmark} />}
+      disabled={props.processing || !props.hasStock}
+    >
+      remove this from stock
+    </Button>
+  );
+
   return (
     <CardActions className={classes.root}>
-      <Button
-        className={classes.button}
-        aria-label="add this to stock"
-        color="primary"
-        onClick={props.handleAddStock}
-        startIcon={<FontAwesomeIcon icon={faBookmark} />}
-        disabled={props.processing || !!props.hasStock}
-      >
-        add this to stock
-      </Button>
+      {props.hasStock ? <RemoveButton /> : <AddButton />}
     </CardActions>
   );
 };

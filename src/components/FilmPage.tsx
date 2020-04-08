@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImdb } from '@fortawesome/free-brands-svg-icons'
 
 import { searchById } from "../amplify/API";
-import { createStock, getStock } from "../amplify/API";
+import { createStock, getStock, deleteStock } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
@@ -104,6 +104,27 @@ const FilmPage: React.FC<Props> = (props) => {
     }
   };
 
+  const handleRemoveStock = async () => {
+    try {
+      setState({
+        ...state,
+        processing: true,
+      });
+      await deleteStock(imdbID);
+      setState({
+        ...state,
+        stock: undefined,
+        processing: false,
+      });
+    } catch (err) {
+      console.log(err);
+      setState({
+        ...state,
+        processing: false,
+      });
+    }
+  };
+
   if (!state.film) {
     return <Loading />
   }
@@ -132,6 +153,7 @@ const FilmPage: React.FC<Props> = (props) => {
           </Card>
           <ActionCard
             handleAddStock={handleAddStock}
+            handleRemoveStock={handleRemoveStock}
             hasStock={!!state.stock}
             processing={state.processing}
           />
