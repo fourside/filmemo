@@ -43,6 +43,12 @@ export const LoginUserMenu: React.FC<Props> = (props) => {
 
   const handleBookmarkList = () => {
     history.push("/bookmarks");
+    handleClose();
+  };
+
+  const handleSearch = () => {
+    history.push("/");
+    handleClose();
   };
 
   return (
@@ -62,17 +68,13 @@ export const LoginUserMenu: React.FC<Props> = (props) => {
       </Button>
       <Menu
         id="simple-menu"
-        className={classes.menu}
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
         elevation={0}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
       >
+        <MenuItem onClick={handleSearch}>Search</MenuItem>
         <MenuItem onClick={handleBookmarkList}>Bookmarks</MenuItem>
       </Menu>
     </div>
