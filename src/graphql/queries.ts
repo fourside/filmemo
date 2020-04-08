@@ -27,3 +27,27 @@ export const listStocks = /* GraphQL */ `
     }
   }
 `;
+export const stocksByImdbId = /* GraphQL */ `
+  query StocksByImdbId(
+    $imdbID: String
+    $sortDirection: ModelSortDirection
+    $filter: ModelStockFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    stocksByImdbID(
+      imdbID: $imdbID
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        imdbID
+        owner
+      }
+      nextToken
+    }
+  }
+`;

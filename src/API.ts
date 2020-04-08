@@ -5,7 +5,6 @@
 export type CreateStockInput = {
   id?: string | null,
   imdbID: string,
-  _version?: number | null,
 };
 
 export type ModelStockConditionInput = {
@@ -58,12 +57,10 @@ export type ModelSizeInput = {
 export type UpdateStockInput = {
   id: string,
   imdbID?: string | null,
-  _version?: number | null,
 };
 
 export type DeleteStockInput = {
   id?: string | null,
-  _version?: number | null,
 };
 
 export type ModelStockFilterInput = {
@@ -106,9 +103,6 @@ export type CreateStockMutation = {
     __typename: "Stock",
     id: string,
     imdbID: string,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -123,9 +117,6 @@ export type UpdateStockMutation = {
     __typename: "Stock",
     id: string,
     imdbID: string,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -140,34 +131,7 @@ export type DeleteStockMutation = {
     __typename: "Stock",
     id: string,
     imdbID: string,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
     owner: string | null,
-  } | null,
-};
-
-export type SyncStocksQueryVariables = {
-  filter?: ModelStockFilterInput | null,
-  limit?: number | null,
-  nextToken?: string | null,
-  lastSync?: number | null,
-};
-
-export type SyncStocksQuery = {
-  syncStocks:  {
-    __typename: "ModelStockConnection",
-    items:  Array< {
-      __typename: "Stock",
-      id: string,
-      imdbID: string,
-      _version: number,
-      _deleted: boolean | null,
-      _lastChangedAt: number,
-      owner: string | null,
-    } | null > | null,
-    nextToken: string | null,
-    startedAt: number | null,
   } | null,
 };
 
@@ -180,9 +144,6 @@ export type GetStockQuery = {
     __typename: "Stock",
     id: string,
     imdbID: string,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -200,13 +161,9 @@ export type ListStocksQuery = {
       __typename: "Stock",
       id: string,
       imdbID: string,
-      _version: number,
-      _deleted: boolean | null,
-      _lastChangedAt: number,
       owner: string | null,
     } | null > | null,
     nextToken: string | null,
-    startedAt: number | null,
   } | null,
 };
 
@@ -225,13 +182,9 @@ export type StocksByImdbIdQuery = {
       __typename: "Stock",
       id: string,
       imdbID: string,
-      _version: number,
-      _deleted: boolean | null,
-      _lastChangedAt: number,
       owner: string | null,
     } | null > | null,
     nextToken: string | null,
-    startedAt: number | null,
   } | null,
 };
 
@@ -244,9 +197,6 @@ export type OnCreateStockSubscription = {
     __typename: "Stock",
     id: string,
     imdbID: string,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -260,9 +210,6 @@ export type OnUpdateStockSubscription = {
     __typename: "Stock",
     id: string,
     imdbID: string,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };
@@ -276,9 +223,6 @@ export type OnDeleteStockSubscription = {
     __typename: "Stock",
     id: string,
     imdbID: string,
-    _version: number,
-    _deleted: boolean | null,
-    _lastChangedAt: number,
     owner: string | null,
   } | null,
 };

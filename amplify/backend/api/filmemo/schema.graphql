@@ -1,6 +1,7 @@
 type Stock
   @model
   @auth(rules: [{allow: owner}])
+  @key(name: "ByImdbID", fields: ["imdbID"], queryField: "stocksByImdbID")
 {
   id: ID!
   imdbID: String!
