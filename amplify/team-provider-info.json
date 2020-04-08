@@ -1,14 +1,14 @@
 {
-    "dev": {
+    "develop": {
         "awscloudformation": {
-            "AuthRoleName": "amplify-filmemo-dev-194214-authRole",
-            "UnauthRoleArn": "arn:aws:iam::540093229923:role/amplify-filmemo-dev-194214-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::540093229923:role/amplify-filmemo-dev-194214-authRole",
+            "AuthRoleName": "amplify-filmemo-develop-124238-authRole",
+            "UnauthRoleArn": "arn:aws:iam::540093229923:role/amplify-filmemo-develop-124238-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::540093229923:role/amplify-filmemo-develop-124238-authRole",
             "Region": "ap-northeast-1",
-            "DeploymentBucketName": "amplify-filmemo-dev-194214-deployment",
-            "UnauthRoleName": "amplify-filmemo-dev-194214-unauthRole",
-            "StackName": "amplify-filmemo-dev-194214",
-            "StackId": "arn:aws:cloudformation:ap-northeast-1:540093229923:stack/amplify-filmemo-dev-194214/76d2a530-6f4e-11ea-a9fb-0a0f495cff22",
+            "DeploymentBucketName": "amplify-filmemo-develop-124238-deployment",
+            "UnauthRoleName": "amplify-filmemo-develop-124238-unauthRole",
+            "StackName": "amplify-filmemo-develop-124238",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:540093229923:stack/amplify-filmemo-develop-124238/008166d0-794b-11ea-bf6e-0ab0e844d044",
             "AmplifyAppId": "d2fnfud21hfc41"
         },
         "categories": {
@@ -16,6 +16,9 @@
                 "filmemo3fa42bef": {
                     "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"899427308704-7p92vo526jda2iqcf2tta1lsvfjqmlod.apps.googleusercontent.com\",\"client_secret\":\"_Ydy515uY4AwqH1VFSs0T37e\"}]"
                 }
+            },
+            "function": {
+                "searchomdb": {}
             }
         }
     }
