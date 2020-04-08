@@ -7,10 +7,14 @@ import { Routes } from "./components/Routes";
 import { User, emptyUser } from "./model/User";
 import { UserContext } from "./context/UserContext";
 import { Header } from "./components/Header";
+import { ErrorContext } from "./context/ErrorContext";
+import { ErrorAlert } from "./components/ErrorAlert";
 
 export const App: React.FC = () => {
   const [user, setUser] = useState<User>(emptyUser);
+  const [error, setError] = useState("");
   const value = useMemo(() => ({ user, setUser}), [user, setUser]);
+  const errorValue = useMemo(() => ({ error, setError}), [error, setError]);
 
   const history = useHistory();
 
@@ -44,10 +48,13 @@ export const App: React.FC = () => {
 
   return (
     <UserContext.Provider value={value}>
-      <div className="App">
-        <Header />
-        <Routes />
-      </div>
+      <ErrorContext.Provider value={errorValue}>
+        <div className="App">
+          <Header />
+          <Routes />
+          <ErrorAlert />
+        </div>
+      </ErrorContext.Provider>
     </UserContext.Provider>
   );
 };

@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import { useHistory } from "react-router-dom";
 import { SearchForm } from "./SearchForm";
 import { searchByTitle } from '../amplify/API';
 import { FilmList } from './FilmList';
 import { Film } from '../model/Film';
-import { ErrorAlert } from "./ErrorAlert";
 import { getLoginUser } from '../amplify/Auth';
+import { ErrorContext } from '../context/ErrorContext';
 
 const UserPage: React.FC = () => {
   const [search, setSearch] = useState({
     films: [] as Film[],
     processing: false,
-    error: "",
   });
   const history = useHistory();
+  const { setError } = useContext(ErrorContext);
 
   useEffect(() => {
     (async () => {
@@ -38,9 +38,10 @@ const UserPage: React.FC = () => {
         processing: false,
       });
     } catch (err) {
+      setError(err.message);
       setSearch({
         ...search,
-        error: err.message,
+        processing: false,
       });
     }
   };
@@ -49,7 +50,6 @@ const UserPage: React.FC = () => {
     <Container maxWidth="lg">
       <SearchForm processing={search.processing} handleSearch={handleSearch} />
       <FilmList processing={search.processing} films={search.films} />
-      <ErrorAlert message={search.error} />
     </Container>
   );
 };

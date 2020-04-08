@@ -1,14 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import { ErrorContext } from '../context/ErrorContext';
 
-interface Props {
-  message: string;
-}
-export const ErrorAlert: React.FC<Props> = (props) => {
+export const ErrorAlert: React.FC = () => {
   const [open, setOpen] = useState(true);
+  const { error } = useContext(ErrorContext);
 
-  if (!props.message) {
+  if (!error) {
     return null;
   }
 
@@ -20,9 +19,9 @@ export const ErrorAlert: React.FC<Props> = (props) => {
   };
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+    <Snackbar open={open} onClose={handleClose}>
       <MuiAlert elevation={6} variant="filled" onClose={handleClose} severity="error">
-        {props.message}
+        {error}
       </MuiAlert>
     </Snackbar>
   );
