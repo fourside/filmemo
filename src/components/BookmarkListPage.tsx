@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { Bookmark } from '../model/Bookmark';
 import { listBookmarks } from '../amplify/API';
+import { Loading } from './Loading';
 
 interface State {
-  bookmarks: Bookmark[];
+  bookmarks?: Bookmark[];
   processing: boolean;
 }
 const BookmarkListPage: React.FC = () => {
   const [state, setState] = useState<State>({
-    bookmarks: [],
+    bookmarks: undefined,
     processing: false,
   });
 
@@ -41,6 +42,18 @@ const BookmarkListPage: React.FC = () => {
       }
     })();
   }, []);
+
+  if (!state.bookmarks) {
+    return <Loading />
+  }
+
+  if (state.bookmarks.length === 0) {
+    return (
+      <Container maxWidth="lg">
+        <div>no bookmark. add bookmark!</div>
+      </Container>
+    )
+  }
 
   return (
     <Container maxWidth="lg">
