@@ -47,3 +47,8 @@ export async function deleteStock(id: string) {
   const input = { id };
   return API.graphql(graphqlOperation(mutations.deleteStock, { input }));
 }
+
+export async function listStock() {
+  const result = await API.graphql(graphqlOperation(queries.listStocks));
+  return result.data.listStocks.items as Stock[];
+}
