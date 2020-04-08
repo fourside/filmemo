@@ -11,10 +11,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImdb } from '@fortawesome/free-brands-svg-icons'
 
 import { searchById } from "../amplify/API";
+import { createStock, getStock } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
+import { Stock } from "../model/Stock";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,14 +49,33 @@ interface Props extends RouteComponentProps<{ imdbID: string }> {
 const FilmPage: React.FC<Props> = (props) => {
   const { imdbID } = props.match.params;
   const [film, setFilm] = useState<FilmDetail | undefined>(undefined);
+  const [stock, setStock] = useState<Stock | undefined>(undefined);
+  const [processing, setProcessing] = useState(false);
   const classes = useStyles();
 
   useEffect(() => {
     (async () => {
       const film = await searchById(imdbID);
       setFilm(film);
+
+      setProcessing(true);
+      const stock = await getStock(imdbID);
+      setStock(stock);
+      setProcessing(false);
     })();
   }, [imdbID]);
+
+  const handleAddStock = async () => {
+    try {
+      setProcessing(true);
+      const stock = await createStock(imdbID);
+      setStock(stock);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setProcessing(false);
+    }
+  };
 
   if (!film) {
     return <Loading />
@@ -82,7 +103,11 @@ const FilmPage: React.FC<Props> = (props) => {
             <DetailItem title={"Production"} value={film.Production} />
             <DetailItem title={"Imdb Rating"} value={film.imdbRating} />
           </Card>
-          <ActionCard imdbID={imdbID} />
+          <ActionCard
+            handleAddStock={handleAddStock}
+            hasStock={!!stock}
+            processing={processing}
+          />
           <Typography variant="body1">
             <Link href={`${IMDB_URL}${film.imdbID}/`} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faImdb} /> go to imdb
