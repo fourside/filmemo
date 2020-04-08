@@ -29,7 +29,7 @@ export async function searchById(imdbID: string) {
 
 export async function getBookmark(imdbID: string) {
   const result = await API.graphql(graphqlOperation(queries.bookmarksByImdbId, { imdbID }));
-  const items = result.data.bookmarksByImdbId.items;
+  const items = result.data.bookmarksByImdbID.items;
   return items[0] as Bookmark;
 }
 

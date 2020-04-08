@@ -105,12 +105,15 @@ const FilmPage: React.FC<Props> = (props) => {
   };
 
   const handleRemoveBookmark = async () => {
+    if (!state.bookmark?.id) {
+      return;
+    }
     try {
       setState({
         ...state,
         processing: true,
       });
-      await deleteBookmark(imdbID);
+      await deleteBookmark(state.bookmark.id);
       setState({
         ...state,
         bookmark: undefined,
