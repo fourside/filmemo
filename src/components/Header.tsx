@@ -4,11 +4,11 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import Input from "@material-ui/icons/Input";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../context/UserContext";
 import { signOut } from "../amplify/Auth";
+import { LoginUserMenu } from "./LoginUserMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,10 +47,7 @@ export const Header: React.FC = () => {
           </Typography>
           {user.id ? (
             <>
-              <AccountCircle />
-              <Typography variant="subtitle2" className={classes.headerMenuTitle}>
-                {user.name}
-              </Typography>
+              <LoginUserMenu userName={user.name} />
               <Input />
               <Typography variant="subtitle2" className={classes.headerMenuTitle}>
                 <Link href="#" onClick={handleClickSignOut} color="inherit">Sign out</Link>
