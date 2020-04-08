@@ -15,8 +15,8 @@ export const FilmList: React.FC<Props> = (props) => {
 
   return (
     <GridList>
-      {props.films.map(film => (
-        <FilmTile key={film.Title} film={film} />
+      {props.films.map((film, index) => (
+        <FilmTile key={index} film={film} />
       ))}
     </GridList>
   );

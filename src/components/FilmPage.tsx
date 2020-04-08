@@ -82,7 +82,7 @@ const FilmPage: React.FC<Props> = (props) => {
             <DetailItem title={"Production"} value={film.Production} />
             <DetailItem title={"Imdb Rating"} value={film.imdbRating} />
           </Card>
-          <ActionCard />
+          <ActionCard imdbID={imdbID} />
           <Typography variant="body1">
             <Link href={`${IMDB_URL}${film.imdbID}/`} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faImdb} /> go to imdb
