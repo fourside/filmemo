@@ -7,6 +7,8 @@ export const onCreateBookmark = /* GraphQL */ `
     onCreateBookmark(owner: $owner) {
       id
       imdbID
+      title
+      posterURL
       owner
     }
   }
@@ -16,6 +18,8 @@ export const onUpdateBookmark = /* GraphQL */ `
     onUpdateBookmark(owner: $owner) {
       id
       imdbID
+      title
+      posterURL
       owner
     }
   }
@@ -25,6 +29,8 @@ export const onDeleteBookmark = /* GraphQL */ `
     onDeleteBookmark(owner: $owner) {
       id
       imdbID
+      title
+      posterURL
       owner
     }
   }

@@ -5,10 +5,14 @@
 export type CreateBookmarkInput = {
   id?: string | null,
   imdbID: string,
+  title: string,
+  posterURL: string,
 };
 
 export type ModelBookmarkConditionInput = {
   imdbID?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  posterURL?: ModelStringInput | null,
   and?: Array< ModelBookmarkConditionInput | null > | null,
   or?: Array< ModelBookmarkConditionInput | null > | null,
   not?: ModelBookmarkConditionInput | null,
@@ -57,6 +61,8 @@ export type ModelSizeInput = {
 export type UpdateBookmarkInput = {
   id: string,
   imdbID?: string | null,
+  title?: string | null,
+  posterURL?: string | null,
 };
 
 export type DeleteBookmarkInput = {
@@ -66,6 +72,8 @@ export type DeleteBookmarkInput = {
 export type ModelBookmarkFilterInput = {
   id?: ModelIDInput | null,
   imdbID?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  posterURL?: ModelStringInput | null,
   and?: Array< ModelBookmarkFilterInput | null > | null,
   or?: Array< ModelBookmarkFilterInput | null > | null,
   not?: ModelBookmarkFilterInput | null,
@@ -103,6 +111,8 @@ export type CreateBookmarkMutation = {
     __typename: "Bookmark",
     id: string,
     imdbID: string,
+    title: string,
+    posterURL: string,
     owner: string | null,
   } | null,
 };
@@ -117,6 +127,8 @@ export type UpdateBookmarkMutation = {
     __typename: "Bookmark",
     id: string,
     imdbID: string,
+    title: string,
+    posterURL: string,
     owner: string | null,
   } | null,
 };
@@ -131,6 +143,8 @@ export type DeleteBookmarkMutation = {
     __typename: "Bookmark",
     id: string,
     imdbID: string,
+    title: string,
+    posterURL: string,
     owner: string | null,
   } | null,
 };
@@ -144,6 +158,8 @@ export type GetBookmarkQuery = {
     __typename: "Bookmark",
     id: string,
     imdbID: string,
+    title: string,
+    posterURL: string,
     owner: string | null,
   } | null,
 };
@@ -161,6 +177,8 @@ export type ListBookmarksQuery = {
       __typename: "Bookmark",
       id: string,
       imdbID: string,
+      title: string,
+      posterURL: string,
       owner: string | null,
     } | null > | null,
     nextToken: string | null,
@@ -182,6 +200,8 @@ export type BookmarksByImdbIdQuery = {
       __typename: "Bookmark",
       id: string,
       imdbID: string,
+      title: string,
+      posterURL: string,
       owner: string | null,
     } | null > | null,
     nextToken: string | null,
@@ -197,6 +217,8 @@ export type OnCreateBookmarkSubscription = {
     __typename: "Bookmark",
     id: string,
     imdbID: string,
+    title: string,
+    posterURL: string,
     owner: string | null,
   } | null,
 };
@@ -210,6 +232,8 @@ export type OnUpdateBookmarkSubscription = {
     __typename: "Bookmark",
     id: string,
     imdbID: string,
+    title: string,
+    posterURL: string,
     owner: string | null,
   } | null,
 };
@@ -223,6 +247,8 @@ export type OnDeleteBookmarkSubscription = {
     __typename: "Bookmark",
     id: string,
     imdbID: string,
+    title: string,
+    posterURL: string,
     owner: string | null,
   } | null,
 };

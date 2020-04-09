@@ -7,6 +7,8 @@ export const getBookmark = /* GraphQL */ `
     getBookmark(id: $id) {
       id
       imdbID
+      title
+      posterURL
       owner
     }
   }
@@ -21,6 +23,8 @@ export const listBookmarks = /* GraphQL */ `
       items {
         id
         imdbID
+        title
+        posterURL
         owner
       }
       nextToken
@@ -45,6 +49,8 @@ export const bookmarksByImdbId = /* GraphQL */ `
       items {
         id
         imdbID
+        title
+        posterURL
         owner
       }
       nextToken

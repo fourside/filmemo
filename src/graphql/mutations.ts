@@ -10,6 +10,8 @@ export const createBookmark = /* GraphQL */ `
     createBookmark(input: $input, condition: $condition) {
       id
       imdbID
+      title
+      posterURL
       owner
     }
   }
@@ -22,6 +24,8 @@ export const updateBookmark = /* GraphQL */ `
     updateBookmark(input: $input, condition: $condition) {
       id
       imdbID
+      title
+      posterURL
       owner
     }
   }
@@ -34,6 +38,8 @@ export const deleteBookmark = /* GraphQL */ `
     deleteBookmark(input: $input, condition: $condition) {
       id
       imdbID
+      title
+      posterURL
       owner
     }
   }
