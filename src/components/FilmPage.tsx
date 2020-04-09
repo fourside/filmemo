@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -17,6 +17,7 @@ import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
 import { Bookmark } from "../model/Bookmark";
+import { ErrorContext } from "../context/ErrorContext";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -59,6 +60,7 @@ const FilmPage: React.FC<Props> = (props) => {
     processing: false,
   });
   const classes = useStyles();
+  const { setError } = useContext(ErrorContext);
 
   useEffect(() => {
     (async () => {
@@ -68,35 +70,53 @@ const FilmPage: React.FC<Props> = (props) => {
           processing: true,
         };
       });
-      const results = await Promise.all([
-        searchById(imdbID),
-        getBookmark(imdbID),
-      ]);
-      setState(prev => {
-        return {
-          ...prev,
-          film: results[0],
-          bookmark: results[1],
-          processing: false,
-        };
-      });
+      try {
+        const results = await Promise.all([
+          searchById(imdbID),
+          getBookmark(imdbID),
+        ]);
+        setState(prev => {
+          return {
+            ...prev,
+            film: results[0],
+            bookmark: results[1],
+            processing: false,
+          };
+        });
+      } catch (err) {
+        setError(err.message);
+        setState(prev => {
+          return {
+            ...prev,
+            processing: false,
+          };
+        });
+      }
     })();
-  }, [imdbID]);
+  }, [imdbID, setError]);
 
   const handleAddBookmark = async () => {
+    if (!state.film) {
+      return;
+    }
     try {
       setState({
         ...state,
         processing: true,
       });
-      const bookmark = await createBookmark(imdbID);
+      const params = {
+        imdbID,
+        title: state.film.Title,
+        posterURL: state.film.Poster,
+      };
+      const bookmark = await createBookmark(params);
       setState({
         ...state,
         bookmark,
         processing: false,
       });
     } catch (err) {
-      console.log(err);
+      setError(err.message);
       setState({
         ...state,
         processing: false,

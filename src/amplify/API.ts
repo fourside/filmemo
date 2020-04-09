@@ -28,27 +28,43 @@ export async function searchById(imdbID: string) {
 }
 
 export async function getBookmark(imdbID: string) {
-  const result = await API.graphql(graphqlOperation(queries.bookmarksByImdbId, { imdbID }));
-  const items = result.data.bookmarksByImdbID.items;
-  return items[0] as Bookmark;
+  try {
+    const result = await API.graphql(graphqlOperation(queries.bookmarksByImdbId, { imdbID }));
+    const items = result.data.bookmarksByImdbID.items;
+    return items[0] as Bookmark;
+  } catch (err) {
+    const messages = err.errors.map((err: any) => err.message).join("\n");
+    throw new Error(messages);
+  }
 }
 
-export async function createBookmark(imdbID: string) {
-  const input = { imdbID };
-  const result = await API.graphql(graphqlOperation(mutations.createBookmark, { input }));
-  if (result.data) {
+export async function createBookmark(bookmark: Bookmark) {
+  const input = { ...bookmark };
+  try {
+    const result = await API.graphql(graphqlOperation(mutations.createBookmark, { input }));
     return result.data.createBookmark as Bookmark;
+  } catch (err) {
+    const messages = err.errors.map((err: any) => err.message).join("\n");
+    throw new Error(messages);
   }
-  console.log(result);
-  throw new Error(); // should be error message
 }
 
 export async function deleteBookmark(id: string) {
   const input = { id };
-  return API.graphql(graphqlOperation(mutations.deleteBookmark, { input }));
+  try {
+    return API.graphql(graphqlOperation(mutations.deleteBookmark, { input }));
+  } catch (err) {
+    const messages = err.errors.map((err: any) => err.message).join("\n");
+    throw new Error(messages);
+  }
 }
 
 export async function listBookmarks() {
-  const result = await API.graphql(graphqlOperation(queries.listBookmarks));
-  return result.data.listBookmarks.items as Bookmark[];
+  try {
+    const result = await API.graphql(graphqlOperation(queries.listBookmarks));
+    return result.data.listBookmarks.items as Bookmark[];
+  } catch (err) {
+    const messages = err.errors.map((err: any) => err.message).join("\n");
+    throw new Error(messages);
+  }
 }

@@ -58,7 +58,10 @@ const BookmarkListPage: React.FC = () => {
   return (
     <Container maxWidth="lg">
       {state.bookmarks.map(bookmark => (
-        <div key={bookmark.id}>{bookmark.imdbID}</div>
+        <div key={bookmark.id}>
+          {bookmark.title}
+          <img src={bookmark.posterURL} alt={bookmark.title} />
+        </div>
       ))}
     </Container>
   );
