@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
+import GridList from '@material-ui/core/GridList';
+import Typography from '@material-ui/core/Typography';
 import { Bookmark } from '../model/Bookmark';
 import { listBookmarks } from '../amplify/API';
 import { Loading } from './Loading';
+import { BookmarkTile } from './BookmarkTile';
 
 interface State {
   bookmarks?: Bookmark[];
@@ -57,14 +60,15 @@ const BookmarkListPage: React.FC = () => {
 
   return (
     <Container maxWidth="lg">
-      {state.bookmarks.map(bookmark => (
-        <div key={bookmark.id}>
-          {bookmark.title}
-          <img src={bookmark.posterURL} alt={bookmark.title} />
-        </div>
-      ))}
+      <Typography variant="h4" gutterBottom>Bookmarks</Typography>
+      <GridList>
+        {state.bookmarks.map(bookmark => (
+          <BookmarkTile bookmark={bookmark} key={bookmark.id} />
+        ))}
+      </GridList>
     </Container>
   );
 };
 
 export default BookmarkListPage;
+
