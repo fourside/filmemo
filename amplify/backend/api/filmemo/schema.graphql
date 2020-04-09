@@ -2,9 +2,12 @@ type Bookmark
   @model
   @auth(rules: [{allow: owner}])
   @key(name: "ByImdbID", fields: ["imdbID"], queryField: "bookmarksByImdbID")
+  @key(name: "TimestapSorted", fields: ["owner", "createdAt"], queryField: "bookmarksSortedByTimestamp")
 {
   id: ID!
   imdbID: String!
   title: String!
   posterURL: String!
+  owner: String!
+  createdAt: AWSDateTime!
 }

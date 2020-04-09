@@ -10,6 +10,7 @@ export const onCreateBookmark = /* GraphQL */ `
       title
       posterURL
       owner
+      createdAt
     }
   }
 `;
@@ -21,6 +22,7 @@ export const onUpdateBookmark = /* GraphQL */ `
       title
       posterURL
       owner
+      createdAt
     }
   }
 `;
@@ -32,6 +34,7 @@ export const onDeleteBookmark = /* GraphQL */ `
       title
       posterURL
       owner
+      createdAt
     }
   }
 `;

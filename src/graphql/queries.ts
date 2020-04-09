@@ -10,6 +10,7 @@ export const getBookmark = /* GraphQL */ `
       title
       posterURL
       owner
+      createdAt
     }
   }
 `;
@@ -26,6 +27,7 @@ export const listBookmarks = /* GraphQL */ `
         title
         posterURL
         owner
+        createdAt
       }
       nextToken
     }
@@ -52,6 +54,36 @@ export const bookmarksByImdbId = /* GraphQL */ `
         title
         posterURL
         owner
+        createdAt
+      }
+      nextToken
+    }
+  }
+`;
+export const bookmarksSortedByTimestamp = /* GraphQL */ `
+  query BookmarksSortedByTimestamp(
+    $owner: String
+    $createdAt: ModelStringKeyConditionInput
+    $sortDirection: ModelSortDirection
+    $filter: ModelBookmarkFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    bookmarksSortedByTimestamp(
+      owner: $owner
+      createdAt: $createdAt
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        imdbID
+        title
+        posterURL
+        owner
+        createdAt
       }
       nextToken
     }
