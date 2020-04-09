@@ -18,6 +18,7 @@ import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
 import { Bookmark } from "../model/Bookmark";
 import { ErrorContext } from "../context/ErrorContext";
+import { UserContext } from "../context/UserContext";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,6 +61,7 @@ const FilmPage: React.FC<Props> = (props) => {
     processing: false,
   });
   const classes = useStyles();
+  const { user } = useContext(UserContext);
   const { setError } = useContext(ErrorContext);
 
   useEffect(() => {
@@ -108,6 +110,8 @@ const FilmPage: React.FC<Props> = (props) => {
         imdbID,
         title: state.film.Title,
         posterURL: state.film.Poster,
+        owner: user.owner,
+        createdAt: new Date(),
       };
       const bookmark = await createBookmark(params);
       setState({
@@ -186,9 +190,7 @@ const FilmPage: React.FC<Props> = (props) => {
             </Link>
           </Typography>
         </CardContent>
-
       </Card>
-
     </Container>
   );
 };

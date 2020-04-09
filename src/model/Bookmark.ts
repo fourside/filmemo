@@ -4,4 +4,6 @@ export type Bookmark = {
   imdbID: string;
   title: string;
   posterURL: string;
+  owner: string;
+  createdAt?: Date;
 };

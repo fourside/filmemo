@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Container from '@material-ui/core/Container';
 import GridList from '@material-ui/core/GridList';
 import Typography from '@material-ui/core/Typography';
@@ -6,6 +6,8 @@ import { Bookmark } from '../model/Bookmark';
 import { listBookmarks } from '../amplify/API';
 import { Loading } from './Loading';
 import { BookmarkTile } from './BookmarkTile';
+import { ErrorContext } from "../context/ErrorContext";
+import { UserContext } from '../context/UserContext';
 
 interface State {
   bookmarks?: Bookmark[];
@@ -16,8 +18,13 @@ const BookmarkListPage: React.FC = () => {
     bookmarks: undefined,
     processing: false,
   });
+  const { user } = useContext(UserContext);
+  const { setError } = useContext(ErrorContext);
 
   useEffect(() => {
+    if (!user.owner) {
+      return;
+    }
     (async () => {
       try {
         setState(prev => {
@@ -26,7 +33,7 @@ const BookmarkListPage: React.FC = () => {
             processing: true,
           };
         });
-        const bookmarks = await listBookmarks();
+        const bookmarks = await listBookmarks(user.owner);
         setState(prev => {
           return {
             ...prev,
@@ -35,7 +42,7 @@ const BookmarkListPage: React.FC = () => {
           };
         });
       } catch (err) {
-        console.log(err);
+        setError(err.message);
         setState(prev => {
           return {
             ...prev,
@@ -44,10 +51,15 @@ const BookmarkListPage: React.FC = () => {
         });
       }
     })();
-  }, []);
+  }, [user.owner, setError]);
+
+  if (state.processing) {
+    return <Loading />
+  }
 
   if (!state.bookmarks) {
-    return <Loading />
+    // when error
+    return null;
   }
 
   if (state.bookmarks.length === 0) {

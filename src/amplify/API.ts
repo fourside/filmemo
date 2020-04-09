@@ -59,10 +59,14 @@ export async function deleteBookmark(id: string) {
   }
 }
 
-export async function listBookmarks() {
+export async function listBookmarks(owner: string) {
   try {
-    const result = await API.graphql(graphqlOperation(queries.listBookmarks));
-    return result.data.listBookmarks.items as Bookmark[];
+    const result = await API.graphql(graphqlOperation(queries.bookmarksSortedByTimestamp, {
+      owner,
+      sortDirection: "DESC",
+      limit: 30,
+    }));
+    return result.data.bookmarksSortedByTimestamp.items as Bookmark[];
   } catch (err) {
     const messages = err.errors.map((err: any) => err.message).join("\n");
     throw new Error(messages);
