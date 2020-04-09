@@ -10,4 +10,17 @@ type Bookmark
   posterURL: String!
   owner: String!
   createdAt: AWSDateTime!
+  note: Note @connection
+}
+
+type Note
+  @model
+  @auth(rules: [{allow: owner}])
+{
+  id: ID!
+  bookmarkId: ID!
+  rating: Float!
+  when: String!
+  where: String!
+  text: String
 }

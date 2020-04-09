@@ -11,6 +11,15 @@ export const onCreateBookmark = /* GraphQL */ `
       posterURL
       owner
       createdAt
+      note {
+        id
+        bookmarkId
+        rating
+        when
+        where
+        text
+        owner
+      }
     }
   }
 `;
@@ -23,6 +32,15 @@ export const onUpdateBookmark = /* GraphQL */ `
       posterURL
       owner
       createdAt
+      note {
+        id
+        bookmarkId
+        rating
+        when
+        where
+        text
+        owner
+      }
     }
   }
 `;
@@ -35,6 +53,54 @@ export const onDeleteBookmark = /* GraphQL */ `
       posterURL
       owner
       createdAt
+      note {
+        id
+        bookmarkId
+        rating
+        when
+        where
+        text
+        owner
+      }
+    }
+  }
+`;
+export const onCreateNote = /* GraphQL */ `
+  subscription OnCreateNote($owner: String!) {
+    onCreateNote(owner: $owner) {
+      id
+      bookmarkId
+      rating
+      when
+      where
+      text
+      owner
+    }
+  }
+`;
+export const onUpdateNote = /* GraphQL */ `
+  subscription OnUpdateNote($owner: String!) {
+    onUpdateNote(owner: $owner) {
+      id
+      bookmarkId
+      rating
+      when
+      where
+      text
+      owner
+    }
+  }
+`;
+export const onDeleteNote = /* GraphQL */ `
+  subscription OnDeleteNote($owner: String!) {
+    onDeleteNote(owner: $owner) {
+      id
+      bookmarkId
+      rating
+      when
+      where
+      text
+      owner
     }
   }
 `;

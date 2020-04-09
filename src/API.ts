@@ -9,6 +9,7 @@ export type CreateBookmarkInput = {
   posterURL: string,
   owner: string,
   createdAt: string,
+  bookmarkNoteId?: string | null,
 };
 
 export type ModelBookmarkConditionInput = {
@@ -68,22 +69,31 @@ export type UpdateBookmarkInput = {
   posterURL?: string | null,
   owner?: string | null,
   createdAt?: string | null,
+  bookmarkNoteId?: string | null,
 };
 
 export type DeleteBookmarkInput = {
   id?: string | null,
 };
 
-export type ModelBookmarkFilterInput = {
-  id?: ModelIDInput | null,
-  imdbID?: ModelStringInput | null,
-  title?: ModelStringInput | null,
-  posterURL?: ModelStringInput | null,
-  owner?: ModelStringInput | null,
-  createdAt?: ModelStringInput | null,
-  and?: Array< ModelBookmarkFilterInput | null > | null,
-  or?: Array< ModelBookmarkFilterInput | null > | null,
-  not?: ModelBookmarkFilterInput | null,
+export type CreateNoteInput = {
+  id?: string | null,
+  bookmarkId: string,
+  rating: number,
+  when: string,
+  where: string,
+  text?: string | null,
+};
+
+export type ModelNoteConditionInput = {
+  bookmarkId?: ModelIDInput | null,
+  rating?: ModelFloatInput | null,
+  when?: ModelStringInput | null,
+  where?: ModelStringInput | null,
+  text?: ModelStringInput | null,
+  and?: Array< ModelNoteConditionInput | null > | null,
+  or?: Array< ModelNoteConditionInput | null > | null,
+  not?: ModelNoteConditionInput | null,
 };
 
 export type ModelIDInput = {
@@ -100,6 +110,55 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
+};
+
+export type ModelFloatInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type UpdateNoteInput = {
+  id: string,
+  bookmarkId?: string | null,
+  rating?: number | null,
+  when?: string | null,
+  where?: string | null,
+  text?: string | null,
+};
+
+export type DeleteNoteInput = {
+  id?: string | null,
+};
+
+export type ModelBookmarkFilterInput = {
+  id?: ModelIDInput | null,
+  imdbID?: ModelStringInput | null,
+  title?: ModelStringInput | null,
+  posterURL?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  and?: Array< ModelBookmarkFilterInput | null > | null,
+  or?: Array< ModelBookmarkFilterInput | null > | null,
+  not?: ModelBookmarkFilterInput | null,
+};
+
+export type ModelNoteFilterInput = {
+  id?: ModelIDInput | null,
+  bookmarkId?: ModelIDInput | null,
+  rating?: ModelFloatInput | null,
+  when?: ModelStringInput | null,
+  where?: ModelStringInput | null,
+  text?: ModelStringInput | null,
+  and?: Array< ModelNoteFilterInput | null > | null,
+  or?: Array< ModelNoteFilterInput | null > | null,
+  not?: ModelNoteFilterInput | null,
 };
 
 export enum ModelSortDirection {
@@ -132,6 +191,16 @@ export type CreateBookmarkMutation = {
     posterURL: string,
     owner: string,
     createdAt: string,
+    note:  {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
+    } | null,
   } | null,
 };
 
@@ -149,6 +218,16 @@ export type UpdateBookmarkMutation = {
     posterURL: string,
     owner: string,
     createdAt: string,
+    note:  {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
+    } | null,
   } | null,
 };
 
@@ -166,6 +245,70 @@ export type DeleteBookmarkMutation = {
     posterURL: string,
     owner: string,
     createdAt: string,
+    note:  {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
+    } | null,
+  } | null,
+};
+
+export type CreateNoteMutationVariables = {
+  input: CreateNoteInput,
+  condition?: ModelNoteConditionInput | null,
+};
+
+export type CreateNoteMutation = {
+  createNote:  {
+    __typename: "Note",
+    id: string,
+    bookmarkId: string,
+    rating: number,
+    when: string,
+    where: string,
+    text: string | null,
+    owner: string | null,
+  } | null,
+};
+
+export type UpdateNoteMutationVariables = {
+  input: UpdateNoteInput,
+  condition?: ModelNoteConditionInput | null,
+};
+
+export type UpdateNoteMutation = {
+  updateNote:  {
+    __typename: "Note",
+    id: string,
+    bookmarkId: string,
+    rating: number,
+    when: string,
+    where: string,
+    text: string | null,
+    owner: string | null,
+  } | null,
+};
+
+export type DeleteNoteMutationVariables = {
+  input: DeleteNoteInput,
+  condition?: ModelNoteConditionInput | null,
+};
+
+export type DeleteNoteMutation = {
+  deleteNote:  {
+    __typename: "Note",
+    id: string,
+    bookmarkId: string,
+    rating: number,
+    when: string,
+    where: string,
+    text: string | null,
+    owner: string | null,
   } | null,
 };
 
@@ -182,6 +325,16 @@ export type GetBookmarkQuery = {
     posterURL: string,
     owner: string,
     createdAt: string,
+    note:  {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
+    } | null,
   } | null,
 };
 
@@ -202,6 +355,56 @@ export type ListBookmarksQuery = {
       posterURL: string,
       owner: string,
       createdAt: string,
+      note:  {
+        __typename: "Note",
+        id: string,
+        bookmarkId: string,
+        rating: number,
+        when: string,
+        where: string,
+        text: string | null,
+        owner: string | null,
+      } | null,
+    } | null > | null,
+    nextToken: string | null,
+  } | null,
+};
+
+export type GetNoteQueryVariables = {
+  id: string,
+};
+
+export type GetNoteQuery = {
+  getNote:  {
+    __typename: "Note",
+    id: string,
+    bookmarkId: string,
+    rating: number,
+    when: string,
+    where: string,
+    text: string | null,
+    owner: string | null,
+  } | null,
+};
+
+export type ListNotesQueryVariables = {
+  filter?: ModelNoteFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListNotesQuery = {
+  listNotes:  {
+    __typename: "ModelNoteConnection",
+    items:  Array< {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -226,6 +429,16 @@ export type BookmarksByImdbIdQuery = {
       posterURL: string,
       owner: string,
       createdAt: string,
+      note:  {
+        __typename: "Note",
+        id: string,
+        bookmarkId: string,
+        rating: number,
+        when: string,
+        where: string,
+        text: string | null,
+        owner: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -251,6 +464,16 @@ export type BookmarksSortedByTimestampQuery = {
       posterURL: string,
       owner: string,
       createdAt: string,
+      note:  {
+        __typename: "Note",
+        id: string,
+        bookmarkId: string,
+        rating: number,
+        when: string,
+        where: string,
+        text: string | null,
+        owner: string | null,
+      } | null,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -269,6 +492,16 @@ export type OnCreateBookmarkSubscription = {
     posterURL: string,
     owner: string,
     createdAt: string,
+    note:  {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
+    } | null,
   } | null,
 };
 
@@ -285,6 +518,16 @@ export type OnUpdateBookmarkSubscription = {
     posterURL: string,
     owner: string,
     createdAt: string,
+    note:  {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
+    } | null,
   } | null,
 };
 
@@ -301,5 +544,66 @@ export type OnDeleteBookmarkSubscription = {
     posterURL: string,
     owner: string,
     createdAt: string,
+    note:  {
+      __typename: "Note",
+      id: string,
+      bookmarkId: string,
+      rating: number,
+      when: string,
+      where: string,
+      text: string | null,
+      owner: string | null,
+    } | null,
+  } | null,
+};
+
+export type OnCreateNoteSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnCreateNoteSubscription = {
+  onCreateNote:  {
+    __typename: "Note",
+    id: string,
+    bookmarkId: string,
+    rating: number,
+    when: string,
+    where: string,
+    text: string | null,
+    owner: string | null,
+  } | null,
+};
+
+export type OnUpdateNoteSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnUpdateNoteSubscription = {
+  onUpdateNote:  {
+    __typename: "Note",
+    id: string,
+    bookmarkId: string,
+    rating: number,
+    when: string,
+    where: string,
+    text: string | null,
+    owner: string | null,
+  } | null,
+};
+
+export type OnDeleteNoteSubscriptionVariables = {
+  owner: string,
+};
+
+export type OnDeleteNoteSubscription = {
+  onDeleteNote:  {
+    __typename: "Note",
+    id: string,
+    bookmarkId: string,
+    rating: number,
+    when: string,
+    where: string,
+    text: string | null,
+    owner: string | null,
   } | null,
 };
