@@ -1,3 +1,4 @@
+import { Note } from "./Note";
 
 export type Bookmark = {
   id?: string;
@@ -6,4 +7,5 @@ export type Bookmark = {
   posterURL: string;
   owner: string;
   createdAt?: Date;
+  note?: Note;
 };

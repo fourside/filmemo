@@ -4,6 +4,7 @@ import { Film, FilmDetail } from "../model/Film";
 import * as mutations from "../graphql/mutations";
 import * as queries from "../graphql/queries";
 import { Bookmark } from "../model/Bookmark";
+import { Note } from "../model/Note";
 
 API.configure(awsmobile);
 
@@ -28,45 +29,49 @@ export async function searchById(imdbID: string) {
 }
 
 export async function getBookmark(imdbID: string) {
-  try {
-    const result = await API.graphql(graphqlOperation(queries.bookmarksByImdbId, { imdbID }));
-    const items = result.data.bookmarksByImdbID.items;
-    return items[0] as Bookmark;
-  } catch (err) {
-    const messages = err.errors.map((err: any) => err.message).join("\n");
-    throw new Error(messages);
-  }
+  const result = await graphql(queries.bookmarksByImdbId, { imdbID });
+  const items = result.data.bookmarksByImdbID.items;
+  return items[0] as Bookmark;
 }
 
 export async function createBookmark(bookmark: Bookmark) {
   const input = { ...bookmark };
-  try {
-    const result = await API.graphql(graphqlOperation(mutations.createBookmark, { input }));
-    return result.data.createBookmark as Bookmark;
-  } catch (err) {
-    const messages = err.errors.map((err: any) => err.message).join("\n");
-    throw new Error(messages);
-  }
+  const result = await graphql(mutations.createBookmark, { input });
+  return result.data.createBookmark as Bookmark;
 }
 
 export async function deleteBookmark(id: string) {
   const input = { id };
-  try {
-    return API.graphql(graphqlOperation(mutations.deleteBookmark, { input }));
-  } catch (err) {
-    const messages = err.errors.map((err: any) => err.message).join("\n");
-    throw new Error(messages);
-  }
+  return graphql(mutations.deleteBookmark, { input });
 }
 
 export async function listBookmarks(owner: string) {
+  const result = await graphql(queries.bookmarksSortedByTimestamp, {
+    owner,
+    sortDirection: "DESC",
+    limit: 30,
+  });
+  return result.data.bookmarksSortedByTimestamp.items as Bookmark[];
+}
+
+export async function createNote(note: Note) {
+  const input = { ...note };
+  const result = await graphql(mutations.createNote, { input });
+  return result.data.createNote as Note;
+}
+
+export async function relateBookmark(bookmarkId: string, noteId: string) {
+  const input = {
+    id: bookmarkId,
+    bookmarkNoteId: noteId,
+  };
+  const result = await graphql(mutations.updateBookmark, { input });
+  return result.data.updateBookmark;
+}
+
+async function graphql(query: string, variables: any) {
   try {
-    const result = await API.graphql(graphqlOperation(queries.bookmarksSortedByTimestamp, {
-      owner,
-      sortDirection: "DESC",
-      limit: 30,
-    }));
-    return result.data.bookmarksSortedByTimestamp.items as Bookmark[];
+    return await API.graphql(graphqlOperation(query, variables));
   } catch (err) {
     const messages = err.errors.map((err: any) => err.message).join("\n");
     throw new Error(messages);

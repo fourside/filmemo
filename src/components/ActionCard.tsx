@@ -3,7 +3,7 @@ import CardActions from '@material-ui/core/CardActions';
 import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookmark } from '@fortawesome/free-solid-svg-icons'
+import { faBookmark, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,6 +21,7 @@ interface Props {
   hasBookmark: boolean;
   handleAddBookmark: () => void;
   handleRemoveBookmark: () => void;
+  handleExpand: () => void;
 }
 export const ActionCard: React.FC<Props> = (props) => {
   const classes = useStyles();
@@ -54,6 +55,18 @@ export const ActionCard: React.FC<Props> = (props) => {
   return (
     <CardActions className={classes.root}>
       {props.hasBookmark ? <RemoveButton /> : <AddButton />}
+      {props.hasBookmark && (
+        <Button
+          className={classes.button}
+          aria-label="take a note"
+          color="primary"
+          onClick={props.handleExpand}
+          startIcon={<FontAwesomeIcon icon={faEdit} />}
+          disabled={props.processing || !props.hasBookmark}
+        >
+          take a note
+        </Button>
+      )}
     </CardActions>
   );
 };

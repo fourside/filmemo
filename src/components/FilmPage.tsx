@@ -19,6 +19,7 @@ import { ActionCard } from "./ActionCard";
 import { Bookmark } from "../model/Bookmark";
 import { ErrorContext } from "../context/ErrorContext";
 import { UserContext } from "../context/UserContext";
+import { NoteForm } from "./NoteForm";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,6 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     cover: {
       width: 300,
+      maxHeight: 450,
       flexShrink: 0,
     },
   }),
@@ -60,6 +62,8 @@ const FilmPage: React.FC<Props> = (props) => {
     bookmark: undefined,
     processing: false,
   });
+  const [expanded, setExpanded] = useState(false);
+
   const classes = useStyles();
   const { user } = useContext(UserContext);
   const { setError } = useContext(ErrorContext);
@@ -143,6 +147,9 @@ const FilmPage: React.FC<Props> = (props) => {
         bookmark: undefined,
         processing: false,
       });
+      if (expanded) {
+        setExpanded(false);
+      }
     } catch (err) {
       console.log(err);
       setState({
@@ -150,6 +157,14 @@ const FilmPage: React.FC<Props> = (props) => {
         processing: false,
       });
     }
+  };
+
+  const handleExpand = () => {
+    setExpanded(!expanded);
+  };
+
+  const handleOnSubmit = () => {
+    setExpanded(false);
   };
 
   if (!state.film) {
@@ -181,9 +196,17 @@ const FilmPage: React.FC<Props> = (props) => {
           <ActionCard
             handleAddBookmark={handleAddBookmark}
             handleRemoveBookmark={handleRemoveBookmark}
+            handleExpand={handleExpand}
             hasBookmark={!!state.bookmark}
             processing={state.processing}
           />
+          {state.bookmark?.id && (
+            <NoteForm
+              expanded={expanded}
+              bookmarkId={state.bookmark.id}
+              onSubmit={handleOnSubmit}
+            />
+          )}
           <Typography variant="body1">
             <Link href={`${IMDB_URL}${state.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
               <FontAwesomeIcon icon={faImdb} /> go to imdb
