@@ -20,6 +20,7 @@ import { Bookmark } from "../model/Bookmark";
 import { ErrorContext } from "../context/ErrorContext";
 import { UserContext } from "../context/UserContext";
 import { NoteForm } from "./NoteForm";
+import { NoteCard } from "./NoteCard";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -167,6 +168,9 @@ const FilmPage: React.FC<Props> = (props) => {
     setExpanded(false);
   };
 
+  const handleEditNote = () => {
+  };
+
   if (!state.film) {
     return <Loading />
   }
@@ -197,7 +201,7 @@ const FilmPage: React.FC<Props> = (props) => {
             handleAddBookmark={handleAddBookmark}
             handleRemoveBookmark={handleRemoveBookmark}
             handleExpand={handleExpand}
-            hasBookmark={!!state.bookmark}
+            bookmark={state.bookmark}
             processing={state.processing}
           />
           {state.bookmark?.id && (
@@ -205,6 +209,12 @@ const FilmPage: React.FC<Props> = (props) => {
               expanded={expanded}
               bookmarkId={state.bookmark.id}
               onSubmit={handleOnSubmit}
+            />
+          )}
+          {state.bookmark?.note && (
+            <NoteCard
+              note={state.bookmark.note}
+              handleEditNote={handleEditNote}
             />
           )}
           <Typography variant="body1">

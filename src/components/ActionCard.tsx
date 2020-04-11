@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBookmark, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { Bookmark } from "../model/Bookmark";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -18,13 +19,14 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
   processing: boolean;
-  hasBookmark: boolean;
+  bookmark?: Bookmark;
   handleAddBookmark: () => void;
   handleRemoveBookmark: () => void;
   handleExpand: () => void;
 }
 export const ActionCard: React.FC<Props> = (props) => {
   const classes = useStyles();
+  const hasNote = !!props.bookmark?.note;
 
   const AddButton: React.FC = () => (
     <Button
@@ -33,7 +35,7 @@ export const ActionCard: React.FC<Props> = (props) => {
       color="primary"
       onClick={props.handleAddBookmark}
       startIcon={<FontAwesomeIcon icon={faBookmark} />}
-      disabled={props.processing || !!props.hasBookmark}
+      disabled={props.processing || !!props.bookmark}
     >
       bookmark
     </Button>
@@ -46,7 +48,7 @@ export const ActionCard: React.FC<Props> = (props) => {
       color="secondary"
       onClick={props.handleRemoveBookmark}
       startIcon={<FontAwesomeIcon icon={faBookmark} />}
-      disabled={props.processing || !props.hasBookmark}
+      disabled={props.processing || !props.bookmark}
     >
       remove bookmark
     </Button>
@@ -54,15 +56,15 @@ export const ActionCard: React.FC<Props> = (props) => {
 
   return (
     <CardActions className={classes.root}>
-      {props.hasBookmark ? <RemoveButton /> : <AddButton />}
-      {props.hasBookmark && (
+      {props.bookmark ? <RemoveButton /> : <AddButton />}
+      {props.bookmark && !hasNote && (
         <Button
           className={classes.button}
           aria-label="take a note"
           color="primary"
           onClick={props.handleExpand}
           startIcon={<FontAwesomeIcon icon={faEdit} />}
-          disabled={props.processing || !props.hasBookmark}
+          disabled={props.processing || !props.bookmark}
         >
           take a note
         </Button>
