@@ -69,6 +69,12 @@ export async function relateBookmark(bookmarkId: string, noteId: string) {
   return result.data.updateBookmark;
 }
 
+export async function editNote(note: Note) {
+  const input = { ...note };
+  const result = await graphql(mutations.updateNote, { input });
+  return result.data.updateNote as Note;
+}
+
 async function graphql(query: string, variables: any) {
   try {
     return await API.graphql(graphqlOperation(query, variables));

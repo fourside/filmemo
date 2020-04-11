@@ -174,10 +174,31 @@ const FilmPage: React.FC<Props> = (props) => {
   };
 
   const handleOnSubmit = () => {
-    setExpanded({
-      card: true,
-      form: false,
-    });
+    (async () => {
+      setState({
+        ...state,
+        processing: true,
+      });
+      try {
+        const bookmark = await getBookmark(imdbID);
+        setState({
+          ...state,
+          bookmark,
+          processing: false,
+        });
+      } catch (err) {
+        setError(err.message);
+        setState({
+          ...state,
+          processing: false,
+        });
+      } finally {
+        setExpanded({
+          card: true,
+          form: false,
+        });
+      }
+    })();
   };
 
   const handleEditNote = () => {
@@ -231,6 +252,7 @@ const FilmPage: React.FC<Props> = (props) => {
             <NoteForm
               expanded={expanded.form}
               bookmarkId={state.bookmark.id}
+              note={state.bookmark?.note}
               onSubmit={handleOnSubmit}
               handleCancel={handleFormCancel}
             />

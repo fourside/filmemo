@@ -6,4 +6,5 @@ export type Note = {
   when: string;
   text: string;
   bookmarkId: string;
+  owner?: string;
 };

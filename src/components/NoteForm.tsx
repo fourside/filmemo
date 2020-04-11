@@ -13,7 +13,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { format } from "date-fns";
-import { createNote, relateBookmark } from "../amplify/API";
+import { createNote, relateBookmark, editNote } from "../amplify/API";
 import { Note } from "../model/Note";
 import { ErrorContext } from "../context/ErrorContext";
 
@@ -38,18 +38,20 @@ const FORMAT_DATE = "yyyy/MM/dd";
 interface Props {
   expanded: boolean;
   bookmarkId: string;
+  note?: Note;
   onSubmit: () => void;
   handleCancel: () => void;
 }
 export const NoteForm: React.FC<Props> = (props) => {
   const initialDate = format(new Date(), FORMAT_DATE);
-  const [form, setForm] = useState<Note>({
+  const initialNote = props.note ?? {
     rating: 0,
     when: initialDate,
     where: "",
     text: "",
     bookmarkId: props.bookmarkId,
-  });
+  };
+  const [form, setForm] = useState<Note>(initialNote);
   const [valid, setValid] = useState(false);
   const [processing, setProcessing] = useState(false);
   const classes = useStyles();
@@ -95,8 +97,14 @@ export const NoteForm: React.FC<Props> = (props) => {
     }
     setProcessing(true);
     try {
-      const note = await createNote(form);
-      await relateBookmark(props.bookmarkId, note.id as string);
+      if (!form.id) {
+        const note = await createNote(form);
+        await relateBookmark(props.bookmarkId, note.id as string);
+      } else {
+        const note = Object.assign({}, form);
+        delete note.owner;
+        await editNote(note);
+      }
       props.onSubmit();
     } catch (err) {
       setProcessing(false);
@@ -136,6 +144,7 @@ export const NoteForm: React.FC<Props> = (props) => {
           <Input
             id="where"
             name="where"
+            value={form.where}
             onChange={handleChange}
             startAdornment={
               <InputAdornment position="end">
@@ -151,6 +160,7 @@ export const NoteForm: React.FC<Props> = (props) => {
             id="text"
             name="text"
             multiline
+            value={form.text}
             onChange={handleChange}
           />
         </FormControl>
