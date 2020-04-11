@@ -63,7 +63,10 @@ const FilmPage: React.FC<Props> = (props) => {
     bookmark: undefined,
     processing: false,
   });
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState({
+    form: false,
+    card: true,
+  });
 
   const classes = useStyles();
   const { user } = useContext(UserContext);
@@ -148,11 +151,14 @@ const FilmPage: React.FC<Props> = (props) => {
         bookmark: undefined,
         processing: false,
       });
-      if (expanded) {
-        setExpanded(false);
+      if (expanded.form) {
+        setExpanded({
+          ...expanded,
+          form: false,
+        });
       }
     } catch (err) {
-      console.log(err);
+      setError(err.message);
       setState({
         ...state,
         processing: false,
@@ -160,15 +166,32 @@ const FilmPage: React.FC<Props> = (props) => {
     }
   };
 
-  const handleExpand = () => {
-    setExpanded(!expanded);
+  const handleFormExpand = () => {
+    setExpanded({
+      ...expanded,
+      form: !expanded.form,
+    });
   };
 
   const handleOnSubmit = () => {
-    setExpanded(false);
+    setExpanded({
+      card: true,
+      form: false,
+    });
   };
 
   const handleEditNote = () => {
+    setExpanded({
+      card: false,
+      form: true,
+    });
+  };
+
+  const handleFormCancel = () => {
+    setExpanded({
+      card: true,
+      form: false,
+    });
   };
 
   if (!state.film) {
@@ -200,20 +223,22 @@ const FilmPage: React.FC<Props> = (props) => {
           <ActionCard
             handleAddBookmark={handleAddBookmark}
             handleRemoveBookmark={handleRemoveBookmark}
-            handleExpand={handleExpand}
+            handleExpand={handleFormExpand}
             bookmark={state.bookmark}
             processing={state.processing}
           />
           {state.bookmark?.id && (
             <NoteForm
-              expanded={expanded}
+              expanded={expanded.form}
               bookmarkId={state.bookmark.id}
               onSubmit={handleOnSubmit}
+              handleCancel={handleFormCancel}
             />
           )}
           {state.bookmark?.note && (
             <NoteCard
               note={state.bookmark.note}
+              expanded={expanded.card}
               handleEditNote={handleEditNote}
             />
           )}

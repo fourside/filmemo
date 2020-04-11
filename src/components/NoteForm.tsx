@@ -28,7 +28,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     formControl: {
       margin: theme.spacing(1),
-    }
+    },
+    button: {
+      margin: theme.spacing(1),
+    },
   }),
 );
 const FORMAT_DATE = "yyyy/MM/dd";
@@ -36,6 +39,7 @@ interface Props {
   expanded: boolean;
   bookmarkId: string;
   onSubmit: () => void;
+  handleCancel: () => void;
 }
 export const NoteForm: React.FC<Props> = (props) => {
   const initialDate = format(new Date(), FORMAT_DATE);
@@ -156,10 +160,21 @@ export const NoteForm: React.FC<Props> = (props) => {
           variant="outlined"
           size="small"
           color="primary"
+          className={classes.button}
           disabled={!valid || processing}
         >
           {processing && <CircularProgress size={16} />}
           {!processing && "submit"}
+        </Button>
+
+        <Button
+          variant="outlined"
+          size="small"
+          disabled={processing}
+          className={classes.button}
+          onClick={props.handleCancel}
+        >
+          cancel
         </Button>
 
       </form>
