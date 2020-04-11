@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from "@material-ui/core/Link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faImdb } from '@fortawesome/free-brands-svg-icons'
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 
 import { searchById } from "../amplify/API";
 import { createBookmark, getBookmark, deleteBookmark } from "../amplify/API";
@@ -266,7 +267,7 @@ const FilmPage: React.FC<Props> = (props) => {
           )}
           <Typography variant="body1">
             <Link href={`${IMDB_URL}${state.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon={faImdb} /> go to imdb
+              <FontAwesomeIcon icon={faImdb} size="lg" /> <FontAwesomeIcon icon={faExternalLinkAlt} /> IMDb
             </Link>
           </Typography>
         </CardContent>
