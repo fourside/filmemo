@@ -12,11 +12,13 @@ import { UserContext } from '../context/UserContext';
 interface State {
   bookmarks?: Bookmark[];
   processing: boolean;
+  nextToken: string | null;
 }
 const BookmarkListPage: React.FC = () => {
   const [state, setState] = useState<State>({
     bookmarks: undefined,
     processing: false,
+    nextToken: null,
   });
   const { user } = useContext(UserContext);
   const { setError } = useContext(ErrorContext);
@@ -33,11 +35,12 @@ const BookmarkListPage: React.FC = () => {
             processing: true,
           };
         });
-        const bookmarks = await listBookmarks(user.owner);
+        const { bookmarks, nextToken } = await listBookmarks(user.owner, null);
         setState(prev => {
           return {
             ...prev,
             bookmarks,
+            nextToken,
             processing: false,
           };
         });
@@ -83,4 +86,3 @@ const BookmarkListPage: React.FC = () => {
 };
 
 export default BookmarkListPage;
-

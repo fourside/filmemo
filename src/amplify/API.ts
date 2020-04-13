@@ -45,13 +45,18 @@ export async function deleteBookmark(id: string) {
   return graphql(mutations.deleteBookmark, { input });
 }
 
-export async function listBookmarks(owner: string) {
+export async function listBookmarks(owner: string, nextToken: string | null) {
   const result = await graphql(queries.bookmarksSortedByTimestamp, {
     owner,
     sortDirection: "DESC",
-    limit: 30,
+    limit: 10,
+    nextToken,
   });
-  return result.data.bookmarksSortedByTimestamp.items as Bookmark[];
+  const sortedByTimestamp = result.data.bookmarksSortedByTimestamp;
+  return {
+    bookmarks: sortedByTimestamp.items as Bookmark[],
+    nextToken: sortedByTimestamp.nextToken as string,
+  };
 }
 
 export async function createNote(note: Note) {
