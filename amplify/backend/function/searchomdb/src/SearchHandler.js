@@ -8,7 +8,7 @@ async function searchHandler(req, res) {
     if (!apiKey) {
       throw new Error("not prepared");
     }
-    const { title, imdbID } = req.query;
+    const { title, imdbID, page } = req.query;
     let url;
     if (title) {
       url = `${omdbUrl}?s=${title}&apikey=${apiKey}`;
@@ -16,6 +16,9 @@ async function searchHandler(req, res) {
       url = `${omdbUrl}?i=${imdbID}&apikey=${apiKey}`;
     } else {
       throw new Error("pass title or imdbID");
+    }
+    if (page) {
+      url = `${url}&page=${page}`;
     }
 
     const result = await httpClient.get(url);
