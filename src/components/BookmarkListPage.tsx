@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import Container from '@material-ui/core/Container';
 import GridList from '@material-ui/core/GridList';
 import Typography from '@material-ui/core/Typography';
@@ -8,6 +8,7 @@ import { Loading } from './Loading';
 import { BookmarkTile } from './BookmarkTile';
 import { ErrorContext } from "../context/ErrorContext";
 import { UserContext } from '../context/UserContext';
+import { useIntersect } from "../hooks/useIntersect";
 
 interface State {
   bookmarks?: Bookmark[];
@@ -20,6 +21,7 @@ const BookmarkListPage: React.FC = () => {
     processing: false,
     nextToken: null,
   });
+  const [nextLoading, setNextLoading] = useState(false);
   const { user } = useContext(UserContext);
   const { setError } = useContext(ErrorContext);
 
@@ -56,6 +58,39 @@ const BookmarkListPage: React.FC = () => {
     })();
   }, [user.owner, setError]);
 
+  const fetchNextBookmarks = useCallback(() => {
+    if (nextLoading) {
+      return;
+    }
+    if (state.nextToken) {
+      (async () => {
+        try {
+          setNextLoading(true);
+          const { bookmarks, nextToken } = await listBookmarks(user.owner, state.nextToken);
+          const stateBookmarks = state.bookmarks ?? [];
+          setState(prev => {
+            return {
+              ...prev,
+              nextToken,
+              bookmarks: stateBookmarks.concat(bookmarks),
+            };
+          });
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setNextLoading(false);
+        }
+      })();
+    }
+  }, [nextLoading, setError, user.owner, state.nextToken, state.bookmarks]);
+
+  const { intersecting, ref } = useIntersect();
+  useEffect(() => {
+    if (intersecting) {
+      fetchNextBookmarks();
+    }
+  }, [intersecting, fetchNextBookmarks]);
+
   if (state.processing) {
     return <Loading />
   }
@@ -81,6 +116,7 @@ const BookmarkListPage: React.FC = () => {
           <BookmarkTile bookmark={bookmark} key={bookmark.id} />
         ))}
       </GridList>
+      <div ref={ref} />
     </Container>
   );
 };
