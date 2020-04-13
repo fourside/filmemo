@@ -10,13 +10,19 @@ API.configure(awsmobile);
 
 const apiName = "searchomdb";
 
-export async function searchByTitle(title: string) {
-  const path = `/search?title=${title}`;
+export async function searchByTitle(title: string, page = 1) {
+  const path = `/search?title=${title}&page=${page}`;
   const response = await API.get(apiName, path, {});
   if (response.Response === "False") {
     throw new Error(response.Error);
   }
-  return response.Search as Film[];
+  const films = response.Search as Film[];
+  const fetched = (page - 1) * 10 + films.length;
+  const hasNext = parseInt(response.totalResults, 10) > fetched;
+  return {
+    films,
+    hasNext,
+  };
 }
 
 export async function searchById(imdbID: string) {
