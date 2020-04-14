@@ -1,0 +1,21 @@
+{
+  "ci": {
+    "collect": {
+      "numberOfRuns": 3,
+      "staticDistDir": "./build",
+      "settings": {
+        "chromeFlags" :"--no-sandbox"
+      }
+    },
+    "assert": {
+      "preset": "lighthouse:recommended",
+      "assertions": {
+        "offscreen-images": "off",
+        "uses-webp-images": "off"
+      }
+    },
+    "upload": {
+      "target": "temporary-public-storage"
+    }
+  }
+}
