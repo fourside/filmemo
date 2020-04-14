@@ -21,5 +21,28 @@
                 "searchomdb": {}
             }
         }
+    },
+    "prod": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-filmemo-prod-90052-authRole",
+            "UnauthRoleArn": "arn:aws:iam::540093229923:role/amplify-filmemo-prod-90052-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::540093229923:role/amplify-filmemo-prod-90052-authRole",
+            "Region": "ap-northeast-1",
+            "DeploymentBucketName": "amplify-filmemo-prod-90052-deployment",
+            "UnauthRoleName": "amplify-filmemo-prod-90052-unauthRole",
+            "StackName": "amplify-filmemo-prod-90052",
+            "StackId": "arn:aws:cloudformation:ap-northeast-1:540093229923:stack/amplify-filmemo-prod-90052/10221a20-7de3-11ea-97b9-0ae3ffe7265e",
+            "AmplifyAppId": "d3fuswh4vcq4f6"
+        },
+        "categories": {
+            "auth": {
+                "filmemo3fa42bef": {
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Google\",\"client_id\":\"899427308704-1sodmqta88spcsccimk0imq4cgs3ui58.apps.googleusercontent.com\",\"client_secret\":\"WBHj-aH2mlTND4TPQFrjTotL\"}]"
+                }
+            },
+            "function": {
+                "searchomdb": {}
+            }
+        }
     }
 }

@@ -62,7 +62,7 @@
 				"Runtime": "nodejs12.x",
 				"Timeout": "25",
 				"Code": {
-					"S3Bucket": "amplify-filmemo-develop-124238-deployment",
+					"S3Bucket": "amplify-filmemo-prod-90052-deployment",
 					"S3Key": "amplify-builds/searchomdb-3736716e374479484756-build.zip"
 				}
 			}
