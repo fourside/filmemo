@@ -106,6 +106,7 @@ export const NoteForm: React.FC<Props> = (props) => {
         await editNote(note);
       }
       props.onSubmit();
+      setProcessing(false);
     } catch (err) {
       setProcessing(false);
       setError(err.message);
