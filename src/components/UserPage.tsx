@@ -6,6 +6,7 @@ import { FilmList } from "./FilmList";
 import { Film } from "../model/Film";
 import { ErrorContext } from "../context/ErrorContext";
 import { useIntersect } from "../hooks/useIntersect";
+import { Loading } from "./Loading";
 
 const UserPage: React.FC = () => {
   const [search, setSearch] = useState({
@@ -88,6 +89,7 @@ const UserPage: React.FC = () => {
     <Container maxWidth="lg">
       <SearchForm processing={search.processing} handleSearch={handleSearch} handleChangeTitle={handleChangeTitle} title={title} />
       <FilmList processing={search.processing} films={search.films} />
+      {search.nextLoading && <Loading />}
       <div ref={ref} />
     </Container>
   );

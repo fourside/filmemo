@@ -116,6 +116,7 @@ const BookmarkListPage: React.FC = () => {
           <BookmarkTile bookmark={bookmark} key={bookmark.id} />
         ))}
       </GridList>
+      {nextLoading && <Loading />}
       <div ref={ref} />
     </Container>
   );
