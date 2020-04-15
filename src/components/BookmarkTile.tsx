@@ -14,12 +14,15 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: "10px",
       marginBottom: "10px",
       marginRight: "20px",
+      width: 200,
+      height: 300,
     },
     icon: {
       color: 'rgba(255, 255, 255, 0.54)',
     },
     img: {
-      width: "200px",
+      width: 200,
+      height: 300,
     }
   }),
 );
