@@ -49,7 +49,7 @@ export const NoteCard: React.FC<Props> = (props) => {
     <Collapse in={props.expanded} timeout="auto" unmountOnExit>
       <Card variant="outlined" className={classes.root}>
         <CardContent>
-          <Rating value={props.note.rating} readOnly />
+          <Rating value={props.note.rating} precision={0.5} readOnly />
           <div className={classes.whenAndWhere}>
             <EventIcon className={classes.icon}/>
             <Typography className={classes.element}>
