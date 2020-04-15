@@ -4,7 +4,6 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Link from "@material-ui/core/Link";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -22,6 +21,7 @@ import { ErrorContext } from "../context/ErrorContext";
 import { UserContext } from "../context/UserContext";
 import { NoteForm } from "./NoteForm";
 import { NoteCard } from "./NoteCard";
+import { Poster } from "./Poster";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -223,11 +223,7 @@ const FilmPage: React.FC<Props> = (props) => {
   return (
     <Container maxWidth="md" className={classes.root}>
       <Card className={classes.card}>
-        <CardMedia
-          className={classes.cover}
-          image={state.film.Poster}
-          title={state.film.Title}
-        />
+        <Poster src={state.film.Poster} alt={state.film.Title} className={classes.cover} />
         <CardContent className={classes.content}>
           <Typography component="h5" variant="h5">
             {state.film.Title}
