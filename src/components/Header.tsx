@@ -1,5 +1,4 @@
 import React, { useContext, MouseEvent } from "react";
-import { useHistory } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Link from "@material-ui/core/Link";
@@ -26,11 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
 export const Header: React.FC = () => {
   const { user } = useContext(UserContext);
   const classes = useStyles();
-  const history = useHistory();
-
-  const handleClickSignIn = (event: MouseEvent) => {
-    history.push("/signin");
-  };
 
   const handleClickSignOut = (event: MouseEvent) => {
     signOut();
@@ -41,19 +35,12 @@ export const Header: React.FC = () => {
       <AppBar position="static">
         <Toolbar>
           <HeaderLogo isLogedIn={!!user.id} />
-          {user.id ? (
+          {user.id && (
             <>
               <LoginUserMenu userName={user.name} />
               <Input />
               <Typography variant="subtitle2" className={classes.headerMenuTitle}>
                 <Link href="#" onClick={handleClickSignOut} color="inherit">Sign out</Link>
-              </Typography>
-            </>
-          ) : (
-            <>
-              <Input />
-              <Typography variant="subtitle2" className={classes.headerMenuTitle}>
-                <Link href="#" onClick={handleClickSignIn} color="inherit">Sign in</Link>
               </Typography>
             </>
           )}
