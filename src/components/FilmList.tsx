@@ -1,8 +1,8 @@
-import React from 'react';
-import GridList from '@material-ui/core/GridList';
-import { Film } from '../model/Film';
-import { FilmTile } from './FilmTile';
-import { Loading } from './Loading';
+import React from "react";
+import GridList from "@material-ui/core/GridList";
+import { Film } from "../model/Film";
+import { FilmTile } from "./FilmTile";
+import { Loading } from "./Loading";
 
 interface Props {
   films: Film[];
@@ -10,7 +10,7 @@ interface Props {
 }
 export const FilmList: React.FC<Props> = (props) => {
   if (props.processing) {
-    return <Loading text="searching" />
+    return <Loading text="searching" />;
   }
 
   return (

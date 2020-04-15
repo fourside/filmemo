@@ -1,7 +1,7 @@
-import React, { useState, useContext } from 'react';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
-import { ErrorContext } from '../context/ErrorContext';
+import React, { useState, useContext } from "react";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import { ErrorContext } from "../context/ErrorContext";
 
 export const ErrorAlert: React.FC = () => {
   const [open, setOpen] = useState(true);
@@ -12,7 +12,7 @@ export const ErrorAlert: React.FC = () => {
   }
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
     setOpen(false);

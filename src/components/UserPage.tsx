@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext, ChangeEvent } from 'react';
-import Container from '@material-ui/core/Container';
+import React, { useState, useEffect, useContext, ChangeEvent } from "react";
+import Container from "@material-ui/core/Container";
 import { useHistory } from "react-router-dom";
 import { SearchForm } from "./SearchForm";
-import { searchByTitle } from '../amplify/API';
-import { FilmList } from './FilmList';
-import { Film } from '../model/Film';
-import { getLoginUser } from '../amplify/Auth';
-import { ErrorContext } from '../context/ErrorContext';
+import { searchByTitle } from "../amplify/API";
+import { FilmList } from "./FilmList";
+import { Film } from "../model/Film";
+import { getLoginUser } from "../amplify/Auth";
+import { ErrorContext } from "../context/ErrorContext";
 import { useIntersect } from "../hooks/useIntersect";
 
 const UserPage: React.FC = () => {

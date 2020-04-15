@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef } from "react";
 
 export const useIntersect = () => {
   const [intersecting, setIntersecting] = useState(false);
@@ -27,8 +27,8 @@ export const useIntersect = () => {
 
     return () => {
       currentObserver.disconnect();
-    }
-  }, [node])
+    };
+  }, [node]);
 
   return { intersecting, ref: setNode };
 };

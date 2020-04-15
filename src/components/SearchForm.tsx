@@ -1,14 +1,14 @@
-import React, { FormEvent, ChangeEvent } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import SearchIcon from '@material-ui/icons/Search';
+import React, { FormEvent, ChangeEvent } from "react";
+import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import SearchIcon from "@material-ui/icons/Search";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      '& > *': {
+      "& > *": {
         margin: theme.spacing(1),
       },
     },

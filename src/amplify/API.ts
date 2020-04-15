@@ -53,7 +53,7 @@ export async function getBookmark(imdbID: string) {
   const result = await graphql<ListBookmarks>(queries.bookmarksByImdbId, { imdbID });
   const items = result.data?.bookmarksByImdbID.items;
   if (items) {
-    return items[0]
+    return items[0];
   }
   throw new Error("no data");
 }

@@ -1,15 +1,15 @@
 import React, { FormEvent, ChangeEvent ,useState, useEffect, useContext } from "react";
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
-import Typography from '@material-ui/core/Typography';
+import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import RoomIcon from '@material-ui/icons/Room';
-import FormControl from '@material-ui/core/FormControl';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import RoomIcon from "@material-ui/icons/Room";
+import FormControl from "@material-ui/core/FormControl";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { format } from "date-fns";
@@ -80,7 +80,7 @@ export const NoteForm: React.FC<Props> = (props) => {
         when,
       });
     }
-  }
+  };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

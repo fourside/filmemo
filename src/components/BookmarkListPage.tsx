@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
-import Container from '@material-ui/core/Container';
-import GridList from '@material-ui/core/GridList';
-import Typography from '@material-ui/core/Typography';
-import { Bookmark } from '../model/Bookmark';
-import { listBookmarks } from '../amplify/API';
-import { Loading } from './Loading';
-import { BookmarkTile } from './BookmarkTile';
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import Container from "@material-ui/core/Container";
+import GridList from "@material-ui/core/GridList";
+import Typography from "@material-ui/core/Typography";
+import { Bookmark } from "../model/Bookmark";
+import { listBookmarks } from "../amplify/API";
+import { Loading } from "./Loading";
+import { BookmarkTile } from "./BookmarkTile";
 import { ErrorContext } from "../context/ErrorContext";
-import { UserContext } from '../context/UserContext';
+import { UserContext } from "../context/UserContext";
 import { useIntersect } from "../hooks/useIntersect";
 
 interface State {
@@ -92,7 +92,7 @@ const BookmarkListPage: React.FC = () => {
   }, [intersecting, fetchNextBookmarks]);
 
   if (state.processing) {
-    return <Loading />
+    return <Loading />;
   }
 
   if (!state.bookmarks) {
@@ -105,7 +105,7 @@ const BookmarkListPage: React.FC = () => {
       <Container maxWidth="lg">
         <div>no bookmark. add bookmark!</div>
       </Container>
-    )
+    );
   }
 
   return (

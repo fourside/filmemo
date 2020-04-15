@@ -27,6 +27,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "eslint src --ext .ts,.tsx",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lh": "lhci autorun || echo 'LHCI failed!'",
     "eject": "react-scripts eject"

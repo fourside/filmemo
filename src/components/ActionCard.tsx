@@ -1,9 +1,9 @@
 import React from "react";
-import CardActions from '@material-ui/core/CardActions';
-import Button from '@material-ui/core/Button';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBookmark, faEdit } from '@fortawesome/free-solid-svg-icons'
+import CardActions from "@material-ui/core/CardActions";
+import Button from "@material-ui/core/Button";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { Bookmark } from "../model/Bookmark";
 
 const useStyles = makeStyles((theme: Theme) =>
