@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from "react";
 import { Hub } from "@aws-amplify/core";
 import { useHistory } from "react-router-dom";
-import './App.css';
+import "./App.css";
 import { getLoginUser } from "./amplify/Auth";
 import { Routes } from "./components/Routes";
 import { User, emptyUser } from "./model/User";

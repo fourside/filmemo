@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import { RouteComponentProps } from "react-router-dom";
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faImdb } from '@fortawesome/free-brands-svg-icons'
-import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImdb } from "@fortawesome/free-brands-svg-icons";
+import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
 import { searchById } from "../amplify/API";
 import { createBookmark, getBookmark, deleteBookmark } from "../amplify/API";
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "10px",
     },
     card: {
-      display: 'flex',
+      display: "flex",
       height: "100%",
       minHeight: "466px",
       padding: "10px",
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "10px 0px",
     },
     content: {
-      flex: '1 0 auto',
+      flex: "1 0 auto",
       marginLeft: "20px",
     },
     cover: {
@@ -217,7 +217,7 @@ const FilmPage: React.FC<Props> = (props) => {
   };
 
   if (!state.film) {
-    return <Loading />
+    return <Loading />;
   }
 
   return (
