@@ -9,13 +9,11 @@ import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
 import { UserContext } from "../context/UserContext";
 import { signOut } from "../amplify/Auth";
 import { LoginUserMenu } from "./LoginUserMenu";
+import { HeaderLogo } from "./HeaderLogo";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
-    },
-    title: {
       flexGrow: 1,
     },
     headerMenuTitle: {
@@ -42,9 +40,7 @@ export const Header: React.FC = () => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            FILM MEMO
-          </Typography>
+          <HeaderLogo />
           {user.id ? (
             <>
               <LoginUserMenu userName={user.name} />
