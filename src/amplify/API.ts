@@ -1,4 +1,4 @@
-import { API, graphqlOperation } from "aws-amplify";
+import { API, graphqlOperation, GraphQLResult } from "@aws-amplify/api";
 import awsmobile from "../aws-exports";
 import { Film, FilmDetail } from "../model/Film";
 import * as mutations from "../graphql/mutations";
@@ -34,16 +34,34 @@ export async function searchById(imdbID: string) {
   return response as FilmDetail;
 }
 
+type ListBookmarks = {
+  [key: string]: {
+    items: Bookmark[];
+    nextToken: string;
+  };
+};
+
+type BookmarkResponse = {
+  [key: string]: Bookmark;
+};
+
+type NoteResponse = {
+  [key: string]: Note;
+};
+
 export async function getBookmark(imdbID: string) {
-  const result = await graphql(queries.bookmarksByImdbId, { imdbID });
-  const items = result.data.bookmarksByImdbID.items;
-  return items[0] as Bookmark;
+  const result = await graphql<ListBookmarks>(queries.bookmarksByImdbId, { imdbID });
+  const items = result.data?.bookmarksByImdbID.items;
+  if (items) {
+    return items[0];
+  }
+  throw new Error("no data");
 }
 
 export async function createBookmark(bookmark: Bookmark) {
   const input = { ...bookmark };
-  const result = await graphql(mutations.createBookmark, { input });
-  return result.data.createBookmark as Bookmark;
+  const result = await graphql<BookmarkResponse>(mutations.createBookmark, { input });
+  return result.data?.createBookmark as Bookmark;
 }
 
 export async function deleteBookmark(id: string) {
@@ -52,23 +70,23 @@ export async function deleteBookmark(id: string) {
 }
 
 export async function listBookmarks(owner: string, nextToken: string | null) {
-  const result = await graphql(queries.bookmarksSortedByTimestamp, {
+  const result = await graphql<ListBookmarks>(queries.bookmarksSortedByTimestamp, {
     owner,
     sortDirection: "DESC",
     limit: 10,
     nextToken,
   });
-  const sortedByTimestamp = result.data.bookmarksSortedByTimestamp;
+  const sortedByTimestamp = result.data?.bookmarksSortedByTimestamp;
   return {
-    bookmarks: sortedByTimestamp.items as Bookmark[],
-    nextToken: sortedByTimestamp.nextToken as string,
+    bookmarks: sortedByTimestamp?.items as Bookmark[],
+    nextToken: sortedByTimestamp?.nextToken as string,
   };
 }
 
 export async function createNote(note: Note) {
   const input = { ...note };
-  const result = await graphql(mutations.createNote, { input });
-  return result.data.createNote as Note;
+  const result = await graphql<NoteResponse>(mutations.createNote, { input });
+  return result.data?.createNote as Note;
 }
 
 export async function relateBookmark(bookmarkId: string, noteId: string) {
@@ -76,19 +94,23 @@ export async function relateBookmark(bookmarkId: string, noteId: string) {
     id: bookmarkId,
     bookmarkNoteId: noteId,
   };
-  const result = await graphql(mutations.updateBookmark, { input });
-  return result.data.updateBookmark;
+  const result = await graphql<BookmarkResponse>(mutations.updateBookmark, { input });
+  return result.data?.updateBookmark;
 }
 
 export async function editNote(note: Note) {
   const input = { ...note };
-  const result = await graphql(mutations.updateNote, { input });
-  return result.data.updateNote as Note;
+  const result = await graphql<NoteResponse>(mutations.updateNote, { input });
+  return result.data?.updateNote as Note;
 }
 
-async function graphql(query: string, variables: any) {
+async function graphql<T>(query: string, variables: any) {
   try {
-    return await API.graphql(graphqlOperation(query, variables));
+    const result = await API.graphql(graphqlOperation(query, variables)) as GraphQLResult<T>;
+    if (!result.data) {
+      throw new Error("no data");
+    }
+    return result;
   } catch (err) {
     const messages = err.errors.map((err: any) => err.message).join("\n");
     throw new Error(messages);

@@ -1,10 +1,10 @@
-import React from 'react';
-import Container from '@material-ui/core/Container';
+import React from "react";
+import Container from "@material-ui/core/Container";
 import Typography from "@material-ui/core/Typography";
-import Button from '@material-ui/core/Button';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faGoogle } from '@fortawesome/free-brands-svg-icons'
+import Button from "@material-ui/core/Button";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { signInGoogle } from "../amplify/Auth";
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { Hub } from "@aws-amplify/core";
 import { useHistory } from "react-router-dom";
-import './App.css';
+import "./App.css";
 import { getLoginUser } from "./amplify/Auth";
 import { Routes } from "./components/Routes";
 import { User, emptyUser } from "./model/User";
@@ -18,16 +18,18 @@ export const App: React.FC = () => {
 
   const history = useHistory();
 
-  const setLoginUser = async () => {
+  const setLoginUser = useCallback(async () => {
     try {
       const user = await getLoginUser();
       if (user.id) {
         setUser(user);
+      } else {
+        history.push("/signin");
       }
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [history]);
 
   useEffect(() => {
     Hub.listen("auth", (capsule) => {
@@ -44,7 +46,7 @@ export const App: React.FC = () => {
       }
     });
     setLoginUser();
-  }, [history]);
+  }, [history, setLoginUser]);
 
   return (
     <UserContext.Provider value={value}>

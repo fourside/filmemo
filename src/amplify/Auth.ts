@@ -1,4 +1,4 @@
-import Auth, { CognitoHostedUIIdentityProvider } from '@aws-amplify/auth';
+import Auth, { CognitoHostedUIIdentityProvider } from "@aws-amplify/auth";
 import awsmobile from "../aws-exports";
 import { emptyUser } from "../model/User";
 

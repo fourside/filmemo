@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 import { useHistory } from "react-router-dom";
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
-import IconButton from '@material-ui/core/IconButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFilm } from '@fortawesome/free-solid-svg-icons'
-import { Bookmark } from '../model/Bookmark';
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import GridListTile from "@material-ui/core/GridListTile";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
+import IconButton from "@material-ui/core/IconButton";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFilm } from "@fortawesome/free-solid-svg-icons";
+import { Bookmark } from "../model/Bookmark";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -14,12 +14,15 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: "10px",
       marginBottom: "10px",
       marginRight: "20px",
+      width: 200,
+      height: 300,
     },
     icon: {
-      color: 'rgba(255, 255, 255, 0.54)',
+      color: "rgba(255, 255, 255, 0.54)",
     },
     img: {
-      width: "200px",
+      width: 200,
+      height: 300,
     }
   }),
 );
