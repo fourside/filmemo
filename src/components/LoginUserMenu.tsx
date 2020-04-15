@@ -7,6 +7,9 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import SearchIcon from "@material-ui/icons/Search";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBookmark } from "@fortawesome/free-solid-svg-icons";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,6 +25,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     menu: {
       transformOrigin: "center bottom",
+    },
+    fontawesome: {
+      marginRight: 5,
+      marginLeft: 4,
     },
   })
 );
@@ -74,8 +81,14 @@ export const LoginUserMenu: React.FC<Props> = (props) => {
         onClose={handleClose}
         elevation={0}
       >
-        <MenuItem onClick={handleSearch}>Search</MenuItem>
-        <MenuItem onClick={handleBookmarkList}>Bookmarks</MenuItem>
+        <MenuItem onClick={handleSearch}>
+          <SearchIcon />
+          Search
+        </MenuItem>
+        <MenuItem onClick={handleBookmarkList}>
+          <FontAwesomeIcon icon={faBookmark} className={classes.fontawesome} />
+          Bookmarks
+        </MenuItem>
       </Menu>
     </div>
   );
