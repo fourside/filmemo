@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
@@ -29,9 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "10px",
     },
     card: {
-      display: "flex",
       height: "100%",
-      minHeight: "466px",
       padding: "10px",
     },
     details: {
@@ -39,13 +38,10 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "10px 0px",
     },
     content: {
-      flex: "1 0 auto",
-      marginLeft: "20px",
     },
     cover: {
       width: 300,
       maxHeight: 450,
-      flexShrink: 0,
     },
   }),
 );
@@ -223,50 +219,56 @@ const FilmPage: React.FC<Props> = (props) => {
   return (
     <Container maxWidth="md" className={classes.root}>
       <Card className={classes.card}>
-        <Poster src={state.film.Poster} alt={state.film.Title} className={classes.cover} />
-        <CardContent className={classes.content}>
-          <Typography component="h5" variant="h5">
-            {state.film.Title}
-          </Typography>
-          <Card className={classes.details} elevation={0}>
-            <DetailItem title={"Released"} value={state.film.Released} />
-            <DetailItem title={"Genre"} value={state.film.Genre} />
-            <DetailItem title={"Director"} value={state.film.Director} />
-            <DetailItem title={"Writer"} value={state.film.Writer} />
-            <DetailItem title={"Actors"} value={state.film.Actors} />
-            <DetailItem title={"Runtime"} value={state.film.Runtime} />
-            <DetailItem title={"Production"} value={state.film.Production} />
-            <DetailItem title={"Imdb Rating"} value={state.film.imdbRating} />
-          </Card>
-          <ActionCard
-            handleAddBookmark={handleAddBookmark}
-            handleRemoveBookmark={handleRemoveBookmark}
-            handleExpand={handleFormExpand}
-            bookmark={state.bookmark}
-            processing={state.processing}
-          />
-          {state.bookmark?.id && (
-            <NoteForm
-              expanded={expanded.form}
-              bookmarkId={state.bookmark.id}
-              note={state.bookmark?.note}
-              onSubmit={handleOnSubmit}
-              handleCancel={handleFormCancel}
-            />
-          )}
-          {state.bookmark?.note && (
-            <NoteCard
-              note={state.bookmark.note}
-              expanded={expanded.card}
-              handleEditNote={handleEditNote}
-            />
-          )}
-          <Typography variant="body1">
-            <Link href={`${IMDB_URL}${state.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
-              <FontAwesomeIcon icon={faImdb} size="lg" /> <FontAwesomeIcon icon={faExternalLinkAlt} /> IMDb
-            </Link>
-          </Typography>
-        </CardContent>
+        <Grid container>
+          <Grid item xs={12} sm={4}>
+            <Poster src={state.film.Poster} alt={state.film.Title} className={classes.cover} />
+          </Grid>
+          <Grid item xs={12} sm={8}>
+            <CardContent className={classes.content}>
+              <Typography component="h5" variant="h5">
+                {state.film.Title}
+              </Typography>
+              <Card className={classes.details} elevation={0}>
+                <DetailItem title={"Released"} value={state.film.Released} />
+                <DetailItem title={"Genre"} value={state.film.Genre} />
+                <DetailItem title={"Director"} value={state.film.Director} />
+                <DetailItem title={"Writer"} value={state.film.Writer} />
+                <DetailItem title={"Actors"} value={state.film.Actors} />
+                <DetailItem title={"Runtime"} value={state.film.Runtime} />
+                <DetailItem title={"Production"} value={state.film.Production} />
+                <DetailItem title={"Imdb Rating"} value={state.film.imdbRating} />
+              </Card>
+              <ActionCard
+                handleAddBookmark={handleAddBookmark}
+                handleRemoveBookmark={handleRemoveBookmark}
+                handleExpand={handleFormExpand}
+                bookmark={state.bookmark}
+                processing={state.processing}
+              />
+              {state.bookmark?.id && (
+                <NoteForm
+                  expanded={expanded.form}
+                  bookmarkId={state.bookmark.id}
+                  note={state.bookmark?.note}
+                  onSubmit={handleOnSubmit}
+                  handleCancel={handleFormCancel}
+                />
+              )}
+              {state.bookmark?.note && (
+                <NoteCard
+                  note={state.bookmark.note}
+                  expanded={expanded.card}
+                  handleEditNote={handleEditNote}
+                />
+              )}
+              <Typography variant="body1">
+                <Link href={`${IMDB_URL}${state.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
+                  <FontAwesomeIcon icon={faImdb} size="lg" /> <FontAwesomeIcon icon={faExternalLinkAlt} /> IMDb
+                </Link>
+              </Typography>
+            </CardContent>
+          </Grid>
+        </Grid>
       </Card>
     </Container>
   );

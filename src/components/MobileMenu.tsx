@@ -1,32 +1,24 @@
 import React, { useState, MouseEvent } from "react";
 import { useHistory } from "react-router-dom";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import AccountCircle from "@material-ui/icons/AccountCircle";
 import SearchIcon from "@material-ui/icons/Search";
+import Input from "@material-ui/icons/Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBookmark } from "@fortawesome/free-solid-svg-icons";
+import { signOut } from "../amplify/Auth";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: "flex",
-    },
     button: {
       color: "#fff",
       textTransform: "inherit",
     },
-    text: {
-      marginLeft: "0.25em",
-    },
-    menu: {
-      transformOrigin: "center bottom",
-    },
-    fontawesome: {
+    icon: {
       marginRight: 5,
       marginLeft: 4,
     },
@@ -35,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   userName: string;
 }
-export const LoginUserMenu: React.FC<Props> = (props) => {
+export const MobileMenu: React.FC<Props> = (props) => {
   const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(undefined);
   const classes = useStyles();
   const history = useHistory();
@@ -58,21 +50,22 @@ export const LoginUserMenu: React.FC<Props> = (props) => {
     handleClose();
   };
 
+  const handleClickSignOut = (event: MouseEvent) => {
+    signOut();
+  };
+
   return (
-    <div className={classes.root}>
-      <Button
-        aria-controls="simple-menu"
-        aria-haspopup="true"
-        color="primary"
-        className={classes.button}
+    <div>
+      <IconButton
+        color="inherit"
+        aria-label="open drawer"
         onClick={handleClick}
+        edge="start"
+        className={classes.button}
       >
-        <AccountCircle />
-        <Typography variant="subtitle2" className={classes.text}>
-          {props.userName}
-        </Typography>
-        <ExpandMoreIcon />
-      </Button>
+        <MenuIcon />
+      </IconButton>
+
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
@@ -81,13 +74,21 @@ export const LoginUserMenu: React.FC<Props> = (props) => {
         onClose={handleClose}
         elevation={0}
       >
+        <MenuItem disabled={true}>
+          <AccountCircle className={classes.icon} />
+          {props.userName}
+        </MenuItem>
         <MenuItem onClick={handleSearch}>
           <SearchIcon />
           Search
         </MenuItem>
         <MenuItem onClick={handleBookmarkList}>
-          <FontAwesomeIcon icon={faBookmark} className={classes.fontawesome} />
+          <FontAwesomeIcon icon={faBookmark} className={classes.icon} />
           Bookmarks
+        </MenuItem>
+        <MenuItem onClick={handleClickSignOut}>
+          <Input className={classes.icon} />
+          Sign out
         </MenuItem>
       </Menu>
     </div>
