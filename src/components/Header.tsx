@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <HeaderLogo />
+          <HeaderLogo isLogedIn={!!user.id} />
           {user.id ? (
             <>
               <LoginUserMenu userName={user.name} />
