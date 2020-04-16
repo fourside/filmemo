@@ -19,7 +19,7 @@ interface Props {
   title: string;
   processing: boolean;
   handleChangeTitle: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleSearch: () => void;
+  handleSubmit: () => void;
 }
 export const SearchForm: React.FC<Props> = (props) => {
   const classes = useStyles();
@@ -30,7 +30,7 @@ export const SearchForm: React.FC<Props> = (props) => {
     if (!valid) {
       return;
     }
-    props.handleSearch();
+    props.handleSubmit();
   };
 
   return (
