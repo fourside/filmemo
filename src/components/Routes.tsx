@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { Loading } from "./Loading";
 
 const UserPage = lazy(() => import("./UserPage"));
@@ -16,7 +16,9 @@ export const Routes: React.FC = () => {
         <Route exact path="/signin" component={SignInPage} />
         <Route exact path="/films/:imdbID" component={FilmPage} />
         <Route exact path="/bookmarks" component={BookmarkListPage} />
-        <Route path="*" component={SignInPage} />
+        <Route path="*">
+          <Redirect to="/signin" />
+        </Route>
       </Switch>
     </Suspense>
   );
