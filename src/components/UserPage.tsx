@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useContext, ChangeEvent } from "react";
+import React, { useState, useEffect, useContext, useCallback, ChangeEvent } from "react";
+import { useHistory, useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import { SearchForm } from "./SearchForm";
 import { searchByTitle } from "../amplify/API";
@@ -6,7 +7,11 @@ import { FilmList } from "./FilmList";
 import { Film } from "../model/Film";
 import { ErrorContext } from "../context/ErrorContext";
 import { useIntersect } from "../hooks/useIntersect";
+import { Loading } from "./Loading";
 
+interface RouterParams {
+  searchTitle?: string;
+}
 const UserPage: React.FC = () => {
   const [search, setSearch] = useState({
     films: [] as Film[],
@@ -15,7 +20,10 @@ const UserPage: React.FC = () => {
     processing: false,
     nextLoading: false,
   });
-  const [title, setTitle] = useState("");
+  const history = useHistory();
+  const params = useParams<RouterParams>();
+  const searchTitle = params.searchTitle ?? "";
+  const [title, setTitle] = useState(searchTitle);
   const { setError } = useContext(ErrorContext);
   const { intersecting, ref } = useIntersect();
 
@@ -62,7 +70,7 @@ const UserPage: React.FC = () => {
     setTitle(value);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = useCallback(async (title: string) => {
     setSearch({
       ...search,
       processing: true,
@@ -82,12 +90,35 @@ const UserPage: React.FC = () => {
         processing: false,
       });
     }
+  }, [search, setError]);
+
+  useEffect(() => {
+    if (title) {
+      setTitle(prev => {
+        return title;
+      });
+      (async () => {
+        await handleSearch(title);
+      })();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSubmit = async () => {
+    history.push(`/title/${title}`);
+    handleSearch(title);
   };
 
   return (
     <Container maxWidth="lg">
-      <SearchForm processing={search.processing} handleSearch={handleSearch} handleChangeTitle={handleChangeTitle} title={title} />
+      <SearchForm
+        processing={search.processing}
+        handleSubmit={handleSubmit}
+        handleChangeTitle={handleChangeTitle}
+        title={title}
+      />
       <FilmList processing={search.processing} films={search.films} />
+      {search.nextLoading && <Loading />}
       <div ref={ref} />
     </Container>
   );
