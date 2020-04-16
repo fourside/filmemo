@@ -12,6 +12,7 @@ export const Routes: React.FC = () => {
     <Suspense fallback={<Loading />}>
       <Switch>
         <Route exact path="/" component={UserPage} />
+        <Route exact path="/title/:searchTitle" component={UserPage} />
         <Route exact path="/signin" component={SignInPage} />
         <Route exact path="/films/:imdbID" component={FilmPage} />
         <Route exact path="/bookmarks" component={BookmarkListPage} />
