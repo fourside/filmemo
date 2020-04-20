@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import { Loading } from "./Loading";
 
 const UserPage = lazy(() => import("./UserPage"));
-const SignInPage = lazy(() => import("./SignInPage"));
+const SignInPage = lazy(() => import("../containers/SignInPage"));
 const FilmPage = lazy(() => import("./FilmPage"));
 const BookmarkListPage = lazy(() => import("./BookmarkListPage"));
 

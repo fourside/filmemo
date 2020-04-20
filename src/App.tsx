@@ -9,8 +9,9 @@ import { UserContext } from "./context/UserContext";
 import { Header } from "./components/Header";
 import { ErrorContext } from "./context/ErrorContext";
 import { ErrorAlert } from "./components/ErrorAlert";
+import { Props } from "./containers/App";
 
-export const App: React.FC = () => {
+export const App: React.FC<Props> = (props) => {
   const [user, setUser] = useState<User>(emptyUser);
   const [error, setError] = useState("");
   const value = useMemo(() => ({ user, setUser}), [user, setUser]);
@@ -36,17 +37,17 @@ export const App: React.FC = () => {
       const { event } = capsule.payload;
       switch (event) {
         case "signIn":
-          setLoginUser();
+          props.signedIn();
           history.push("/");
           break;
         case "signOut":
-          setUser(emptyUser);
+          props.clearUser();
           history.push("/signin");
           break;
       }
     });
     setLoginUser();
-  }, [history, setLoginUser]);
+  }, [history, setLoginUser, props]);
 
   return (
     <UserContext.Provider value={value}>
