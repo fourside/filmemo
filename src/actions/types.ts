@@ -1,5 +1,6 @@
 import { Action } from "redux";
 import { User } from "../model/User";
+import { Film } from "../model/Film";
 
 export enum ACTIONS {
   SIGN_IN_REQUEST = "SIGN_IN_REQUEST",
@@ -7,12 +8,15 @@ export enum ACTIONS {
   SIGN_IN_FAILURE = "SIGN_IN_FAILURE",
   SIGN_OUT_REQUEST = "SIGN_OUT_REQUEST",
   SIGNED_OUT = "SIGNED_OUT",
-  SEARCH_REQUEST = "SEARCH_REQUEST",
-  SEARCH_SUCCESS = "SEARCH_SUCCESS",
-  SEARCH_FAILURE = "SEARCH_FAILURE",
-  SEARCH_NEXT_REQUEST = "SEARCH_NEXT_REQUEST",
-  SEARCH_NEXT_SUCCESS = "SEARCH_NEXT_SUCCESS",
-  SEARCH_NEXT_FAILURE = "SEARCH_NEXT_FAILURE",
+  SEARCH_FILMS_REQUEST = "SEARCH_FILMS_REQUEST",
+  SEARCH_FILMS_SUCCESS = "SEARCH_FILMS_SUCCESS",
+  SEARCH_FILMS_FAILURE = "SEARCH_FILMS_FAILURE",
+  SEARCH_FILMS_NEXT_REQUEST = "SEARCH_FILMS_NEXT_REQUEST",
+  SEARCH_FILMS_NEXT_SUCCESS = "SEARCH_FILMS_NEXT_SUCCESS",
+  SEARCH_FILMS_NEXT_FAILURE = "SEARCH_FILMS_NEXT_FAILURE",
+  SEARCH_FILM_DETAILS_REQUEST = "SEARCH_FILM_DETAILS_REQUEST",
+  SEARCH_FILM_DETAILS_SUCCESS = "SEARCH_FILM_DETAILS_SUCCESS",
+  SEARCH_FILM_DETAILS_FAILURE = "SEARCH_FILM_DETAILS_FAILURE",
   LIST_BOOKMARK_REQUEST = "LIST_BOOKMARK_REQUEST",
   LIST_BOOKMARK_SUCCESS = "LIST_BOOKMARK_SUCCESS",
   LIST_BOOKMARK_FAILURE = "LIST_BOOKMARK_FAILURE",
@@ -50,3 +54,52 @@ interface SignedOutAction extends Action {
 }
 
 export type UserActionTypes = SignInRequestAction | SignInSuccessAction | SignOutRequestAction | SignedOutAction;
+
+interface SearchFilmsRequestAction extends Action {
+  type: ACTIONS.SEARCH_FILMS_REQUEST,
+  payload: {
+    processing: true,
+  },
+}
+interface SearchFilmsSuccessAction extends Action {
+  type: ACTIONS.SEARCH_FILMS_SUCCESS,
+  payload: {
+    processing: false,
+    films: Film[],
+    hasNext: boolean,
+  },
+}
+interface SearchFilmsFailureAction extends Action {
+  type: ACTIONS.SEARCH_FILMS_FAILURE,
+  payload: {
+    processing: false,
+    error: string,
+  },
+}
+
+export type SearchFilmsActionTypes = SearchFilmsRequestAction | SearchFilmsSuccessAction | SearchFilmsFailureAction;
+
+interface SearchFilmsNextRequestAction extends Action {
+  type: ACTIONS.SEARCH_FILMS_NEXT_REQUEST,
+  payload: {
+    nextLoading: true,
+  },
+}
+interface SearchFilmsNextSuccessAction extends Action {
+  type: ACTIONS.SEARCH_FILMS_NEXT_SUCCESS,
+  payload: {
+    nextLoading: false,
+    films: Film[],
+    hasNext: boolean,
+    page: number,
+  },
+}
+interface SearchFilmsNextFailureAction extends Action {
+  type: ACTIONS.SEARCH_FILMS_NEXT_FAILURE,
+  payload: {
+    nextLoading: false,
+    error: string,
+  },
+}
+
+export type SearchFilmsNextActionTypes = SearchFilmsNextRequestAction | SearchFilmsNextSuccessAction | SearchFilmsNextFailureAction;

@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { Loading } from "./Loading";
 
-const UserPage = lazy(() => import("./UserPage"));
+const UserPage = lazy(() => import("../containers/UserPage"));
 const SignInPage = lazy(() => import("../containers/SignInPage"));
 const FilmPage = lazy(() => import("./FilmPage"));
 const BookmarkListPage = lazy(() => import("./BookmarkListPage"));

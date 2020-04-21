@@ -1,7 +1,8 @@
 import { combineReducers } from "redux";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
-import { UserActionTypes, ACTIONS } from "../actions/types";
+import { UserActionTypes, SearchFilmsActionTypes, ACTIONS, SearchFilmsNextActionTypes } from "../actions/types";
 import { emptyUser } from "../model/User";
+import { Film } from "../model/Film";
 
 const userReducer = (state = emptyUser, action: UserActionTypes) => {
   switch(action.type) {
@@ -17,11 +18,44 @@ const userReducer = (state = emptyUser, action: UserActionTypes) => {
   }
 };
 
+const initFilmsState = {
+  processing: false,
+  films: [] as Film[],
+  page: 1,
+  hasNext: false,
+  nextLoading: false,
+  error: "",
+};
+const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | SearchFilmsNextActionTypes) => {
+  switch(action.type) {
+    case ACTIONS.SEARCH_FILMS_REQUEST:
+    case ACTIONS.SEARCH_FILMS_SUCCESS:
+    case ACTIONS.SEARCH_FILMS_FAILURE:
+    case ACTIONS.SEARCH_FILMS_NEXT_REQUEST:
+    case ACTIONS.SEARCH_FILMS_NEXT_FAILURE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case ACTIONS.SEARCH_FILMS_NEXT_SUCCESS:
+      const total = state.films.concat(action.payload.films);
+      return {
+        ...state,
+        ...action.payload,
+        films: total,
+      };
+    default:
+      return state;
+  }
+};
+
 export const rootReducer = combineReducers({
   user: userReducer,
+  films: filmsReducer,
 });
 
 type RootState = ReturnType<typeof rootReducer>
 
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useUser = () => useTypedSelector(state => state.user);
+export const useFilms = () => useTypedSelector(state => state.films);
