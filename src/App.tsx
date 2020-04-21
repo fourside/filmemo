@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Hub } from "@aws-amplify/core";
 import { useHistory } from "react-router-dom";
 import "./App.css";
-import { getLoginUser } from "./amplify/Auth";
 import { Routes } from "./components/Routes";
 import { User, emptyUser } from "./model/User";
 import { UserContext } from "./context/UserContext";
@@ -12,25 +11,22 @@ import { ErrorAlert } from "./components/ErrorAlert";
 import { Props } from "./containers/App";
 
 export const App: React.FC<Props> = (props) => {
-  const [user, setUser] = useState<User>(emptyUser);
+  const [user] = useState<User>(emptyUser);
   const [error, setError] = useState("");
-  const value = useMemo(() => ({ user, setUser}), [user, setUser]);
+  const value = useMemo(() => ({ user }), [user]);
   const errorValue = useMemo(() => ({ error, setError}), [error, setError]);
 
   const history = useHistory();
 
-  const setLoginUser = useCallback(async () => {
-    try {
-      const user = await getLoginUser();
-      if (user.id) {
-        setUser(user);
-      } else {
+  useEffect(() => {
+    (async () => {
+      const user = await props.signedIn();
+      if (user && !user.id) {
         history.push("/signin");
       }
-    } catch (err) {
-      console.log(err);
-    }
-  }, [history]);
+    })();
+    // eslint-disable-next-line
+  }, []);
 
   useEffect(() => {
     Hub.listen("auth", (capsule) => {
@@ -46,8 +42,7 @@ export const App: React.FC<Props> = (props) => {
           break;
       }
     });
-    setLoginUser();
-  }, [history, setLoginUser, props]);
+  }, [history, props]);
 
   return (
     <UserContext.Provider value={value}>

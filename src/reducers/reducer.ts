@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { useSelector, TypedUseSelectorHook } from "react-redux";
 import { UserActionTypes, ACTIONS } from "../actions/types";
 import { emptyUser } from "../model/User";
 
@@ -19,3 +20,8 @@ const userReducer = (state = emptyUser, action: UserActionTypes) => {
 export const rootReducer = combineReducers({
   user: userReducer,
 });
+
+type RootState = ReturnType<typeof rootReducer>
+
+const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useUser = () => useTypedSelector(state => state.user);

@@ -21,7 +21,7 @@ export function signOutRequest(): UserActionTypes {
   };
 }
 
-type ThunkUserAction = ThunkAction<Promise<void>, User, undefined, UserActionTypes>;
+type ThunkUserAction = ThunkAction<Promise<void | User>, User, undefined, UserActionTypes>;
 
 export function signIn(): ThunkUserAction {
   return async function(dispatch) {
@@ -34,6 +34,7 @@ export function signedIn(): ThunkUserAction {
   return async (dispatch) => {
     const user = await Auth.getLoginUser();
     dispatch(signInSuccess(user));
+    return user;
   };
 }
 
