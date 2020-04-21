@@ -1,4 +1,4 @@
-import React, { useContext, MouseEvent } from "react";
+import React, { MouseEvent } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Hidden from "@material-ui/core/Hidden";
@@ -6,11 +6,11 @@ import Link from "@material-ui/core/Link";
 import Typography from "@material-ui/core/Typography";
 import Input from "@material-ui/icons/Input";
 import { createStyles, Theme, makeStyles } from "@material-ui/core/styles";
-import { UserContext } from "../context/UserContext";
 import { signOut } from "../amplify/Auth";
 import { LoginUserMenu } from "./LoginUserMenu";
 import { HeaderLogo } from "./HeaderLogo";
 import { MobileMenu } from "./MobileMenu";
+import { useUser } from "../reducers/reducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const Header: React.FC = () => {
-  const { user } = useContext(UserContext);
+  const user = useUser();
   const classes = useStyles();
 
   const handleClickSignOut = (event: MouseEvent) => {

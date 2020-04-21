@@ -7,8 +7,8 @@ import { listBookmarks } from "../amplify/API";
 import { Loading } from "./Loading";
 import { BookmarkTile } from "./BookmarkTile";
 import { ErrorContext } from "../context/ErrorContext";
-import { UserContext } from "../context/UserContext";
 import { useIntersect } from "../hooks/useIntersect";
+import { useUser } from "../reducers/reducer";
 
 interface State {
   bookmarks?: Bookmark[];
@@ -22,7 +22,7 @@ const BookmarkListPage: React.FC = () => {
     nextToken: null,
   });
   const [nextLoading, setNextLoading] = useState(false);
-  const { user } = useContext(UserContext);
+  const user = useUser();
   const { setError } = useContext(ErrorContext);
 
   useEffect(() => {

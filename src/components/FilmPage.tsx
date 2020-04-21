@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -19,10 +19,10 @@ import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
 import { Bookmark } from "../model/Bookmark";
 import { ErrorContext } from "../context/ErrorContext";
-import { UserContext } from "../context/UserContext";
 import { NoteForm } from "./NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
+import { useUser } from "../reducers/reducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,15 +46,13 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 const IMDB_URL = "https://www.imdb.com/title/";
-interface Props extends RouteComponentProps<{ imdbID: string }> {
-}
 interface State {
   film?: FilmDetail;
   bookmark?: Bookmark;
   processing: boolean;
 }
-const FilmPage: React.FC<Props> = (props) => {
-  const { imdbID } = props.match.params;
+const FilmPage: React.FC = () => {
+  const { imdbID } = useParams<{ imdbID: string} >();
   const [state, setState] = useState<State>({
     film: undefined,
     bookmark: undefined,
@@ -66,7 +64,7 @@ const FilmPage: React.FC<Props> = (props) => {
   });
 
   const classes = useStyles();
-  const { user } = useContext(UserContext);
+  const user = useUser();
   const { setError } = useContext(ErrorContext);
 
   useEffect(() => {
