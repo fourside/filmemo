@@ -14,6 +14,7 @@ export enum ACTIONS {
   SEARCH_FILMS_NEXT_REQUEST = "SEARCH_FILMS_NEXT_REQUEST",
   SEARCH_FILMS_NEXT_SUCCESS = "SEARCH_FILMS_NEXT_SUCCESS",
   SEARCH_FILMS_NEXT_FAILURE = "SEARCH_FILMS_NEXT_FAILURE",
+  SEARCH_TITLE_INPUT = "SEARCH_TITLE_INPUT",
   SEARCH_FILM_DETAILS_REQUEST = "SEARCH_FILM_DETAILS_REQUEST",
   SEARCH_FILM_DETAILS_SUCCESS = "SEARCH_FILM_DETAILS_SUCCESS",
   SEARCH_FILM_DETAILS_FAILURE = "SEARCH_FILM_DETAILS_FAILURE",
@@ -103,3 +104,11 @@ interface SearchFilmsNextFailureAction extends Action {
 }
 
 export type SearchFilmsNextActionTypes = SearchFilmsNextRequestAction | SearchFilmsNextSuccessAction | SearchFilmsNextFailureAction;
+
+interface SearchTitleInputAction extends Action {
+  type: ACTIONS.SEARCH_TITLE_INPUT,
+  payload: {
+    title: string,
+  },
+}
+export type SearchTitleInputActionTypes = SearchTitleInputAction;

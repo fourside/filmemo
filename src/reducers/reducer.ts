@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
-import { UserActionTypes, SearchFilmsActionTypes, ACTIONS, SearchFilmsNextActionTypes } from "../actions/types";
+import { UserActionTypes, SearchFilmsActionTypes, ACTIONS, SearchFilmsNextActionTypes, SearchTitleInputActionTypes } from "../actions/types";
 import { emptyUser } from "../model/User";
 import { Film } from "../model/Film";
 
@@ -49,9 +49,19 @@ const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | S
   }
 };
 
+const titleReducer = (state = "", action: SearchTitleInputActionTypes) => {
+  switch(action.type) {
+    case ACTIONS.SEARCH_TITLE_INPUT:
+      return action.payload.title;
+    default:
+      return state;
+  }
+};
+
 export const rootReducer = combineReducers({
   user: userReducer,
   films: filmsReducer,
+  title: titleReducer,
 });
 
 type RootState = ReturnType<typeof rootReducer>
@@ -59,3 +69,4 @@ type RootState = ReturnType<typeof rootReducer>
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useUser = () => useTypedSelector(state => state.user);
 export const useFilms = () => useTypedSelector(state => state.films);
+export const useTitle = () => useTypedSelector(state => state.title);

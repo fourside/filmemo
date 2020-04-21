@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext, useCallback, ChangeEvent } from "react";
+import React, { useEffect, useContext, ChangeEvent } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import { SearchForm } from "./SearchForm";
@@ -6,18 +6,14 @@ import { FilmList } from "./FilmList";
 import { ErrorContext } from "../context/ErrorContext";
 import { useIntersect } from "../hooks/useIntersect";
 import { Loading } from "./Loading";
-import { useFilms } from "../reducers/reducer";
+import { useFilms, useTitle } from "../reducers/reducer";
 import { Props } from "../containers/UserPage";
 
-interface RouterParams {
-  searchTitle?: string;
-}
 const UserPage: React.FC<Props> = (props) => {
   const films = useFilms();
   const history = useHistory();
-  const params = useParams<RouterParams>();
-  const searchTitle = params.searchTitle ?? "";
-  const [title, setTitle] = useState(searchTitle);
+  const { searchTitle } = useParams<{ searchTitle?: string }>();
+  const title = useTitle();
   const { setError } = useContext(ErrorContext);
   const { intersecting, ref } = useIntersect();
 
@@ -26,6 +22,14 @@ const UserPage: React.FC<Props> = (props) => {
       setError(films.error);
     }
   }, [films.error, setError]);
+
+  useEffect(() => {
+    if (searchTitle) {
+      props.searchTitleInput(searchTitle);
+      props.searchFilms(searchTitle);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (films.nextLoading || films.processing) {
@@ -41,28 +45,12 @@ const UserPage: React.FC<Props> = (props) => {
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    setTitle(value);
+    props.searchTitleInput(value);
   };
-
-  const handleSearch = useCallback(async (title: string) => {
-    props.searchFilms(title);
-  }, [props]);
-
-  useEffect(() => {
-    if (title) {
-      setTitle(prev => {
-        return title;
-      });
-      (async () => {
-        await handleSearch(title);
-      })();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleSubmit = async () => {
     history.push(`/title/${title}`);
-    handleSearch(title);
+    props.searchFilms(title);
   };
 
   return (

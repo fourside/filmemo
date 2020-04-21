@@ -1,5 +1,5 @@
 import { ThunkAction } from "redux-thunk";
-import { ACTIONS, UserActionTypes, SearchFilmsActionTypes, SearchFilmsNextActionTypes } from "./types";
+import { ACTIONS, UserActionTypes, SearchFilmsActionTypes, SearchFilmsNextActionTypes, SearchTitleInputActionTypes } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film } from "../model/Film";
 import * as Auth from "../amplify/Auth";
@@ -146,5 +146,14 @@ export function searchFilmsNext(title: string, nextPage: number): ThunkSearchFil
     } catch (err) {
       dispatch(searchFilmsNextFailure(err.message));
     }
+  };
+}
+
+export function searchTitleInput(title: string): SearchTitleInputActionTypes {
+  return {
+    type: ACTIONS.SEARCH_TITLE_INPUT,
+    payload: {
+      title
+    },
   };
 }
