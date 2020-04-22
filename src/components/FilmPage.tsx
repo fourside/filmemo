@@ -11,12 +11,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { getBookmark } from "../amplify/API";
-import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
-import { Bookmark } from "../model/Bookmark";
 import { ErrorContext } from "../context/ErrorContext";
 import { NoteForm } from "./NoteForm";
 import { NoteCard } from "./NoteCard";
@@ -46,29 +43,18 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 const IMDB_URL = "https://www.imdb.com/title/";
-interface State {
-  film?: FilmDetail;
-  bookmark?: Bookmark;
-  processing: boolean;
-}
+
 const FilmPage: React.FC<Props> = (props) => {
+  const { saerchFilmDetails, addBookmark, removeBookmark, getBookmark } = props;
   const { imdbID } = useParams<{ imdbID: string} >();
-  const [state, setState] = useState<State>({
-    film: undefined,
-    bookmark: undefined,
-    processing: false,
-  });
   const [expanded, setExpanded] = useState({
     form: false,
     card: true,
   });
-
+  const { setError } = useContext(ErrorContext);
   const classes = useStyles();
   const user = useUser();
-  const { setError } = useContext(ErrorContext);
   const filmDetails = useFilmDetails();
-
-  const { saerchFilmDetails, addBookmark, removeBookmark } = props;
 
   useEffect(() => {
     saerchFilmDetails(imdbID);
@@ -109,31 +95,11 @@ const FilmPage: React.FC<Props> = (props) => {
   };
 
   const handleOnSubmit = () => {
-    (async () => {
-      setState({
-        ...filmDetails,
-        processing: true,
-      });
-      try {
-        const bookmark = await getBookmark(imdbID);
-        setState({
-          ...filmDetails,
-          bookmark,
-          processing: false,
-        });
-      } catch (err) {
-        setError(err.message);
-        setState({
-          ...filmDetails,
-          processing: false,
-        });
-      } finally {
-        setExpanded({
-          card: true,
-          form: false,
-        });
-      }
-    })();
+    getBookmark(imdbID);
+    setExpanded({
+      card: true,
+      form: false,
+    });
   };
 
   const handleEditNote = () => {

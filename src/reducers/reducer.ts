@@ -9,6 +9,7 @@ import {
   SearchFilmDetailsActionTypes,
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
+  GetBookmarkActionTypes,
 } from "../actions/types";
 import { FilmDetailsState } from "../actions/action";
 import { emptyUser } from "../model/User";
@@ -74,7 +75,11 @@ const initialFilmDetailsState: FilmDetailsState = {
   processing: false,
   error: "",
 };
-type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes | AddBookmarkActionTypes | RemoveBookmarkActionTypes;
+type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes
+  | AddBookmarkActionTypes
+  | RemoveBookmarkActionTypes
+  | GetBookmarkActionTypes
+  ;
 const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetailsActionTyeps) => {
   switch(action.type) {
     case ACTIONS.SEARCH_FILM_DETAILS_REQUEST:
@@ -86,6 +91,9 @@ const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetails
     case ACTIONS.REMOVE_BOOKMARK_REQUEST:
     case ACTIONS.REMOVE_BOOKMARK_SUCCESS:
     case ACTIONS.REMOVE_BOOKMARK_FAILURE:
+    case ACTIONS.GET_BOOKMARK_REQUEST:
+    case ACTIONS.GET_BOOKMARK_SUCCESS:
+    case ACTIONS.GET_BOOKMARK_FAILURE:
       return {
         ...state,
         ...action.payload,

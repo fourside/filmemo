@@ -8,6 +8,7 @@ import {
   SearchFilmDetailsActionTypes,
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
+  GetBookmarkActionTypes,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
@@ -308,6 +309,46 @@ export function removeBookmark(bookmarkId: string): ThunkRemoveBookmarkAction {
       dispatch(removeBookmarkSuccess());
     } catch (err) {
       dispatch(removeBookmarkFailure(err.message));
+    }
+  };
+}
+
+type ThunkGetBookmarkAction = ThunkAction<Promise<void>, BookmarkState, undefined, GetBookmarkActionTypes>;
+
+function getBookmarkRequest(): GetBookmarkActionTypes {
+  return {
+    type: ACTIONS.GET_BOOKMARK_REQUEST,
+    payload: {
+      processing: true,
+    },
+  };
+}
+function getBookmarkSuccess(bookmark: Bookmark): GetBookmarkActionTypes {
+  return {
+    type: ACTIONS.GET_BOOKMARK_SUCCESS,
+    payload: {
+      processing: false,
+      bookmark,
+    },
+  };
+}
+function getBookmarkFailure(error: string): GetBookmarkActionTypes {
+  return {
+    type: ACTIONS.GET_BOOKMARK_FAILURE,
+    payload: {
+      processing: false,
+      error,
+    },
+  };
+}
+export function getBookmark(imdbID: string): ThunkGetBookmarkAction {
+  return async (dispatch) => {
+    dispatch(getBookmarkRequest());
+    try {
+      const bookmark = await API.getBookmark(imdbID);
+      dispatch(getBookmarkSuccess(bookmark));
+    } catch (err) {
+      dispatch(getBookmarkFailure(err.message));
     }
   };
 }
