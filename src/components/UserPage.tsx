@@ -16,6 +16,7 @@ const UserPage: React.FC<Props> = (props) => {
   const title = useTitle();
   const { setError } = useContext(ErrorContext);
   const { intersecting, ref } = useIntersect();
+  const { searchTitleInput, searchFilms } = props;
 
   useEffect(() => {
     if (films.error) {
@@ -25,21 +26,18 @@ const UserPage: React.FC<Props> = (props) => {
 
   useEffect(() => {
     if (searchTitle) {
-      props.searchTitleInput(searchTitle);
-      props.searchFilms(searchTitle);
+      searchTitleInput(searchTitle);
+      searchFilms(searchTitle);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchTitle, searchTitleInput, searchFilms]);
 
   useEffect(() => {
     if (films.nextLoading || films.processing) {
       return;
     }
     if (intersecting && films.hasNext) {
-      (async () => {
-        const nextPage = films.page + 1;
-        props.searchFilmsNext(title, nextPage);
-      })();
+      const nextPage = films.page + 1;
+      props.searchFilmsNext(title, nextPage);
     }
   }, [intersecting, props, title, films.hasNext, films.page, films.nextLoading, films.processing]);
 

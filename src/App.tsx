@@ -13,32 +13,32 @@ export const App: React.FC<Props> = (props) => {
   const errorValue = useMemo(() => ({ error, setError}), [error, setError]);
 
   const history = useHistory();
+  const { signedIn, clearUser } = props;
 
   useEffect(() => {
     (async () => {
-      const user = await props.signedIn();
+      const user = await signedIn();
       if (user && !user.id) {
         history.push("/signin");
       }
     })();
-    // eslint-disable-next-line
-  }, []);
+  }, [history, signedIn]);
 
   useEffect(() => {
     Hub.listen("auth", (capsule) => {
       const { event } = capsule.payload;
       switch (event) {
         case "signIn":
-          props.signedIn();
+          signedIn();
           history.push("/");
           break;
         case "signOut":
-          props.clearUser();
+          clearUser();
           history.push("/signin");
           break;
       }
     });
-  }, [history, props]);
+  }, [history, signedIn, clearUser]);
 
   return (
     <ErrorContext.Provider value={errorValue}>
