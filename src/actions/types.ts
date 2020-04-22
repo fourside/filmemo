@@ -1,6 +1,7 @@
 import { Action } from "redux";
 import { User } from "../model/User";
-import { Film } from "../model/Film";
+import { Film, FilmDetail } from "../model/Film";
+import { Bookmark } from "../model/Bookmark";
 
 export enum ACTIONS {
   SIGN_IN_REQUEST = "SIGN_IN_REQUEST",
@@ -112,3 +113,27 @@ interface SearchTitleInputAction extends Action {
   },
 }
 export type SearchTitleInputActionTypes = SearchTitleInputAction;
+
+interface SearchFilmDetailsRequestAction extends Action {
+  type: ACTIONS.SEARCH_FILM_DETAILS_REQUEST,
+  payload: {
+    processing: true,
+  },
+}
+interface SearchFilmDetailsSuccessAction extends Action {
+  type: ACTIONS.SEARCH_FILM_DETAILS_SUCCESS,
+  payload: {
+    processing: false,
+    film: FilmDetail,
+    bookmark?: Bookmark,
+  },
+}
+interface SearchFilmDetailsFailureAction extends Action {
+  type: ACTIONS.SEARCH_FILM_DETAILS_FAILURE,
+  payload: {
+    processing: false,
+    error: string,
+  },
+}
+
+export type SearchFilmDetailsActionTypes = SearchFilmDetailsRequestAction | SearchFilmDetailsSuccessAction | SearchFilmDetailsFailureAction;

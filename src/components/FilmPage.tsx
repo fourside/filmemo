@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { searchById } from "../amplify/API";
 import { createBookmark, getBookmark, deleteBookmark } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
@@ -22,7 +21,8 @@ import { ErrorContext } from "../context/ErrorContext";
 import { NoteForm } from "./NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
-import { useUser } from "../reducers/reducer";
+import { useUser, useFilmDetails } from "../reducers/reducer";
+import { Props } from "../containers/FilmPage";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,7 +51,7 @@ interface State {
   bookmark?: Bookmark;
   processing: boolean;
 }
-const FilmPage: React.FC = () => {
+const FilmPage: React.FC<Props> = (props) => {
   const { imdbID } = useParams<{ imdbID: string} >();
   const [state, setState] = useState<State>({
     film: undefined,
@@ -66,83 +66,62 @@ const FilmPage: React.FC = () => {
   const classes = useStyles();
   const user = useUser();
   const { setError } = useContext(ErrorContext);
+  const filmDetails = useFilmDetails();
+
+  const { saerchFilmDetails } = props;
+  useEffect(() => {
+    saerchFilmDetails(imdbID);
+  }, [saerchFilmDetails, imdbID]);
 
   useEffect(() => {
-    (async () => {
-      setState(prev => {
-        return {
-          ...prev,
-          processing: true,
-        };
-      });
-      try {
-        const results = await Promise.all([
-          searchById(imdbID),
-          getBookmark(imdbID),
-        ]);
-        setState(prev => {
-          return {
-            ...prev,
-            film: results[0],
-            bookmark: results[1],
-            processing: false,
-          };
-        });
-      } catch (err) {
-        setError(err.message);
-        setState(prev => {
-          return {
-            ...prev,
-            processing: false,
-          };
-        });
-      }
-    })();
-  }, [imdbID, setError]);
+    if (filmDetails.error) {
+      setError(filmDetails.error);
+    }
+  }, [filmDetails.error, setError]);
 
   const handleAddBookmark = async () => {
-    if (!state.film) {
+    if (!filmDetails.film) {
       return;
     }
     try {
       setState({
-        ...state,
+        ...filmDetails,
         processing: true,
       });
       const params = {
         imdbID,
-        title: state.film.Title,
-        posterURL: state.film.Poster,
+        title: filmDetails.film.Title,
+        posterURL: filmDetails.film.Poster,
         owner: user.owner,
         createdAt: new Date(),
       };
       const bookmark = await createBookmark(params);
       setState({
-        ...state,
+        ...filmDetails,
         bookmark,
         processing: false,
       });
     } catch (err) {
       setError(err.message);
       setState({
-        ...state,
+        ...filmDetails,
         processing: false,
       });
     }
   };
 
   const handleRemoveBookmark = async () => {
-    if (!state.bookmark?.id) {
+    if (!filmDetails.bookmark?.id) {
       return;
     }
     try {
       setState({
-        ...state,
+        ...filmDetails,
         processing: true,
       });
-      await deleteBookmark(state.bookmark.id);
+      await deleteBookmark(filmDetails.bookmark.id);
       setState({
-        ...state,
+        ...filmDetails,
         bookmark: undefined,
         processing: false,
       });
@@ -155,7 +134,7 @@ const FilmPage: React.FC = () => {
     } catch (err) {
       setError(err.message);
       setState({
-        ...state,
+        ...filmDetails,
         processing: false,
       });
     }
@@ -171,20 +150,20 @@ const FilmPage: React.FC = () => {
   const handleOnSubmit = () => {
     (async () => {
       setState({
-        ...state,
+        ...filmDetails,
         processing: true,
       });
       try {
         const bookmark = await getBookmark(imdbID);
         setState({
-          ...state,
+          ...filmDetails,
           bookmark,
           processing: false,
         });
       } catch (err) {
         setError(err.message);
         setState({
-          ...state,
+          ...filmDetails,
           processing: false,
         });
       } finally {
@@ -210,7 +189,7 @@ const FilmPage: React.FC = () => {
     });
   };
 
-  if (!state.film) {
+  if (!filmDetails.film) {
     return <Loading />;
   }
 
@@ -219,48 +198,48 @@ const FilmPage: React.FC = () => {
       <Card className={classes.card}>
         <Grid container>
           <Grid item xs={12} sm={4}>
-            <Poster src={state.film.Poster} alt={state.film.Title} className={classes.cover} />
+            <Poster src={filmDetails.film.Poster} alt={filmDetails.film.Title} className={classes.cover} />
           </Grid>
           <Grid item xs={12} sm={8}>
             <CardContent className={classes.content}>
               <Typography component="h5" variant="h5">
-                {state.film.Title}
+                {filmDetails.film.Title}
               </Typography>
               <Card className={classes.details} elevation={0}>
-                <DetailItem title={"Released"} value={state.film.Released} />
-                <DetailItem title={"Genre"} value={state.film.Genre} />
-                <DetailItem title={"Director"} value={state.film.Director} />
-                <DetailItem title={"Writer"} value={state.film.Writer} />
-                <DetailItem title={"Actors"} value={state.film.Actors} />
-                <DetailItem title={"Runtime"} value={state.film.Runtime} />
-                <DetailItem title={"Production"} value={state.film.Production} />
-                <DetailItem title={"Imdb Rating"} value={state.film.imdbRating} />
+                <DetailItem title={"Released"} value={filmDetails.film.Released} />
+                <DetailItem title={"Genre"} value={filmDetails.film.Genre} />
+                <DetailItem title={"Director"} value={filmDetails.film.Director} />
+                <DetailItem title={"Writer"} value={filmDetails.film.Writer} />
+                <DetailItem title={"Actors"} value={filmDetails.film.Actors} />
+                <DetailItem title={"Runtime"} value={filmDetails.film.Runtime} />
+                <DetailItem title={"Production"} value={filmDetails.film.Production} />
+                <DetailItem title={"Imdb Rating"} value={filmDetails.film.imdbRating} />
               </Card>
               <ActionCard
                 handleAddBookmark={handleAddBookmark}
                 handleRemoveBookmark={handleRemoveBookmark}
                 handleExpand={handleFormExpand}
-                bookmark={state.bookmark}
-                processing={state.processing}
+                bookmark={filmDetails.bookmark}
+                processing={filmDetails.processing}
               />
-              {state.bookmark?.id && (
+              {filmDetails.bookmark?.id && (
                 <NoteForm
                   expanded={expanded.form}
-                  bookmarkId={state.bookmark.id}
-                  note={state.bookmark?.note}
+                  bookmarkId={filmDetails.bookmark.id}
+                  note={filmDetails.bookmark?.note}
                   onSubmit={handleOnSubmit}
                   handleCancel={handleFormCancel}
                 />
               )}
-              {state.bookmark?.note && (
+              {filmDetails.bookmark?.note && (
                 <NoteCard
-                  note={state.bookmark.note}
+                  note={filmDetails.bookmark.note}
                   expanded={expanded.card}
                   handleEditNote={handleEditNote}
                 />
               )}
               <Typography variant="body1">
-                <Link href={`${IMDB_URL}${state.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
+                <Link href={`${IMDB_URL}${filmDetails.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
                   <FontAwesomeIcon icon={faImdb} size="lg" /> <FontAwesomeIcon icon={faExternalLinkAlt} /> IMDb
                 </Link>
               </Typography>

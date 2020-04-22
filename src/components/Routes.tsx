@@ -4,7 +4,7 @@ import { Loading } from "./Loading";
 
 const UserPage = lazy(() => import("../containers/UserPage"));
 const SignInPage = lazy(() => import("../containers/SignInPage"));
-const FilmPage = lazy(() => import("./FilmPage"));
+const FilmPage = lazy(() => import("../containers/FilmPage"));
 const BookmarkListPage = lazy(() => import("./BookmarkListPage"));
 
 export const Routes: React.FC = () => {

@@ -1,9 +1,17 @@
 import { ThunkAction } from "redux-thunk";
-import { ACTIONS, UserActionTypes, SearchFilmsActionTypes, SearchFilmsNextActionTypes, SearchTitleInputActionTypes } from "./types";
+import {
+  ACTIONS,
+  UserActionTypes,
+  SearchFilmsActionTypes,
+  SearchFilmsNextActionTypes,
+  SearchTitleInputActionTypes,
+  SearchFilmDetailsActionTypes,
+} from "./types";
 import { User, emptyUser } from "../model/User";
-import { Film } from "../model/Film";
+import { Film, FilmDetail } from "../model/Film";
 import * as Auth from "../amplify/Auth";
-import { searchByTitle } from "../amplify/API";
+import * as API from "../amplify/API";
+import { Bookmark } from "../model/Bookmark";
 
 function signInRequest(): UserActionTypes {
   return { type: ACTIONS.SIGN_IN_REQUEST };
@@ -97,7 +105,7 @@ export function searchFilms(title: string): ThunkSearchFilmsAction {
   return async (dispatch) => {
     dispatch(searchFilmsRequest());
     try {
-      const { films, hasNext } = await searchByTitle(title);
+      const { films, hasNext } = await API.searchByTitle(title);
       dispatch(searchFilmsSuccess({ films, hasNext }));
     } catch (err) {
       dispatch(searchFilmsFailure(err.message));
@@ -141,7 +149,7 @@ export function searchFilmsNext(title: string, nextPage: number): ThunkSearchFil
   return async (dispatch) => {
     dispatch(searchFilmsNextRequest());
     try {
-      const { films, hasNext } = await searchByTitle(title, nextPage);
+      const { films, hasNext } = await API.searchByTitle(title, nextPage);
       dispatch(searchFilmsNextSuccess({ films, hasNext, page: nextPage }));
     } catch (err) {
       dispatch(searchFilmsNextFailure(err.message));
@@ -155,5 +163,57 @@ export function searchTitleInput(title: string): SearchTitleInputActionTypes {
     payload: {
       title
     },
+  };
+}
+
+export type FilmDetailsState = {
+  processing: boolean;
+  film?: FilmDetail;
+  bookmark?: Bookmark;
+  error: string;
+};
+type ThunkSearchFilmDetailsAction = ThunkAction<Promise<void>, FilmDetailsState, undefined, SearchFilmDetailsActionTypes>;
+
+function searchFilmDetailsRequest(): SearchFilmDetailsActionTypes {
+  return {
+    type: ACTIONS.SEARCH_FILM_DETAILS_REQUEST,
+    payload: {
+      processing: true,
+    },
+  };
+}
+
+function searchFilmDetailsSuccess(film: FilmDetail, bookmark?: Bookmark): SearchFilmDetailsActionTypes {
+  return {
+    type: ACTIONS.SEARCH_FILM_DETAILS_SUCCESS,
+    payload: {
+      processing: false,
+      film,
+      bookmark,
+    },
+  };
+}
+function searchFilmDetailsFailure(error: string): SearchFilmDetailsActionTypes {
+  return {
+    type: ACTIONS.SEARCH_FILM_DETAILS_FAILURE,
+    payload: {
+      processing: false,
+      error,
+    },
+  };
+}
+
+export function saerchFilmDetails(imdbID: string): ThunkSearchFilmDetailsAction {
+  return async (dispatch) => {
+    dispatch(searchFilmDetailsRequest());
+    try {
+      const [filmDetails, bookmark] = await Promise.all([
+        API.searchById(imdbID),
+        API.getBookmark(imdbID),
+      ]);
+      dispatch(searchFilmDetailsSuccess(filmDetails, bookmark));
+    } catch (err) {
+      dispatch(searchFilmDetailsFailure(err.message));
+    }
   };
 }
