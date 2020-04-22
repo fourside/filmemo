@@ -137,3 +137,26 @@ interface SearchFilmDetailsFailureAction extends Action {
 }
 
 export type SearchFilmDetailsActionTypes = SearchFilmDetailsRequestAction | SearchFilmDetailsSuccessAction | SearchFilmDetailsFailureAction;
+
+interface AddBookmarkRequestAction extends Action {
+  type: ACTIONS.ADD_BOOKMARK_REQUEST,
+  payload: {
+    processing: true,
+  },
+}
+interface AddBookmarkSuccessAction extends Action {
+  type: ACTIONS.ADD_BOOKMARK_SUCCESS,
+  payload: {
+    processing: false,
+    bookmark: Bookmark,
+  },
+}
+interface AddBookmarkFailureAction extends Action {
+  type: ACTIONS.ADD_BOOKMARK_FAILURE,
+  payload: {
+    processing: false,
+    error: string,
+  },
+}
+
+export type AddBookmarkActionTypes = AddBookmarkRequestAction | AddBookmarkSuccessAction | AddBookmarkFailureAction;

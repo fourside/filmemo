@@ -7,6 +7,7 @@ import {
   SearchFilmsNextActionTypes,
   SearchTitleInputActionTypes,
   SearchFilmDetailsActionTypes,
+  AddBookmarkActionTypes,
 } from "../actions/types";
 import { FilmDetailsState } from "../actions/action";
 import { emptyUser } from "../model/User";
@@ -72,11 +73,14 @@ const initialFilmDetailsState: FilmDetailsState = {
   processing: false,
   error: "",
 };
-const filmDetailsReducer = (state = initialFilmDetailsState, action: SearchFilmDetailsActionTypes) => {
+const filmDetailsReducer = (state = initialFilmDetailsState, action: SearchFilmDetailsActionTypes | AddBookmarkActionTypes) => {
   switch(action.type) {
     case ACTIONS.SEARCH_FILM_DETAILS_REQUEST:
     case ACTIONS.SEARCH_FILM_DETAILS_SUCCESS:
     case ACTIONS.SEARCH_FILM_DETAILS_FAILURE:
+    case ACTIONS.ADD_BOOKMARK_REQUEST:
+    case ACTIONS.ADD_BOOKMARK_SUCCESS:
+    case ACTIONS.ADD_BOOKMARK_FAILURE:
       return {
         ...state,
         ...action.payload,

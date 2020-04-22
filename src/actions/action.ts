@@ -6,6 +6,7 @@ import {
   SearchFilmsNextActionTypes,
   SearchTitleInputActionTypes,
   SearchFilmDetailsActionTypes,
+  AddBookmarkActionTypes,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
@@ -214,6 +215,58 @@ export function saerchFilmDetails(imdbID: string): ThunkSearchFilmDetailsAction 
       dispatch(searchFilmDetailsSuccess(filmDetails, bookmark));
     } catch (err) {
       dispatch(searchFilmDetailsFailure(err.message));
+    }
+  };
+}
+
+export type BookmarkState = {
+  processing: boolean;
+  bookmark: Bookmark;
+  error: string;
+};
+type ThunkAddBookmarkAction = ThunkAction<Promise<void>, BookmarkState, undefined, AddBookmarkActionTypes>;
+
+function addBookmarkRequest(): AddBookmarkActionTypes {
+  return {
+    type: ACTIONS.ADD_BOOKMARK_REQUEST,
+    payload: {
+      processing: true,
+    },
+  };
+}
+function addBookmarkSuccess(bookmark: Bookmark): AddBookmarkActionTypes {
+  return {
+    type: ACTIONS.ADD_BOOKMARK_SUCCESS,
+    payload: {
+      processing: false,
+      bookmark,
+    },
+  };
+}
+function addBookmarkFailure(error: string): AddBookmarkActionTypes {
+  return {
+    type: ACTIONS.ADD_BOOKMARK_FAILURE,
+    payload: {
+      processing: false,
+      error,
+    },
+  };
+}
+type AddBookmarkParams = {
+  imdbID: string;
+  title: string;
+  posterURL: string
+  owner: string;
+  createdAt: Date;
+};
+export function addBookmark(params: AddBookmarkParams): ThunkAddBookmarkAction {
+  return async (dispatch) => {
+    dispatch(addBookmarkRequest());
+    try {
+      const bookmark = await API.createBookmark(params);
+      dispatch(addBookmarkSuccess(bookmark));
+    } catch (err) {
+      dispatch(addBookmarkFailure(err.message));
     }
   };
 }

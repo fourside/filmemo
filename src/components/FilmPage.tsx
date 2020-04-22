@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { createBookmark, getBookmark, deleteBookmark } from "../amplify/API";
+import { getBookmark, deleteBookmark } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
@@ -68,7 +68,8 @@ const FilmPage: React.FC<Props> = (props) => {
   const { setError } = useContext(ErrorContext);
   const filmDetails = useFilmDetails();
 
-  const { saerchFilmDetails } = props;
+  const { saerchFilmDetails, addBookmark } = props;
+
   useEffect(() => {
     saerchFilmDetails(imdbID);
   }, [saerchFilmDetails, imdbID]);
@@ -83,31 +84,14 @@ const FilmPage: React.FC<Props> = (props) => {
     if (!filmDetails.film) {
       return;
     }
-    try {
-      setState({
-        ...filmDetails,
-        processing: true,
-      });
-      const params = {
-        imdbID,
-        title: filmDetails.film.Title,
-        posterURL: filmDetails.film.Poster,
-        owner: user.owner,
-        createdAt: new Date(),
-      };
-      const bookmark = await createBookmark(params);
-      setState({
-        ...filmDetails,
-        bookmark,
-        processing: false,
-      });
-    } catch (err) {
-      setError(err.message);
-      setState({
-        ...filmDetails,
-        processing: false,
-      });
-    }
+    const params = {
+      imdbID,
+      title: filmDetails.film.Title,
+      posterURL: filmDetails.film.Poster,
+      owner: user.owner,
+      createdAt: new Date(),
+    };
+    addBookmark(params);
   };
 
   const handleRemoveBookmark = async () => {

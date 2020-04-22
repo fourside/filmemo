@@ -1,10 +1,11 @@
 import { connect, ConnectedProps } from "react-redux";
-import { saerchFilmDetails } from "../actions/action";
+import { saerchFilmDetails, addBookmark } from "../actions/action";
 import FilmPage from "../components/FilmPage";
 
 const mapState = () => ({});
 const mapDispatch = {
   saerchFilmDetails,
+  addBookmark,
 };
 const connector = connect(mapState, mapDispatch);
 
