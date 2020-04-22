@@ -28,7 +28,7 @@ export enum ACTIONS {
   ADD_BOOKMARK_REQUEST = "ADD_BOOKMARK_REQUEST",
   ADD_BOOKMARK_SUCCESS = "ADD_BOOKMARK_SUCCESS",
   ADD_BOOKMARK_FAILURE = "ADD_BOOKMARK_FAILURE",
-  REMOVE_BOOKMARK_REQUEST = "REMOVE_BOOKMARK_SUCCESS",
+  REMOVE_BOOKMARK_REQUEST = "REMOVE_BOOKMARK_REQUEST",
   REMOVE_BOOKMARK_SUCCESS = "REMOVE_BOOKMARK_SUCCESS",
   REMOVE_BOOKMARK_FAILURE = "REMOVE_BOOKMARK_FAILURE",
   ADD_NOTE_REQUEST = "ADD_NOTE_REQUEST",
@@ -160,3 +160,26 @@ interface AddBookmarkFailureAction extends Action {
 }
 
 export type AddBookmarkActionTypes = AddBookmarkRequestAction | AddBookmarkSuccessAction | AddBookmarkFailureAction;
+
+interface RemoveBookmarkRequestAction extends Action {
+  type: ACTIONS.REMOVE_BOOKMARK_REQUEST,
+  payload: {
+    processing: true,
+  },
+}
+interface RemoveBookmarkSuccessAction extends Action {
+  type: ACTIONS.REMOVE_BOOKMARK_SUCCESS,
+  payload: {
+    processing: false,
+    bookmark: undefined,
+  },
+}
+interface RemoveBookmarkFailureAction extends Action {
+  type: ACTIONS.REMOVE_BOOKMARK_FAILURE,
+  payload: {
+    processing: false,
+    error: string,
+  },
+}
+
+export type RemoveBookmarkActionTypes = RemoveBookmarkRequestAction | RemoveBookmarkSuccessAction | RemoveBookmarkFailureAction;

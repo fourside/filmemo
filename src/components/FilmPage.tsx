@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { getBookmark, deleteBookmark } from "../amplify/API";
+import { getBookmark } from "../amplify/API";
 import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
@@ -68,7 +68,7 @@ const FilmPage: React.FC<Props> = (props) => {
   const { setError } = useContext(ErrorContext);
   const filmDetails = useFilmDetails();
 
-  const { saerchFilmDetails, addBookmark } = props;
+  const { saerchFilmDetails, addBookmark, removeBookmark } = props;
 
   useEffect(() => {
     saerchFilmDetails(imdbID);
@@ -94,34 +94,11 @@ const FilmPage: React.FC<Props> = (props) => {
     addBookmark(params);
   };
 
-  const handleRemoveBookmark = async () => {
+  const handleRemoveBookmark = () => {
     if (!filmDetails.bookmark?.id) {
       return;
     }
-    try {
-      setState({
-        ...filmDetails,
-        processing: true,
-      });
-      await deleteBookmark(filmDetails.bookmark.id);
-      setState({
-        ...filmDetails,
-        bookmark: undefined,
-        processing: false,
-      });
-      if (expanded.form) {
-        setExpanded({
-          ...expanded,
-          form: false,
-        });
-      }
-    } catch (err) {
-      setError(err.message);
-      setState({
-        ...filmDetails,
-        processing: false,
-      });
-    }
+    removeBookmark(filmDetails.bookmark.id);
   };
 
   const handleFormExpand = () => {
