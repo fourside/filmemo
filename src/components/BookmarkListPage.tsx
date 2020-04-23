@@ -1,9 +1,7 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useContext } from "react";
 import Container from "@material-ui/core/Container";
 import GridList from "@material-ui/core/GridList";
 import Typography from "@material-ui/core/Typography";
-import { Bookmark } from "../model/Bookmark";
-import { listBookmarks } from "../amplify/API";
 import { Loading } from "./Loading";
 import { BookmarkTile } from "./BookmarkTile";
 import { ErrorContext } from "../context/ErrorContext";
@@ -11,22 +9,12 @@ import { useIntersect } from "../hooks/useIntersect";
 import { useUser, useBookmarks } from "../reducers/reducer";
 import { Props } from "../containers/BookmarkListPage";
 
-interface State {
-  bookmarks?: Bookmark[];
-  processing: boolean;
-  nextToken: string | null;
-}
 const BookmarkListPage: React.FC<Props> = (props) => {
-  const [state, setState] = useState<State>({
-    bookmarks: undefined,
-    processing: false,
-    nextToken: null,
-  });
-  const bookmarkState = useBookmarks();
-  const [nextLoading, setNextLoading] = useState(false);
+  const state = useBookmarks();
   const user = useUser();
   const { setError } = useContext(ErrorContext);
-  const { listBookmark } = props;
+  const { listBookmark, listBookmarkNext } = props;
+  const { intersecting, ref } = useIntersect();
 
   useEffect(() => {
     if (!user.owner) {
@@ -35,49 +23,33 @@ const BookmarkListPage: React.FC<Props> = (props) => {
     listBookmark(user.owner);
   }, [user.owner, listBookmark]);
 
-  const fetchNextBookmarks = useCallback(() => {
-    if (nextLoading) {
-      return;
-    }
-    if (bookmarkState.nextToken) {
-      (async () => {
-        try {
-          setNextLoading(true);
-          const { bookmarks, nextToken } = await listBookmarks(user.owner, bookmarkState.nextToken);
-          const before = bookmarkState.bookmarks ?? [];
-          setState(prev => {
-            return {
-              ...prev,
-              nextToken,
-              bookmarks: before.concat(bookmarks),
-            };
-          });
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setNextLoading(false);
-        }
-      })();
-    }
-  }, [nextLoading, setError, user.owner, bookmarkState.nextToken, bookmarkState.bookmarks]);
-
-  const { intersecting, ref } = useIntersect();
   useEffect(() => {
     if (intersecting) {
-      fetchNextBookmarks();
+      if (state.nextLoading) {
+        return;
+      }
+      if (state.nextToken) {
+        listBookmarkNext(user.owner, state.nextToken);
+      }
     }
-  }, [intersecting, fetchNextBookmarks]);
+  }, [intersecting, state.nextLoading, state.nextToken, listBookmarkNext, user.owner]);
 
-  if (bookmarkState.processing) {
+  useEffect(() => {
+    if (state.error) {
+      setError(state.error);
+    }
+  }, [state.error, setError]);
+
+  if (state.processing) {
     return <Loading />;
   }
 
-  if (!bookmarkState.bookmarks) {
+  if (!state.bookmarks) {
     // when error
     return null;
   }
 
-  if (bookmarkState.bookmarks.length === 0) {
+  if (state.bookmarks.length === 0) {
     return (
       <Container maxWidth="lg">
         <div>no bookmark. add bookmark!</div>
@@ -89,11 +61,11 @@ const BookmarkListPage: React.FC<Props> = (props) => {
     <Container maxWidth="lg">
       <Typography variant="h4" gutterBottom>Bookmarks</Typography>
       <GridList>
-        {bookmarkState.bookmarks.map(bookmark => (
+        {state.bookmarks.map(bookmark => (
           <BookmarkTile bookmark={bookmark} key={bookmark.id} />
         ))}
       </GridList>
-      {nextLoading && <Loading />}
+      {state.nextLoading && <Loading />}
       <div ref={ref} />
     </Container>
   );

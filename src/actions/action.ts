@@ -525,3 +525,44 @@ export function listBookmark(owner: string): ThunkListBookmarkAction {
     }
   };
 }
+
+function listBookmarkNextRequest(): ListBookmarkActionTypes {
+  return {
+    type: ACTIONS.LIST_BOOKMARK_NEXT_REQUEST,
+    payload: {
+      nextLoading: true,
+    },
+  };
+}
+
+function listBookmarkNextSuccess(bookmarks: Bookmark[], nextToken: string | null): ListBookmarkActionTypes {
+  return {
+    type: ACTIONS.LIST_BOOKMARK_NEXT_SUCCESS,
+    payload: {
+      nextLoading: false,
+      bookmarks,
+      nextToken,
+    },
+  };
+}
+function listBookmarkNextFailure(error: string): ListBookmarkActionTypes {
+  return {
+    type: ACTIONS.LIST_BOOKMARK_NEXT_FAILURE,
+    payload: {
+      nextLoading: false,
+      error,
+    },
+  };
+}
+
+export function listBookmarkNext(owner: string, token: string): ThunkListBookmarkAction {
+  return async (dispatch) => {
+    dispatch(listBookmarkNextRequest());
+    try {
+      const { bookmarks, nextToken } = await API.listBookmarks(owner, token);
+      dispatch(listBookmarkNextSuccess(bookmarks, nextToken));
+    } catch (err) {
+      dispatch(listBookmarkNextFailure(err.message));
+    }
+  };
+}

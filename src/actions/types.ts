@@ -330,10 +330,39 @@ interface ListBookmarkFailureAction extends Action {
     error: string,
   },
 }
+interface ListBookmarkNextRequestAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK_NEXT_REQUEST,
+  payload: {
+    nextLoading: boolean,
+  },
+}
+interface ListBookmarkNextSuccessAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK_NEXT_SUCCESS,
+  payload: {
+    nextLoading: boolean,
+    bookmarks: Bookmark[],
+    nextToken: string | null,
+  },
+}
+interface ListBookmarkNextFailureAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK_NEXT_FAILURE,
+  payload: {
+    nextLoading: boolean,
+    error: string,
+  },
+}
 
 export type BookmarksState = ListBookmarkRequestAction["payload"]
   & ListBookmarkSuccessAction["payload"]
-  & ListBookmarkFailureAction["payload"];
+  & ListBookmarkFailureAction["payload"]
+  & ListBookmarkNextRequestAction["payload"]
+  & ListBookmarkNextSuccessAction["payload"]
+  & ListBookmarkNextFailureAction["payload"]
+  ;
 export type ListBookmarkActionTypes = ListBookmarkRequestAction
   | ListBookmarkSuccessAction
-  | ListBookmarkFailureAction;
+  | ListBookmarkFailureAction
+  | ListBookmarkNextRequestAction
+  | ListBookmarkNextSuccessAction
+  | ListBookmarkNextFailureAction
+  ;

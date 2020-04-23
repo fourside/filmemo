@@ -152,19 +152,29 @@ const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
 };
 
 const initBookmarkListState: BookmarksState = {
-  bookmarks: [] as Bookmark[],
+  bookmarks: new Array<Bookmark>(),
   processing: false,
   nextToken: null,
   error: "",
+  nextLoading: false,
 };
 const listBookmarkReducer = (state = initBookmarkListState, action: ListBookmarkActionTypes) => {
   switch(action.type) {
     case ACTIONS.LIST_BOOKMARK_REQUEST:
     case ACTIONS.LIST_BOOKMARK_SUCCESS:
     case ACTIONS.LIST_BOOKMARK_FAILURE:
+    case ACTIONS.LIST_BOOKMARK_NEXT_REQUEST:
+    case ACTIONS.LIST_BOOKMARK_NEXT_FAILURE:
       return {
         ...state,
         ...action.payload,
+      };
+    case ACTIONS.LIST_BOOKMARK_NEXT_SUCCESS:
+      const bookmarks = state.bookmarks.concat(action.payload.bookmarks);
+      return {
+        ...state,
+        ...action.payload,
+        bookmarks,
       };
     default:
       return state;
