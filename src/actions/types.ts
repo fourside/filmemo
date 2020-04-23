@@ -285,3 +285,26 @@ export type ChangeNoteFormActionTypes = ChangeNoteDateAction
   | ChangeNoteWhereAction
   | ChangeNoteTextAction
   ;
+
+interface EditNoteRequestAction extends Action {
+  type: ACTIONS.EDIT_NOTE_REQUEST,
+  payload: {
+    processing: boolean,
+  },
+}
+interface EditNoteSuccessAction extends Action {
+  type: ACTIONS.EDIT_NOTE_SUCCESS,
+  payload: {
+    processing: boolean,
+    note: Note,
+  },
+}
+interface EditNoteFailureAction extends Action {
+  type: ACTIONS.EDIT_NOTE_FAILURE,
+  payload: {
+    processing: boolean,
+    error: string,
+  },
+}
+
+export type EditNoteActionTypes = EditNoteRequestAction | EditNoteSuccessAction | EditNoteFailureAction;

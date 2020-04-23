@@ -12,6 +12,7 @@ import {
   GetBookmarkActionTypes,
   NoteState,
   AddNoteActionTypes,
+  EditNoteActionTypes,
   ChangeNoteFormActionTypes,
 } from "../actions/types";
 import { FilmDetailsState } from "../actions/action";
@@ -118,12 +119,15 @@ const initialNoteState: NoteState = {
   },
   error: "",
 };
-type NoteActionTypes = AddNoteActionTypes | ChangeNoteFormActionTypes;
+type NoteActionTypes = AddNoteActionTypes | EditNoteActionTypes | ChangeNoteFormActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
     case ACTIONS.ADD_NOTE_REQUEST:
     case ACTIONS.ADD_NOTE_SUCCESS:
     case ACTIONS.ADD_NOTE_FAILURE:
+    case ACTIONS.EDIT_NOTE_REQUEST:
+    case ACTIONS.EDIT_NOTE_SUCCESS:
+    case ACTIONS.EDIT_NOTE_FAILURE:
       return {
         ...state,
         ...action.payload,

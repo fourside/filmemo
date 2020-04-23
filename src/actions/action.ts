@@ -12,6 +12,7 @@ import {
   AddNoteActionTypes,
   NoteState,
   ChangeNoteFormActionTypes,
+  EditNoteActionTypes,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
@@ -437,5 +438,45 @@ export function changeNoteText(text: string): ChangeNoteFormActionTypes {
         text,
       },
     },
+  };
+}
+
+type ThunkEditNoteAction = ThunkAction<Promise<void>, NoteState, undefined, EditNoteActionTypes>;
+
+function editNoteRequest(): EditNoteActionTypes {
+  return {
+    type: ACTIONS.EDIT_NOTE_REQUEST,
+    payload: {
+      processing: true,
+    },
+  };
+}
+function editNoteSuccess(note: Note): EditNoteActionTypes {
+  return {
+    type: ACTIONS.EDIT_NOTE_SUCCESS,
+    payload: {
+      processing: false,
+      note,
+    },
+  };
+}
+function editNoteFailure(error: string): EditNoteActionTypes {
+  return {
+    type: ACTIONS.EDIT_NOTE_FAILURE,
+    payload: {
+      processing: false,
+      error,
+    },
+  };
+}
+export function editNote(noteParams: NoteParams): ThunkEditNoteAction {
+  return async (dispatch) => {
+    dispatch(editNoteRequest());
+    try {
+      const note = await API.editNote(noteParams);
+      dispatch(editNoteSuccess(note));
+    } catch (err) {
+      dispatch(editNoteFailure(err.message));
+    }
   };
 }

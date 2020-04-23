@@ -12,7 +12,6 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { editNote } from "../amplify/API";
 import { formatDate, validate } from "../model/Note";
 import { ErrorContext } from "../context/ErrorContext";
 import { ContainerProps } from "../containers/NoteForm";
@@ -45,12 +44,18 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const [valid, setValid] = useState(false);
   const classes = useStyles();
   const { setError } = useContext(ErrorContext);
-  const { addNote } = props;
+  const { addNote, editNote } = props;
   const noteForm = useNote();
 
   useEffect(() => {
     setValid(validate(noteForm.note));
   }, [noteForm.note]);
+
+  useEffect(() => {
+    if (noteForm.error) {
+      setError(noteForm.error);
+    }
+  }, [noteForm.error, setError]);
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
     const rating = value ?? 0;
@@ -79,19 +84,15 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
     if (!valid) {
       return;
     }
-    try {
-      const { note } = noteForm;
-      if (!note.id) {
-        await addNote(note, props.bookmarkId);
-      } else {
-        const noteCopy = Object.assign({}, note);
-        delete noteCopy.owner;
-        await editNote(noteCopy);
-      }
-      props.onSubmit();
-    } catch (err) {
-      setError(err.message);
+    const { note } = noteForm;
+    if (!note.id) {
+      addNote(note, props.bookmarkId);
+    } else {
+      const noteCopy = Object.assign({}, note);
+      delete noteCopy.owner;
+      editNote(noteCopy);
     }
+    props.onSubmit();
   };
 
   const { note } = noteForm;
