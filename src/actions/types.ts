@@ -308,3 +308,32 @@ interface EditNoteFailureAction extends Action {
 }
 
 export type EditNoteActionTypes = EditNoteRequestAction | EditNoteSuccessAction | EditNoteFailureAction;
+
+interface ListBookmarkRequestAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK_REQUEST,
+  payload: {
+    processing: boolean,
+  },
+}
+interface ListBookmarkSuccessAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK_SUCCESS,
+  payload: {
+    processing: boolean,
+    bookmarks: Bookmark[],
+    nextToken: string | null,
+  },
+}
+interface ListBookmarkFailureAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK_FAILURE,
+  payload: {
+    processing: boolean,
+    error: string,
+  },
+}
+
+export type BookmarksState = ListBookmarkRequestAction["payload"]
+  & ListBookmarkSuccessAction["payload"]
+  & ListBookmarkFailureAction["payload"];
+export type ListBookmarkActionTypes = ListBookmarkRequestAction
+  | ListBookmarkSuccessAction
+  | ListBookmarkFailureAction;

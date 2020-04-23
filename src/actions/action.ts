@@ -13,6 +13,8 @@ import {
   NoteState,
   ChangeNoteFormActionTypes,
   EditNoteActionTypes,
+  ListBookmarkActionTypes,
+  BookmarksState,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
@@ -477,6 +479,49 @@ export function editNote(noteParams: NoteParams): ThunkEditNoteAction {
       dispatch(editNoteSuccess(note));
     } catch (err) {
       dispatch(editNoteFailure(err.message));
+    }
+  };
+}
+
+type ThunkListBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, ListBookmarkActionTypes>;
+
+function listBookmarkRequest(): ListBookmarkActionTypes {
+  return {
+    type: ACTIONS.LIST_BOOKMARK_REQUEST,
+    payload: {
+      processing: true,
+    },
+  };
+}
+
+function listBookmarkSuccess(bookmarks: Bookmark[], nextToken: string | null): ListBookmarkActionTypes {
+  return {
+    type: ACTIONS.LIST_BOOKMARK_SUCCESS,
+    payload: {
+      processing: false,
+      bookmarks,
+      nextToken,
+    },
+  };
+}
+function listBookmarkFailure(error: string): ListBookmarkActionTypes {
+  return {
+    type: ACTIONS.LIST_BOOKMARK_FAILURE,
+    payload: {
+      processing: false,
+      error,
+    },
+  };
+}
+
+export function listBookmark(owner: string): ThunkListBookmarkAction {
+  return async (dispatch) => {
+    dispatch(listBookmarkRequest());
+    try {
+      const { bookmarks, nextToken } = await API.listBookmarks(owner, null);
+      dispatch(listBookmarkSuccess(bookmarks, nextToken));
+    } catch (err) {
+      dispatch(listBookmarkFailure(err.message));
     }
   };
 }
