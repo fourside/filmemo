@@ -10,7 +10,9 @@ import {
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
+  NoteState,
   AddNoteActionTypes,
+  ChangeNoteFormActionTypes,
 } from "../actions/types";
 import { FilmDetailsState } from "../actions/action";
 import { emptyUser } from "../model/User";
@@ -105,7 +107,7 @@ const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetails
   }
 };
 
-const initialNoteState = {
+const initialNoteState: NoteState = {
   processing: false,
   note: {
     rating: 0,
@@ -113,9 +115,11 @@ const initialNoteState = {
     where: "",
     text: "",
     bookmarkId: "",
-  }
+  },
+  error: "",
 };
-const noteReducer = (state = initialNoteState, action: AddNoteActionTypes) => {
+type NoteActionTypes = AddNoteActionTypes | ChangeNoteFormActionTypes;
+const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
     case ACTIONS.ADD_NOTE_REQUEST:
     case ACTIONS.ADD_NOTE_SUCCESS:
@@ -123,6 +127,17 @@ const noteReducer = (state = initialNoteState, action: AddNoteActionTypes) => {
       return {
         ...state,
         ...action.payload,
+      };
+    case ACTIONS.CHANGE_NOTE_RATING:
+    case ACTIONS.CHANGE_NOTE_WHEN:
+    case ACTIONS.CHANGE_NOTE_WHERE:
+    case ACTIONS.CHANGE_NOTE_TEXT:
+      return {
+        ...state,
+        note: {
+          ...state.note,
+          ...action.payload.note,
+        },
       };
     default:
       return state;

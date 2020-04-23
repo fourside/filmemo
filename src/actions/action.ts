@@ -11,6 +11,7 @@ import {
   GetBookmarkActionTypes,
   AddNoteActionTypes,
   NoteState,
+  ChangeNoteFormActionTypes,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
@@ -395,5 +396,46 @@ export function addNote(noteParams: NoteParams, bookmarkId: string): ThunkAddNot
     } catch (err) {
       dispatch(addNoteFailure(err.message));
     }
+  };
+}
+
+export function changeNoteRating(rating: number): ChangeNoteFormActionTypes {
+  return {
+    type: ACTIONS.CHANGE_NOTE_RATING,
+    payload: {
+      note: {
+        rating,
+      },
+    },
+  };
+}
+export function changeNoteWhen(when: string): ChangeNoteFormActionTypes {
+  return {
+    type: ACTIONS.CHANGE_NOTE_WHEN,
+    payload: {
+      note: {
+        when,
+      },
+    },
+  };
+}
+export function changeNoteWhere(where: string): ChangeNoteFormActionTypes {
+  return {
+    type: ACTIONS.CHANGE_NOTE_WHERE,
+    payload: {
+      note: {
+        where,
+      },
+    },
+  };
+}
+export function changeNoteText(text: string): ChangeNoteFormActionTypes {
+  return {
+    type: ACTIONS.CHANGE_NOTE_TEXT,
+    payload: {
+      note: {
+        text,
+      },
+    },
   };
 }

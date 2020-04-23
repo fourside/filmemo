@@ -13,9 +13,10 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { editNote } from "../amplify/API";
-import { Note, formatDate, validate } from "../model/Note";
+import { formatDate, validate } from "../model/Note";
 import { ErrorContext } from "../context/ErrorContext";
 import { ContainerProps } from "../containers/NoteForm";
+import { useNote } from "../reducers/reducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -37,53 +38,40 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Props {
   expanded: boolean;
   bookmarkId: string;
-  note?: Note;
   onSubmit: () => void;
   handleCancel: () => void;
 }
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
-  const initialNote = props.note ?? {
-    rating: 0,
-    when: formatDate(),
-    where: "",
-    text: "",
-    bookmarkId: props.bookmarkId,
-  };
-  const [form, setForm] = useState<Note>(initialNote);
   const [valid, setValid] = useState(false);
-  const [processing, setProcessing] = useState(false);
   const classes = useStyles();
   const { setError } = useContext(ErrorContext);
   const { addNote } = props;
+  const noteForm = useNote();
 
   useEffect(() => {
-    setValid(validate(form));
-  }, [form]);
+    setValid(validate(noteForm.note));
+  }, [noteForm.note]);
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
     const rating = value ?? 0;
-    setForm({
-      ...form,
-      rating,
-    });
+    props.changeNoteRating(rating);
   };
 
   const handleChangeDate = (date: Date | null) => {
     if (date) {
       const when = formatDate(date);
-      setForm({
-        ...form,
-        when,
-      });
+      props.changeNoteWhen(when);
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
+  const handleChangeWhere = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    props.changeNoteWhere(value);
+  };
+
+  const handleChangeText = (event: ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    props.changeNoteText(value);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -91,29 +79,28 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
     if (!valid) {
       return;
     }
-    setProcessing(true);
     try {
-      if (!form.id) {
-        await addNote(form, props.bookmarkId);
+      const { note } = noteForm;
+      if (!note.id) {
+        await addNote(note, props.bookmarkId);
       } else {
-        const note = Object.assign({}, form);
-        delete note.owner;
-        await editNote(note);
+        const noteCopy = Object.assign({}, note);
+        delete noteCopy.owner;
+        await editNote(noteCopy);
       }
       props.onSubmit();
-      setProcessing(false);
     } catch (err) {
-      setProcessing(false);
       setError(err.message);
     }
   };
 
+  const { note } = noteForm;
   return (
     <Collapse in={props.expanded} timeout="auto" unmountOnExit className={classes.root}>
       <form onSubmit={handleSubmit} className={classes.form}>
         <FormControl className={classes.formControl}>
           <Typography component="legend" variant="caption" display="block">Rating</Typography>
-          <Rating name="rating" defaultValue={form.rating} precision={0.5} onChange={handleChangeRating} />
+          <Rating name="rating" defaultValue={note.rating} precision={0.5} onChange={handleChangeRating} />
         </FormControl>
 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -125,7 +112,7 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
             margin="normal"
             id="when"
             label="When did you see this?"
-            value={form.when}
+            value={note.when}
             disableFuture={true}
             autoOk={true}
             onChange={handleChangeDate}
@@ -140,8 +127,8 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
           <Input
             id="where"
             name="where"
-            value={form.where}
-            onChange={handleChange}
+            value={note.where}
+            onChange={handleChangeWhere}
             startAdornment={
               <InputAdornment position="end">
                 <RoomIcon />
@@ -156,8 +143,8 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
             id="text"
             name="text"
             multiline
-            value={form.text}
-            onChange={handleChange}
+            value={note.text}
+            onChange={handleChangeText}
           />
         </FormControl>
 
@@ -167,16 +154,16 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
           size="small"
           color="primary"
           className={classes.button}
-          disabled={!valid || processing}
+          disabled={!valid || noteForm.processing}
         >
-          {processing && <CircularProgress size={16} />}
-          {!processing && "submit"}
+          {noteForm.processing && <CircularProgress size={16} />}
+          {!noteForm.processing && "submit"}
         </Button>
 
         <Button
           variant="outlined"
           size="small"
-          disabled={processing}
+          disabled={noteForm.processing}
           className={classes.button}
           onClick={props.handleCancel}
         >

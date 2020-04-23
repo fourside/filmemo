@@ -35,6 +35,10 @@ export enum ACTIONS {
   GET_BOOKMARK_REQUEST = "GET_BOOKMARK_REQUEST",
   GET_BOOKMARK_SUCCESS = "GET_BOOKMARK_SUCCESS",
   GET_BOOKMARK_FAILURE = "GET_BOOKMARK_FAILURE",
+  CHANGE_NOTE_RATING = "CHANGE_NOTE_RATING",
+  CHANGE_NOTE_WHEN = "CHANGE_NOTE_WHEN",
+  CHANGE_NOTE_WHERE = "CHANGE_NOTE_WHERE",
+  CHANGE_NOTE_TEXT = "CHANGE_NOTE_TEXT",
   ADD_NOTE_REQUEST = "ADD_NOTE_REQUEST",
   ADD_NOTE_SUCCESS = "ADD_NOTE_SUCCESS",
   ADD_NOTE_FAILURE = "ADD_NOTE_FAILURE",
@@ -214,23 +218,70 @@ export type GetBookmarkActionTypes = GetBookmarkRequestAction | GetBookmarkSucce
 interface AddNoteRequestAction extends Action {
   type: ACTIONS.ADD_NOTE_REQUEST,
   payload: {
-    processing: true,
+    processing: boolean,
   },
 }
 interface AddNoteSuccessAction extends Action {
   type: ACTIONS.ADD_NOTE_SUCCESS,
   payload: {
-    processing: false,
+    processing: boolean,
     note: Note,
   },
 }
 interface AddNoteFailureAction extends Action {
   type: ACTIONS.ADD_NOTE_FAILURE,
   payload: {
-    processing: false,
+    processing: boolean,
     error: string,
   },
 }
 
 export type NoteState = AddNoteRequestAction["payload"] & AddNoteSuccessAction["payload"] & AddNoteFailureAction["payload"];
 export type AddNoteActionTypes = AddNoteRequestAction | AddNoteSuccessAction | AddNoteFailureAction;
+
+interface ChangeNoteDateAction extends Action {
+  type: ACTIONS.CHANGE_NOTE_WHEN,
+  payload: {
+    note: {
+      when: string,
+    },
+  },
+}
+interface ChangeNoteRatingAction extends Action {
+  type: ACTIONS.CHANGE_NOTE_RATING,
+  payload: {
+    note: {
+      rating: number,
+    },
+  },
+}
+interface ChangeNoteWhenAction extends Action {
+  type: ACTIONS.CHANGE_NOTE_WHEN,
+  payload: {
+    note: {
+      when: string,
+    },
+  },
+}
+interface ChangeNoteWhereAction extends Action {
+  type: ACTIONS.CHANGE_NOTE_WHERE,
+  payload: {
+    note: {
+      where: string,
+    },
+  },
+}
+interface ChangeNoteTextAction extends Action {
+  type: ACTIONS.CHANGE_NOTE_TEXT,
+  payload: {
+    note: {
+      text: string,
+    },
+  },
+}
+export type ChangeNoteFormActionTypes = ChangeNoteDateAction
+  | ChangeNoteRatingAction
+  | ChangeNoteWhenAction
+  | ChangeNoteWhereAction
+  | ChangeNoteTextAction
+  ;

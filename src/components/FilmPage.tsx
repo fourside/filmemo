@@ -153,7 +153,6 @@ const FilmPage: React.FC<Props> = (props) => {
                 <NoteForm
                   expanded={expanded.form}
                   bookmarkId={filmDetails.bookmark.id}
-                  note={filmDetails.bookmark?.note}
                   onSubmit={handleOnSubmit}
                   handleCancel={handleFormCancel}
                 />
