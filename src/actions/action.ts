@@ -9,12 +9,15 @@ import {
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
+  AddNoteActionTypes,
+  NoteState,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
 import * as Auth from "../amplify/Auth";
 import * as API from "../amplify/API";
 import { Bookmark } from "../model/Bookmark";
+import { Note } from "../model/Note";
 
 function signInRequest(): UserActionTypes {
   return { type: ACTIONS.SIGN_IN_REQUEST };
@@ -349,6 +352,48 @@ export function getBookmark(imdbID: string): ThunkGetBookmarkAction {
       dispatch(getBookmarkSuccess(bookmark));
     } catch (err) {
       dispatch(getBookmarkFailure(err.message));
+    }
+  };
+}
+
+type ThunkAddNoteAction = ThunkAction<Promise<void>, NoteState, undefined, AddNoteActionTypes>;
+
+function addNoteRequest(): AddNoteActionTypes {
+  return {
+    type: ACTIONS.ADD_NOTE_REQUEST,
+    payload: {
+      processing: true,
+    },
+  };
+}
+function addNoteSuccess(note: Note): AddNoteActionTypes {
+  return {
+    type: ACTIONS.ADD_NOTE_SUCCESS,
+    payload: {
+      processing: false,
+      note,
+    },
+  };
+}
+function addNoteFailure(error: string): AddNoteActionTypes {
+  return {
+    type: ACTIONS.ADD_NOTE_FAILURE,
+    payload: {
+      processing: false,
+      error,
+    },
+  };
+}
+type NoteParams = Omit<Note, "owner">;
+export function addNote(noteParams: NoteParams, bookmarkId: string): ThunkAddNoteAction {
+  return async (dispatch) => {
+    dispatch(addNoteRequest());
+    try {
+      const note = await API.createNote({ ...noteParams, bookmarkId });
+      await API.relateBookmark(bookmarkId, note.id);
+      dispatch(addNoteSuccess(note));
+    } catch (err) {
+      dispatch(addNoteFailure(err.message));
     }
   };
 }

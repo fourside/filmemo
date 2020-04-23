@@ -2,6 +2,7 @@ import { Action } from "redux";
 import { User } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
 import { Bookmark } from "../model/Bookmark";
+import { Note } from "../model/Note";
 
 export enum ACTIONS {
   SIGN_IN_REQUEST = "SIGN_IN_REQUEST",
@@ -209,3 +210,27 @@ interface GetBookmarkFailureAction extends Action {
 }
 
 export type GetBookmarkActionTypes = GetBookmarkRequestAction | GetBookmarkSuccessAction | GetBookmarkFailureAction;
+
+interface AddNoteRequestAction extends Action {
+  type: ACTIONS.ADD_NOTE_REQUEST,
+  payload: {
+    processing: true,
+  },
+}
+interface AddNoteSuccessAction extends Action {
+  type: ACTIONS.ADD_NOTE_SUCCESS,
+  payload: {
+    processing: false,
+    note: Note,
+  },
+}
+interface AddNoteFailureAction extends Action {
+  type: ACTIONS.ADD_NOTE_FAILURE,
+  payload: {
+    processing: false,
+    error: string,
+  },
+}
+
+export type NoteState = AddNoteRequestAction["payload"] & AddNoteSuccessAction["payload"] & AddNoteFailureAction["payload"];
+export type AddNoteActionTypes = AddNoteRequestAction | AddNoteSuccessAction | AddNoteFailureAction;

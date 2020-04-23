@@ -12,10 +12,10 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { format } from "date-fns";
-import { createNote, relateBookmark, editNote } from "../amplify/API";
-import { Note } from "../model/Note";
+import { editNote } from "../amplify/API";
+import { Note, formatDate, validate } from "../model/Note";
 import { ErrorContext } from "../context/ErrorContext";
+import { ContainerProps } from "../containers/NoteForm";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-const FORMAT_DATE = "yyyy/MM/dd";
 interface Props {
   expanded: boolean;
   bookmarkId: string;
@@ -42,11 +41,10 @@ interface Props {
   onSubmit: () => void;
   handleCancel: () => void;
 }
-export const NoteForm: React.FC<Props> = (props) => {
-  const initialDate = format(new Date(), FORMAT_DATE);
+export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const initialNote = props.note ?? {
     rating: 0,
-    when: initialDate,
+    when: formatDate(),
     where: "",
     text: "",
     bookmarkId: props.bookmarkId,
@@ -56,12 +54,10 @@ export const NoteForm: React.FC<Props> = (props) => {
   const [processing, setProcessing] = useState(false);
   const classes = useStyles();
   const { setError } = useContext(ErrorContext);
+  const { addNote } = props;
 
   useEffect(() => {
-    const valid = form.rating > 0
-      && !!form.when
-      && !!form.where;
-    setValid(valid);
+    setValid(validate(form));
   }, [form]);
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
@@ -74,7 +70,7 @@ export const NoteForm: React.FC<Props> = (props) => {
 
   const handleChangeDate = (date: Date | null) => {
     if (date) {
-      const when = format(date, FORMAT_DATE);
+      const when = formatDate(date);
       setForm({
         ...form,
         when,
@@ -98,8 +94,7 @@ export const NoteForm: React.FC<Props> = (props) => {
     setProcessing(true);
     try {
       if (!form.id) {
-        const note = await createNote(form);
-        await relateBookmark(props.bookmarkId, note.id as string);
+        await addNote(form, props.bookmarkId);
       } else {
         const note = Object.assign({}, form);
         delete note.owner;

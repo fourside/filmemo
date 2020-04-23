@@ -86,7 +86,7 @@ export async function listBookmarks(owner: string, nextToken: string | null) {
 export async function createNote(note: Note) {
   const input = { ...note };
   const result = await graphql<NoteResponse>(mutations.createNote, { input });
-  return result.data?.createNote as Note;
+  return result.data?.createNote as Required<Note>;
 }
 
 export async function relateBookmark(bookmarkId: string, noteId: string) {

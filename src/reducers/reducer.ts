@@ -10,10 +10,12 @@ import {
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
+  AddNoteActionTypes,
 } from "../actions/types";
 import { FilmDetailsState } from "../actions/action";
 import { emptyUser } from "../model/User";
 import { Film } from "../model/Film";
+import { formatDate } from "../model/Note";
 
 const userReducer = (state = emptyUser, action: UserActionTypes) => {
   switch(action.type) {
@@ -103,11 +105,36 @@ const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetails
   }
 };
 
+const initialNoteState = {
+  processing: false,
+  note: {
+    rating: 0,
+    when: formatDate(),
+    where: "",
+    text: "",
+    bookmarkId: "",
+  }
+};
+const noteReducer = (state = initialNoteState, action: AddNoteActionTypes) => {
+  switch(action.type) {
+    case ACTIONS.ADD_NOTE_REQUEST:
+    case ACTIONS.ADD_NOTE_SUCCESS:
+    case ACTIONS.ADD_NOTE_FAILURE:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 export const rootReducer = combineReducers({
   user: userReducer,
   films: filmsReducer,
   title: titleReducer,
   filmDetails: filmDetailsReducer,
+  note: noteReducer,
 });
 
 type RootState = ReturnType<typeof rootReducer>
@@ -117,3 +144,4 @@ export const useUser = () => useTypedSelector(state => state.user);
 export const useFilms = () => useTypedSelector(state => state.films);
 export const useTitle = () => useTypedSelector(state => state.title);
 export const useFilmDetails = () => useTypedSelector(state => state.filmDetails);
+export const useNote = () => useTypedSelector(state => state.note);

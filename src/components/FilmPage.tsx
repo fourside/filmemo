@@ -15,7 +15,7 @@ import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
 import { ErrorContext } from "../context/ErrorContext";
-import { NoteForm } from "./NoteForm";
+import { NoteForm } from "../containers/NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
 import { useUser, useFilmDetails } from "../reducers/reducer";
