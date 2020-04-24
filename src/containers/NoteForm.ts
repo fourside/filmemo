@@ -6,6 +6,7 @@ import { RootState } from "../reducers/reducer";
 const mapState = (state: RootState) => {
   return {
     noteForm: state.note,
+    processing: state.processing,
   };
 };
 const mapDispatch = {

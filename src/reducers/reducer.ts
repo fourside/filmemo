@@ -1,4 +1,4 @@
-import { combineReducers } from "redux";
+import { combineReducers, Action } from "redux";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import {
   ACTIONS,
@@ -186,6 +186,15 @@ const errorReducer = (state = "", action: ErrorAction | ErrorNextAction) => {
   }
 };
 
+const processingReducer = (state =  false, action: Action) => {
+  switch (action.type) {
+    case ACTIONS.REQUEST:
+      return true;
+    default:
+      return false;
+  }
+};
+
 export const rootReducer = combineReducers({
   user: userReducer,
   films: filmsReducer,
@@ -194,6 +203,7 @@ export const rootReducer = combineReducers({
   note: noteReducer,
   bookmarks: listBookmarkReducer,
   error: errorReducer,
+  processing: processingReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>

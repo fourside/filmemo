@@ -41,7 +41,7 @@ interface Props {
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const [valid, setValid] = useState(false);
   const classes = useStyles();
-  const { addNote, editNote , noteForm } = props;
+  const { addNote, editNote , noteForm, processing } = props;
   const { note } = noteForm;
 
   useEffect(() => {
@@ -144,16 +144,16 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
           size="small"
           color="primary"
           className={classes.button}
-          disabled={!valid || noteForm.processing}
+          disabled={!valid || processing}
         >
-          {noteForm.processing && <CircularProgress size={16} />}
-          {!noteForm.processing && "submit"}
+          {processing && <CircularProgress size={16} />}
+          {!processing && "submit"}
         </Button>
 
         <Button
           variant="outlined"
           size="small"
-          disabled={noteForm.processing}
+          disabled={processing}
           className={classes.button}
           onClick={props.handleCancel}
         >
