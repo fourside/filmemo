@@ -10,14 +10,15 @@ import {
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
-  NoteState,
   AddNoteActionTypes,
   EditNoteActionTypes,
   ChangeNoteFormActionTypes,
   ListBookmarkActionTypes,
+  FilmsState,
+  FilmDetailsState,
+  NoteState,
   BookmarksState,
 } from "../actions/types";
-import { FilmDetailsState } from "../actions/action";
 import { emptyUser } from "../model/User";
 import { Film } from "../model/Film";
 import { formatDate } from "../model/Note";
@@ -37,9 +38,9 @@ const userReducer = (state = emptyUser, action: UserActionTypes) => {
   }
 };
 
-const initFilmsState = {
+const initFilmsState: FilmsState = {
   processing: false,
-  films: [] as Film[],
+  films: new Array<Film>(),
   page: 1,
   hasNext: false,
   nextLoading: false,
@@ -47,21 +48,21 @@ const initFilmsState = {
 };
 const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | SearchFilmsNextActionTypes) => {
   switch(action.type) {
-    case ACTIONS.SEARCH_FILMS_REQUEST:
+    case ACTIONS.REQUEST:
+    case ACTIONS.ERROR:
+    case ACTIONS.REQUEST_NEXT:
+    case ACTIONS.ERROR_NEXT:
     case ACTIONS.SEARCH_FILMS_SUCCESS:
-    case ACTIONS.SEARCH_FILMS_FAILURE:
-    case ACTIONS.SEARCH_FILMS_NEXT_REQUEST:
-    case ACTIONS.SEARCH_FILMS_NEXT_FAILURE:
       return {
         ...state,
         ...action.payload,
       };
     case ACTIONS.SEARCH_FILMS_NEXT_SUCCESS:
-      const total = state.films.concat(action.payload.films);
+      const films = state.films.concat(action.payload.films);
       return {
         ...state,
         ...action.payload,
-        films: total,
+        films,
       };
     default:
       return state;
@@ -90,18 +91,12 @@ type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes
   ;
 const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetailsActionTyeps) => {
   switch(action.type) {
-    case ACTIONS.SEARCH_FILM_DETAILS_REQUEST:
+    case ACTIONS.REQUEST:
+    case ACTIONS.ERROR:
     case ACTIONS.SEARCH_FILM_DETAILS_SUCCESS:
-    case ACTIONS.SEARCH_FILM_DETAILS_FAILURE:
-    case ACTIONS.ADD_BOOKMARK_REQUEST:
     case ACTIONS.ADD_BOOKMARK_SUCCESS:
-    case ACTIONS.ADD_BOOKMARK_FAILURE:
-    case ACTIONS.REMOVE_BOOKMARK_REQUEST:
     case ACTIONS.REMOVE_BOOKMARK_SUCCESS:
-    case ACTIONS.REMOVE_BOOKMARK_FAILURE:
-    case ACTIONS.GET_BOOKMARK_REQUEST:
     case ACTIONS.GET_BOOKMARK_SUCCESS:
-    case ACTIONS.GET_BOOKMARK_FAILURE:
       return {
         ...state,
         ...action.payload,
@@ -125,12 +120,10 @@ const initialNoteState: NoteState = {
 type NoteActionTypes = AddNoteActionTypes | EditNoteActionTypes | ChangeNoteFormActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
-    case ACTIONS.ADD_NOTE_REQUEST:
+    case ACTIONS.REQUEST:
+    case ACTIONS.ERROR:
     case ACTIONS.ADD_NOTE_SUCCESS:
-    case ACTIONS.ADD_NOTE_FAILURE:
-    case ACTIONS.EDIT_NOTE_REQUEST:
     case ACTIONS.EDIT_NOTE_SUCCESS:
-    case ACTIONS.EDIT_NOTE_FAILURE:
       return {
         ...state,
         ...action.payload,
@@ -160,11 +153,11 @@ const initBookmarkListState: BookmarksState = {
 };
 const listBookmarkReducer = (state = initBookmarkListState, action: ListBookmarkActionTypes) => {
   switch(action.type) {
-    case ACTIONS.LIST_BOOKMARK_REQUEST:
+    case ACTIONS.REQUEST:
+    case ACTIONS.ERROR:
+    case ACTIONS.REQUEST_NEXT:
+    case ACTIONS.ERROR_NEXT:
     case ACTIONS.LIST_BOOKMARK_SUCCESS:
-    case ACTIONS.LIST_BOOKMARK_FAILURE:
-    case ACTIONS.LIST_BOOKMARK_NEXT_REQUEST:
-    case ACTIONS.LIST_BOOKMARK_NEXT_FAILURE:
       return {
         ...state,
         ...action.payload,

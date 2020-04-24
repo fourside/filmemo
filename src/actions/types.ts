@@ -10,41 +10,25 @@ export enum ACTIONS {
   SIGN_IN_FAILURE = "SIGN_IN_FAILURE",
   SIGN_OUT_REQUEST = "SIGN_OUT_REQUEST",
   SIGNED_OUT = "SIGNED_OUT",
-  SEARCH_FILMS_REQUEST = "SEARCH_FILMS_REQUEST",
+  REQUEST = "REQUEST",
+  REQUEST_NEXT = "REQUEST_NEXT",
+  ERROR = "ERROR",
+  ERROR_NEXT = "ERROR_NEXT",
   SEARCH_FILMS_SUCCESS = "SEARCH_FILMS_SUCCESS",
-  SEARCH_FILMS_FAILURE = "SEARCH_FILMS_FAILURE",
-  SEARCH_FILMS_NEXT_REQUEST = "SEARCH_FILMS_NEXT_REQUEST",
   SEARCH_FILMS_NEXT_SUCCESS = "SEARCH_FILMS_NEXT_SUCCESS",
-  SEARCH_FILMS_NEXT_FAILURE = "SEARCH_FILMS_NEXT_FAILURE",
   SEARCH_TITLE_INPUT = "SEARCH_TITLE_INPUT",
-  SEARCH_FILM_DETAILS_REQUEST = "SEARCH_FILM_DETAILS_REQUEST",
   SEARCH_FILM_DETAILS_SUCCESS = "SEARCH_FILM_DETAILS_SUCCESS",
-  SEARCH_FILM_DETAILS_FAILURE = "SEARCH_FILM_DETAILS_FAILURE",
-  LIST_BOOKMARK_REQUEST = "LIST_BOOKMARK_REQUEST",
   LIST_BOOKMARK_SUCCESS = "LIST_BOOKMARK_SUCCESS",
-  LIST_BOOKMARK_FAILURE = "LIST_BOOKMARK_FAILURE",
-  LIST_BOOKMARK_NEXT_REQUEST = "LIST_BOOKMARK_NEXT_REQUEST",
   LIST_BOOKMARK_NEXT_SUCCESS = "LIST_BOOKMARK_NEXT_SUCCESS",
-  LIST_BOOKMARK_NEXT_FAILURE = "LIST_BOOKMARK_NEXT_FAILURE",
-  ADD_BOOKMARK_REQUEST = "ADD_BOOKMARK_REQUEST",
   ADD_BOOKMARK_SUCCESS = "ADD_BOOKMARK_SUCCESS",
-  ADD_BOOKMARK_FAILURE = "ADD_BOOKMARK_FAILURE",
-  REMOVE_BOOKMARK_REQUEST = "REMOVE_BOOKMARK_REQUEST",
   REMOVE_BOOKMARK_SUCCESS = "REMOVE_BOOKMARK_SUCCESS",
-  REMOVE_BOOKMARK_FAILURE = "REMOVE_BOOKMARK_FAILURE",
-  GET_BOOKMARK_REQUEST = "GET_BOOKMARK_REQUEST",
   GET_BOOKMARK_SUCCESS = "GET_BOOKMARK_SUCCESS",
-  GET_BOOKMARK_FAILURE = "GET_BOOKMARK_FAILURE",
   CHANGE_NOTE_RATING = "CHANGE_NOTE_RATING",
   CHANGE_NOTE_WHEN = "CHANGE_NOTE_WHEN",
   CHANGE_NOTE_WHERE = "CHANGE_NOTE_WHERE",
   CHANGE_NOTE_TEXT = "CHANGE_NOTE_TEXT",
-  ADD_NOTE_REQUEST = "ADD_NOTE_REQUEST",
   ADD_NOTE_SUCCESS = "ADD_NOTE_SUCCESS",
-  ADD_NOTE_FAILURE = "ADD_NOTE_FAILURE",
-  EDIT_NOTE_REQUEST = "EDIT_NOTE_REQUEST",
   EDIT_NOTE_SUCCESS = "EDIT_NOTE_SUCCESS",
-  EDIT_NOTE_FAILURE = "EDIT_NOTE_FAILURE",
 }
 
 interface SignInRequestAction extends Action {
@@ -65,54 +49,58 @@ interface SignedOutAction extends Action {
 
 export type UserActionTypes = SignInRequestAction | SignInSuccessAction | SignOutRequestAction | SignedOutAction;
 
-interface SearchFilmsRequestAction extends Action {
-  type: ACTIONS.SEARCH_FILMS_REQUEST,
+export interface RequestAction extends Action {
+  type: ACTIONS.REQUEST,
   payload: {
-    processing: true,
+    processing: boolean,
+  },
+}
+export interface ErrorAction extends Action {
+  type: ACTIONS.ERROR,
+  payload: {
+    processing: boolean,
+    error: string,
+  },
+}
+export interface RequestNextAction extends Action {
+  type: ACTIONS.REQUEST_NEXT,
+  payload: {
+    nextLoading: boolean,
+  },
+}
+export interface ErrorNextAction extends Action {
+  type: ACTIONS.ERROR_NEXT,
+  payload: {
+    nextLoading: boolean,
+    error: string,
   },
 }
 interface SearchFilmsSuccessAction extends Action {
   type: ACTIONS.SEARCH_FILMS_SUCCESS,
   payload: {
-    processing: false,
+    processing: boolean,
     films: Film[],
     hasNext: boolean,
   },
 }
-interface SearchFilmsFailureAction extends Action {
-  type: ACTIONS.SEARCH_FILMS_FAILURE,
-  payload: {
-    processing: false,
-    error: string,
-  },
-}
 
-export type SearchFilmsActionTypes = SearchFilmsRequestAction | SearchFilmsSuccessAction | SearchFilmsFailureAction;
+export type SearchFilmsActionTypes = SearchFilmsSuccessAction | RequestAction | ErrorAction;
 
-interface SearchFilmsNextRequestAction extends Action {
-  type: ACTIONS.SEARCH_FILMS_NEXT_REQUEST,
-  payload: {
-    nextLoading: true,
-  },
-}
 interface SearchFilmsNextSuccessAction extends Action {
   type: ACTIONS.SEARCH_FILMS_NEXT_SUCCESS,
   payload: {
-    nextLoading: false,
+    nextLoading: boolean,
     films: Film[],
     hasNext: boolean,
     page: number,
   },
 }
-interface SearchFilmsNextFailureAction extends Action {
-  type: ACTIONS.SEARCH_FILMS_NEXT_FAILURE,
-  payload: {
-    nextLoading: false,
-    error: string,
-  },
-}
 
-export type SearchFilmsNextActionTypes = SearchFilmsNextRequestAction | SearchFilmsNextSuccessAction | SearchFilmsNextFailureAction;
+export type SearchFilmsNextActionTypes = SearchFilmsNextSuccessAction | RequestNextAction | ErrorNextAction;
+export type FilmsState = SearchFilmsSuccessAction["payload"]
+  & SearchFilmsNextSuccessAction["payload"]
+  & RequestAction["payload"]
+  & ErrorAction["payload"];
 
 interface SearchTitleInputAction extends Action {
   type: ACTIONS.SEARCH_TITLE_INPUT,
@@ -122,105 +110,50 @@ interface SearchTitleInputAction extends Action {
 }
 export type SearchTitleInputActionTypes = SearchTitleInputAction;
 
-interface SearchFilmDetailsRequestAction extends Action {
-  type: ACTIONS.SEARCH_FILM_DETAILS_REQUEST,
-  payload: {
-    processing: true,
-  },
-}
 interface SearchFilmDetailsSuccessAction extends Action {
   type: ACTIONS.SEARCH_FILM_DETAILS_SUCCESS,
   payload: {
-    processing: false,
-    film: FilmDetail,
+    processing: boolean,
+    film?: FilmDetail,
     bookmark?: Bookmark,
   },
 }
-interface SearchFilmDetailsFailureAction extends Action {
-  type: ACTIONS.SEARCH_FILM_DETAILS_FAILURE,
-  payload: {
-    processing: false,
-    error: string,
-  },
-}
 
-export type SearchFilmDetailsActionTypes = SearchFilmDetailsRequestAction | SearchFilmDetailsSuccessAction | SearchFilmDetailsFailureAction;
+export type SearchFilmDetailsActionTypes = SearchFilmDetailsSuccessAction | RequestAction | ErrorAction;
+export type FilmDetailsState = SearchFilmDetailsSuccessAction["payload"]
+  & RequestAction["payload"]
+  & ErrorAction["payload"];
 
-interface AddBookmarkRequestAction extends Action {
-  type: ACTIONS.ADD_BOOKMARK_REQUEST,
-  payload: {
-    processing: true,
-  },
-}
 interface AddBookmarkSuccessAction extends Action {
   type: ACTIONS.ADD_BOOKMARK_SUCCESS,
   payload: {
-    processing: false,
+    processing: boolean,
     bookmark: Bookmark,
   },
 }
-interface AddBookmarkFailureAction extends Action {
-  type: ACTIONS.ADD_BOOKMARK_FAILURE,
-  payload: {
-    processing: false,
-    error: string,
-  },
-}
 
-export type AddBookmarkActionTypes = AddBookmarkRequestAction | AddBookmarkSuccessAction | AddBookmarkFailureAction;
+export type AddBookmarkActionTypes = AddBookmarkSuccessAction | RequestAction | ErrorAction;
 
-interface RemoveBookmarkRequestAction extends Action {
-  type: ACTIONS.REMOVE_BOOKMARK_REQUEST,
-  payload: {
-    processing: true,
-  },
-}
 interface RemoveBookmarkSuccessAction extends Action {
   type: ACTIONS.REMOVE_BOOKMARK_SUCCESS,
   payload: {
-    processing: false,
+    processing: boolean,
     bookmark: undefined,
   },
 }
-interface RemoveBookmarkFailureAction extends Action {
-  type: ACTIONS.REMOVE_BOOKMARK_FAILURE,
-  payload: {
-    processing: false,
-    error: string,
-  },
-}
 
-export type RemoveBookmarkActionTypes = RemoveBookmarkRequestAction | RemoveBookmarkSuccessAction | RemoveBookmarkFailureAction;
+export type RemoveBookmarkActionTypes = RemoveBookmarkSuccessAction | RequestAction | ErrorAction;
 
-interface GetBookmarkRequestAction extends Action {
-  type: ACTIONS.GET_BOOKMARK_REQUEST,
-  payload: {
-    processing: true,
-  },
-}
 interface GetBookmarkSuccessAction extends Action {
   type: ACTIONS.GET_BOOKMARK_SUCCESS,
   payload: {
-    processing: false,
+    processing: boolean,
     bookmark: Bookmark,
   },
 }
-interface GetBookmarkFailureAction extends Action {
-  type: ACTIONS.GET_BOOKMARK_FAILURE,
-  payload: {
-    processing: false,
-    error: string,
-  },
-}
 
-export type GetBookmarkActionTypes = GetBookmarkRequestAction | GetBookmarkSuccessAction | GetBookmarkFailureAction;
+export type GetBookmarkActionTypes = GetBookmarkSuccessAction | RequestAction | ErrorAction;
 
-interface AddNoteRequestAction extends Action {
-  type: ACTIONS.ADD_NOTE_REQUEST,
-  payload: {
-    processing: boolean,
-  },
-}
 interface AddNoteSuccessAction extends Action {
   type: ACTIONS.ADD_NOTE_SUCCESS,
   payload: {
@@ -228,16 +161,9 @@ interface AddNoteSuccessAction extends Action {
     note: Note,
   },
 }
-interface AddNoteFailureAction extends Action {
-  type: ACTIONS.ADD_NOTE_FAILURE,
-  payload: {
-    processing: boolean,
-    error: string,
-  },
-}
 
-export type NoteState = AddNoteRequestAction["payload"] & AddNoteSuccessAction["payload"] & AddNoteFailureAction["payload"];
-export type AddNoteActionTypes = AddNoteRequestAction | AddNoteSuccessAction | AddNoteFailureAction;
+export type NoteState = AddNoteSuccessAction["payload"] & RequestAction["payload"] & ErrorAction["payload"];
+export type AddNoteActionTypes = AddNoteSuccessAction | RequestAction | ErrorAction;
 
 interface ChangeNoteDateAction extends Action {
   type: ACTIONS.CHANGE_NOTE_WHEN,
@@ -286,12 +212,6 @@ export type ChangeNoteFormActionTypes = ChangeNoteDateAction
   | ChangeNoteTextAction
   ;
 
-interface EditNoteRequestAction extends Action {
-  type: ACTIONS.EDIT_NOTE_REQUEST,
-  payload: {
-    processing: boolean,
-  },
-}
 interface EditNoteSuccessAction extends Action {
   type: ACTIONS.EDIT_NOTE_SUCCESS,
   payload: {
@@ -299,41 +219,15 @@ interface EditNoteSuccessAction extends Action {
     note: Note,
   },
 }
-interface EditNoteFailureAction extends Action {
-  type: ACTIONS.EDIT_NOTE_FAILURE,
-  payload: {
-    processing: boolean,
-    error: string,
-  },
-}
 
-export type EditNoteActionTypes = EditNoteRequestAction | EditNoteSuccessAction | EditNoteFailureAction;
+export type EditNoteActionTypes = EditNoteSuccessAction | RequestAction | ErrorAction;
 
-interface ListBookmarkRequestAction extends Action {
-  type: ACTIONS.LIST_BOOKMARK_REQUEST,
-  payload: {
-    processing: boolean,
-  },
-}
 interface ListBookmarkSuccessAction extends Action {
   type: ACTIONS.LIST_BOOKMARK_SUCCESS,
   payload: {
     processing: boolean,
     bookmarks: Bookmark[],
     nextToken: string | null,
-  },
-}
-interface ListBookmarkFailureAction extends Action {
-  type: ACTIONS.LIST_BOOKMARK_FAILURE,
-  payload: {
-    processing: boolean,
-    error: string,
-  },
-}
-interface ListBookmarkNextRequestAction extends Action {
-  type: ACTIONS.LIST_BOOKMARK_NEXT_REQUEST,
-  payload: {
-    nextLoading: boolean,
   },
 }
 interface ListBookmarkNextSuccessAction extends Action {
@@ -344,25 +238,18 @@ interface ListBookmarkNextSuccessAction extends Action {
     nextToken: string | null,
   },
 }
-interface ListBookmarkNextFailureAction extends Action {
-  type: ACTIONS.LIST_BOOKMARK_NEXT_FAILURE,
-  payload: {
-    nextLoading: boolean,
-    error: string,
-  },
-}
 
-export type BookmarksState = ListBookmarkRequestAction["payload"]
-  & ListBookmarkSuccessAction["payload"]
-  & ListBookmarkFailureAction["payload"]
-  & ListBookmarkNextRequestAction["payload"]
+export type BookmarksState = ListBookmarkSuccessAction["payload"]
   & ListBookmarkNextSuccessAction["payload"]
-  & ListBookmarkNextFailureAction["payload"]
+  & RequestAction["payload"]
+  & ErrorAction["payload"]
+  & RequestNextAction["payload"]
+  & ErrorNextAction["payload"]
   ;
-export type ListBookmarkActionTypes = ListBookmarkRequestAction
-  | ListBookmarkSuccessAction
-  | ListBookmarkFailureAction
-  | ListBookmarkNextRequestAction
+export type ListBookmarkActionTypes = ListBookmarkSuccessAction
   | ListBookmarkNextSuccessAction
-  | ListBookmarkNextFailureAction
+  | RequestAction
+  | ErrorAction
+  | RequestNextAction
+  | ErrorNextAction
   ;

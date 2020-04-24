@@ -15,6 +15,12 @@ import {
   EditNoteActionTypes,
   ListBookmarkActionTypes,
   BookmarksState,
+  RequestAction,
+  ErrorAction,
+  RequestNextAction,
+  ErrorNextAction,
+  FilmDetailsState,
+  FilmsState,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
@@ -72,21 +78,39 @@ export function clearUser(): UserActionTypes {
   };
 }
 
-type FilmsState = {
-  processing: false;
-  films: Film[];
-  page: number;
-  hasNext: boolean;
-  nextLoading: boolean;
-  error: string;
-};
 type ThunkSearchFilmsAction = ThunkAction<Promise<void>, FilmsState, undefined, SearchFilmsActionTypes>;
 
-function searchFilmsRequest(): SearchFilmsActionTypes {
+function request(): RequestAction {
   return {
-    type: ACTIONS.SEARCH_FILMS_REQUEST,
+    type: ACTIONS.REQUEST,
     payload: {
       processing: true,
+    },
+  };
+}
+function error(error: string): ErrorAction {
+  return {
+    type: ACTIONS.ERROR,
+    payload: {
+      processing: false,
+      error,
+    },
+  };
+}
+function requestNext(): RequestNextAction {
+  return {
+    type: ACTIONS.REQUEST_NEXT,
+    payload: {
+      nextLoading: true,
+    },
+  };
+}
+function errorNext(error: string): ErrorNextAction {
+  return {
+    type: ACTIONS.ERROR_NEXT,
+    payload: {
+      nextLoading: false,
+      error,
     },
   };
 }
@@ -101,38 +125,20 @@ function searchFilmsSuccess(response: { films: Film[], hasNext: boolean }): Sear
     },
   };
 }
-function searchFilmsFailure(error: string): SearchFilmsActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILMS_FAILURE,
-    payload: {
-      processing: false,
-      error,
-    },
-  };
-}
 
 export function searchFilms(title: string): ThunkSearchFilmsAction {
   return async (dispatch) => {
-    dispatch(searchFilmsRequest());
+    dispatch(request());
     try {
       const { films, hasNext } = await API.searchByTitle(title);
       dispatch(searchFilmsSuccess({ films, hasNext }));
     } catch (err) {
-      dispatch(searchFilmsFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
 
 type ThunkSearchFilmsNextAction = ThunkAction<Promise<void>, FilmsState, undefined, SearchFilmsNextActionTypes>;
-
-function searchFilmsNextRequest(): SearchFilmsNextActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILMS_NEXT_REQUEST,
-    payload: {
-      nextLoading: true,
-    },
-  };
-}
 
 function searchFilmsNextSuccess(response: { films: Film[], hasNext: boolean, page: number }): SearchFilmsNextActionTypes {
   return {
@@ -145,24 +151,15 @@ function searchFilmsNextSuccess(response: { films: Film[], hasNext: boolean, pag
     },
   };
 }
-function searchFilmsNextFailure(error: string): SearchFilmsNextActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILMS_NEXT_FAILURE,
-    payload: {
-      nextLoading: false,
-      error,
-    },
-  };
-}
 
 export function searchFilmsNext(title: string, nextPage: number): ThunkSearchFilmsNextAction {
   return async (dispatch) => {
-    dispatch(searchFilmsNextRequest());
+    dispatch(requestNext());
     try {
       const { films, hasNext } = await API.searchByTitle(title, nextPage);
       dispatch(searchFilmsNextSuccess({ films, hasNext, page: nextPage }));
     } catch (err) {
-      dispatch(searchFilmsNextFailure(err.message));
+      dispatch(errorNext(err.message));
     }
   };
 }
@@ -176,22 +173,7 @@ export function searchTitleInput(title: string): SearchTitleInputActionTypes {
   };
 }
 
-export type FilmDetailsState = {
-  processing: boolean;
-  film?: FilmDetail;
-  bookmark?: Bookmark;
-  error: string;
-};
 type ThunkSearchFilmDetailsAction = ThunkAction<Promise<void>, FilmDetailsState, undefined, SearchFilmDetailsActionTypes>;
-
-function searchFilmDetailsRequest(): SearchFilmDetailsActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILM_DETAILS_REQUEST,
-    payload: {
-      processing: true,
-    },
-  };
-}
 
 function searchFilmDetailsSuccess(film: FilmDetail, bookmark?: Bookmark): SearchFilmDetailsActionTypes {
   return {
@@ -203,19 +185,10 @@ function searchFilmDetailsSuccess(film: FilmDetail, bookmark?: Bookmark): Search
     },
   };
 }
-function searchFilmDetailsFailure(error: string): SearchFilmDetailsActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILM_DETAILS_FAILURE,
-    payload: {
-      processing: false,
-      error,
-    },
-  };
-}
 
 export function saerchFilmDetails(imdbID: string): ThunkSearchFilmDetailsAction {
   return async (dispatch) => {
-    dispatch(searchFilmDetailsRequest());
+    dispatch(request());
     try {
       const [filmDetails, bookmark] = await Promise.all([
         API.searchById(imdbID),
@@ -223,41 +196,19 @@ export function saerchFilmDetails(imdbID: string): ThunkSearchFilmDetailsAction 
       ]);
       dispatch(searchFilmDetailsSuccess(filmDetails, bookmark));
     } catch (err) {
-      dispatch(searchFilmDetailsFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
 
-export type BookmarkState = {
-  processing: boolean;
-  bookmark: Bookmark;
-  error: string;
-};
-type ThunkAddBookmarkAction = ThunkAction<Promise<void>, BookmarkState, undefined, AddBookmarkActionTypes>;
+type ThunkAddBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, AddBookmarkActionTypes>;
 
-function addBookmarkRequest(): AddBookmarkActionTypes {
-  return {
-    type: ACTIONS.ADD_BOOKMARK_REQUEST,
-    payload: {
-      processing: true,
-    },
-  };
-}
 function addBookmarkSuccess(bookmark: Bookmark): AddBookmarkActionTypes {
   return {
     type: ACTIONS.ADD_BOOKMARK_SUCCESS,
     payload: {
       processing: false,
       bookmark,
-    },
-  };
-}
-function addBookmarkFailure(error: string): AddBookmarkActionTypes {
-  return {
-    type: ACTIONS.ADD_BOOKMARK_FAILURE,
-    payload: {
-      processing: false,
-      error,
     },
   };
 }
@@ -270,26 +221,18 @@ type AddBookmarkParams = {
 };
 export function addBookmark(params: AddBookmarkParams): ThunkAddBookmarkAction {
   return async (dispatch) => {
-    dispatch(addBookmarkRequest());
+    dispatch(request());
     try {
       const bookmark = await API.createBookmark(params);
       dispatch(addBookmarkSuccess(bookmark));
     } catch (err) {
-      dispatch(addBookmarkFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
 
-type ThunkRemoveBookmarkAction = ThunkAction<Promise<void>, BookmarkState, undefined, RemoveBookmarkActionTypes>;
+type ThunkRemoveBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, RemoveBookmarkActionTypes>;
 
-function removeBookmarkRequest(): RemoveBookmarkActionTypes {
-  return {
-    type: ACTIONS.REMOVE_BOOKMARK_REQUEST,
-    payload: {
-      processing: true,
-    },
-  };
-}
 function removeBookmarkSuccess(): RemoveBookmarkActionTypes {
   return {
     type: ACTIONS.REMOVE_BOOKMARK_SUCCESS,
@@ -299,37 +242,20 @@ function removeBookmarkSuccess(): RemoveBookmarkActionTypes {
     },
   };
 }
-function removeBookmarkFailure(error: string): RemoveBookmarkActionTypes {
-  return {
-    type: ACTIONS.REMOVE_BOOKMARK_FAILURE,
-    payload: {
-      processing: false,
-      error,
-    },
-  };
-}
 export function removeBookmark(bookmarkId: string): ThunkRemoveBookmarkAction {
   return async (dispatch) => {
-    dispatch(removeBookmarkRequest());
+    dispatch(request());
     try {
       await API.deleteBookmark(bookmarkId);
       dispatch(removeBookmarkSuccess());
     } catch (err) {
-      dispatch(removeBookmarkFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
 
-type ThunkGetBookmarkAction = ThunkAction<Promise<void>, BookmarkState, undefined, GetBookmarkActionTypes>;
+type ThunkGetBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, GetBookmarkActionTypes>;
 
-function getBookmarkRequest(): GetBookmarkActionTypes {
-  return {
-    type: ACTIONS.GET_BOOKMARK_REQUEST,
-    payload: {
-      processing: true,
-    },
-  };
-}
 function getBookmarkSuccess(bookmark: Bookmark): GetBookmarkActionTypes {
   return {
     type: ACTIONS.GET_BOOKMARK_SUCCESS,
@@ -339,37 +265,20 @@ function getBookmarkSuccess(bookmark: Bookmark): GetBookmarkActionTypes {
     },
   };
 }
-function getBookmarkFailure(error: string): GetBookmarkActionTypes {
-  return {
-    type: ACTIONS.GET_BOOKMARK_FAILURE,
-    payload: {
-      processing: false,
-      error,
-    },
-  };
-}
 export function getBookmark(imdbID: string): ThunkGetBookmarkAction {
   return async (dispatch) => {
-    dispatch(getBookmarkRequest());
+    dispatch(request());
     try {
       const bookmark = await API.getBookmark(imdbID);
       dispatch(getBookmarkSuccess(bookmark));
     } catch (err) {
-      dispatch(getBookmarkFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
 
 type ThunkAddNoteAction = ThunkAction<Promise<void>, NoteState, undefined, AddNoteActionTypes>;
 
-function addNoteRequest(): AddNoteActionTypes {
-  return {
-    type: ACTIONS.ADD_NOTE_REQUEST,
-    payload: {
-      processing: true,
-    },
-  };
-}
 function addNoteSuccess(note: Note): AddNoteActionTypes {
   return {
     type: ACTIONS.ADD_NOTE_SUCCESS,
@@ -379,25 +288,16 @@ function addNoteSuccess(note: Note): AddNoteActionTypes {
     },
   };
 }
-function addNoteFailure(error: string): AddNoteActionTypes {
-  return {
-    type: ACTIONS.ADD_NOTE_FAILURE,
-    payload: {
-      processing: false,
-      error,
-    },
-  };
-}
 type NoteParams = Omit<Note, "owner">;
 export function addNote(noteParams: NoteParams, bookmarkId: string): ThunkAddNoteAction {
   return async (dispatch) => {
-    dispatch(addNoteRequest());
+    dispatch(request());
     try {
       const note = await API.createNote({ ...noteParams, bookmarkId });
       await API.relateBookmark(bookmarkId, note.id);
       dispatch(addNoteSuccess(note));
     } catch (err) {
-      dispatch(addNoteFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
@@ -445,14 +345,6 @@ export function changeNoteText(text: string): ChangeNoteFormActionTypes {
 
 type ThunkEditNoteAction = ThunkAction<Promise<void>, NoteState, undefined, EditNoteActionTypes>;
 
-function editNoteRequest(): EditNoteActionTypes {
-  return {
-    type: ACTIONS.EDIT_NOTE_REQUEST,
-    payload: {
-      processing: true,
-    },
-  };
-}
 function editNoteSuccess(note: Note): EditNoteActionTypes {
   return {
     type: ACTIONS.EDIT_NOTE_SUCCESS,
@@ -462,37 +354,19 @@ function editNoteSuccess(note: Note): EditNoteActionTypes {
     },
   };
 }
-function editNoteFailure(error: string): EditNoteActionTypes {
-  return {
-    type: ACTIONS.EDIT_NOTE_FAILURE,
-    payload: {
-      processing: false,
-      error,
-    },
-  };
-}
 export function editNote(noteParams: NoteParams): ThunkEditNoteAction {
   return async (dispatch) => {
-    dispatch(editNoteRequest());
+    dispatch(request());
     try {
       const note = await API.editNote(noteParams);
       dispatch(editNoteSuccess(note));
     } catch (err) {
-      dispatch(editNoteFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
 
 type ThunkListBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, ListBookmarkActionTypes>;
-
-function listBookmarkRequest(): ListBookmarkActionTypes {
-  return {
-    type: ACTIONS.LIST_BOOKMARK_REQUEST,
-    payload: {
-      processing: true,
-    },
-  };
-}
 
 function listBookmarkSuccess(bookmarks: Bookmark[], nextToken: string | null): ListBookmarkActionTypes {
   return {
@@ -504,37 +378,18 @@ function listBookmarkSuccess(bookmarks: Bookmark[], nextToken: string | null): L
     },
   };
 }
-function listBookmarkFailure(error: string): ListBookmarkActionTypes {
-  return {
-    type: ACTIONS.LIST_BOOKMARK_FAILURE,
-    payload: {
-      processing: false,
-      error,
-    },
-  };
-}
 
 export function listBookmark(owner: string): ThunkListBookmarkAction {
   return async (dispatch) => {
-    dispatch(listBookmarkRequest());
+    dispatch(request());
     try {
       const { bookmarks, nextToken } = await API.listBookmarks(owner, null);
       dispatch(listBookmarkSuccess(bookmarks, nextToken));
     } catch (err) {
-      dispatch(listBookmarkFailure(err.message));
+      dispatch(error(err.message));
     }
   };
 }
-
-function listBookmarkNextRequest(): ListBookmarkActionTypes {
-  return {
-    type: ACTIONS.LIST_BOOKMARK_NEXT_REQUEST,
-    payload: {
-      nextLoading: true,
-    },
-  };
-}
-
 function listBookmarkNextSuccess(bookmarks: Bookmark[], nextToken: string | null): ListBookmarkActionTypes {
   return {
     type: ACTIONS.LIST_BOOKMARK_NEXT_SUCCESS,
@@ -545,24 +400,15 @@ function listBookmarkNextSuccess(bookmarks: Bookmark[], nextToken: string | null
     },
   };
 }
-function listBookmarkNextFailure(error: string): ListBookmarkActionTypes {
-  return {
-    type: ACTIONS.LIST_BOOKMARK_NEXT_FAILURE,
-    payload: {
-      nextLoading: false,
-      error,
-    },
-  };
-}
 
 export function listBookmarkNext(owner: string, token: string): ThunkListBookmarkAction {
   return async (dispatch) => {
-    dispatch(listBookmarkNextRequest());
+    dispatch(requestNext());
     try {
       const { bookmarks, nextToken } = await API.listBookmarks(owner, token);
       dispatch(listBookmarkNextSuccess(bookmarks, nextToken));
     } catch (err) {
-      dispatch(listBookmarkNextFailure(err.message));
+      dispatch(errorNext(err.message));
     }
   };
 }
