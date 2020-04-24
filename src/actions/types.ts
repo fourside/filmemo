@@ -14,21 +14,21 @@ export enum ACTIONS {
   REQUEST_NEXT = "REQUEST_NEXT",
   ERROR = "ERROR",
   ERROR_NEXT = "ERROR_NEXT",
-  SEARCH_FILMS_SUCCESS = "SEARCH_FILMS_SUCCESS",
-  SEARCH_FILMS_NEXT_SUCCESS = "SEARCH_FILMS_NEXT_SUCCESS",
+  SEARCH_FILMS = "SEARCH_FILMS",
+  SEARCH_FILMS_NEXT = "SEARCH_FILMS_NEXT",
   SEARCH_TITLE_INPUT = "SEARCH_TITLE_INPUT",
-  SEARCH_FILM_DETAILS_SUCCESS = "SEARCH_FILM_DETAILS_SUCCESS",
-  LIST_BOOKMARK_SUCCESS = "LIST_BOOKMARK_SUCCESS",
-  LIST_BOOKMARK_NEXT_SUCCESS = "LIST_BOOKMARK_NEXT_SUCCESS",
-  ADD_BOOKMARK_SUCCESS = "ADD_BOOKMARK_SUCCESS",
-  REMOVE_BOOKMARK_SUCCESS = "REMOVE_BOOKMARK_SUCCESS",
-  GET_BOOKMARK_SUCCESS = "GET_BOOKMARK_SUCCESS",
+  SEARCH_FILM_DETAILS = "SEARCH_FILM_DETAILS",
+  LIST_BOOKMARK = "LIST_BOOKMARK",
+  LIST_BOOKMARK_NEXT = "LIST_BOOKMARK_NEXT",
+  ADD_BOOKMARK = "ADD_BOOKMARK",
+  REMOVE_BOOKMARK = "REMOVE_BOOKMARK",
+  GET_BOOKMARK = "GET_BOOKMARK",
   CHANGE_NOTE_RATING = "CHANGE_NOTE_RATING",
   CHANGE_NOTE_WHEN = "CHANGE_NOTE_WHEN",
   CHANGE_NOTE_WHERE = "CHANGE_NOTE_WHERE",
   CHANGE_NOTE_TEXT = "CHANGE_NOTE_TEXT",
-  ADD_NOTE_SUCCESS = "ADD_NOTE_SUCCESS",
-  EDIT_NOTE_SUCCESS = "EDIT_NOTE_SUCCESS",
+  ADD_NOTE = "ADD_NOTE",
+  EDIT_NOTE = "EDIT_NOTE",
 }
 
 interface SignInRequestAction extends Action {
@@ -75,8 +75,8 @@ export interface ErrorNextAction extends Action {
     error: string,
   },
 }
-interface SearchFilmsSuccessAction extends Action {
-  type: ACTIONS.SEARCH_FILMS_SUCCESS,
+interface SearchFilmsAction extends Action {
+  type: ACTIONS.SEARCH_FILMS,
   payload: {
     processing: boolean,
     films: Film[],
@@ -84,10 +84,10 @@ interface SearchFilmsSuccessAction extends Action {
   },
 }
 
-export type SearchFilmsActionTypes = SearchFilmsSuccessAction | RequestAction | ErrorAction;
+export type SearchFilmsActionTypes = SearchFilmsAction | RequestAction | ErrorAction;
 
-interface SearchFilmsNextSuccessAction extends Action {
-  type: ACTIONS.SEARCH_FILMS_NEXT_SUCCESS,
+interface SearchFilmsNextAction extends Action {
+  type: ACTIONS.SEARCH_FILMS_NEXT,
   payload: {
     nextLoading: boolean,
     films: Film[],
@@ -96,9 +96,9 @@ interface SearchFilmsNextSuccessAction extends Action {
   },
 }
 
-export type SearchFilmsNextActionTypes = SearchFilmsNextSuccessAction | RequestNextAction | ErrorNextAction;
-export type FilmsState = SearchFilmsSuccessAction["payload"]
-  & SearchFilmsNextSuccessAction["payload"]
+export type SearchFilmsNextActionTypes = SearchFilmsNextAction | RequestNextAction | ErrorNextAction;
+export type FilmsState = SearchFilmsAction["payload"]
+  & SearchFilmsNextAction["payload"]
   & RequestAction["payload"]
   & ErrorAction["payload"];
 
@@ -110,8 +110,8 @@ interface SearchTitleInputAction extends Action {
 }
 export type SearchTitleInputActionTypes = SearchTitleInputAction;
 
-interface SearchFilmDetailsSuccessAction extends Action {
-  type: ACTIONS.SEARCH_FILM_DETAILS_SUCCESS,
+interface SearchFilmDetailsAction extends Action {
+  type: ACTIONS.SEARCH_FILM_DETAILS,
   payload: {
     processing: boolean,
     film?: FilmDetail,
@@ -119,51 +119,51 @@ interface SearchFilmDetailsSuccessAction extends Action {
   },
 }
 
-export type SearchFilmDetailsActionTypes = SearchFilmDetailsSuccessAction | RequestAction | ErrorAction;
-export type FilmDetailsState = SearchFilmDetailsSuccessAction["payload"]
+export type SearchFilmDetailsActionTypes = SearchFilmDetailsAction | RequestAction | ErrorAction;
+export type FilmDetailsState = SearchFilmDetailsAction["payload"]
   & RequestAction["payload"]
   & ErrorAction["payload"];
 
-interface AddBookmarkSuccessAction extends Action {
-  type: ACTIONS.ADD_BOOKMARK_SUCCESS,
+interface AddBookmarkAction extends Action {
+  type: ACTIONS.ADD_BOOKMARK,
   payload: {
     processing: boolean,
     bookmark: Bookmark,
   },
 }
 
-export type AddBookmarkActionTypes = AddBookmarkSuccessAction | RequestAction | ErrorAction;
+export type AddBookmarkActionTypes = AddBookmarkAction | RequestAction | ErrorAction;
 
-interface RemoveBookmarkSuccessAction extends Action {
-  type: ACTIONS.REMOVE_BOOKMARK_SUCCESS,
+interface RemoveBookmarkAction extends Action {
+  type: ACTIONS.REMOVE_BOOKMARK,
   payload: {
     processing: boolean,
     bookmark: undefined,
   },
 }
 
-export type RemoveBookmarkActionTypes = RemoveBookmarkSuccessAction | RequestAction | ErrorAction;
+export type RemoveBookmarkActionTypes = RemoveBookmarkAction | RequestAction | ErrorAction;
 
-interface GetBookmarkSuccessAction extends Action {
-  type: ACTIONS.GET_BOOKMARK_SUCCESS,
+interface GetBookmarkAction extends Action {
+  type: ACTIONS.GET_BOOKMARK,
   payload: {
     processing: boolean,
     bookmark: Bookmark,
   },
 }
 
-export type GetBookmarkActionTypes = GetBookmarkSuccessAction | RequestAction | ErrorAction;
+export type GetBookmarkActionTypes = GetBookmarkAction | RequestAction | ErrorAction;
 
-interface AddNoteSuccessAction extends Action {
-  type: ACTIONS.ADD_NOTE_SUCCESS,
+interface AddNoteAction extends Action {
+  type: ACTIONS.ADD_NOTE,
   payload: {
     processing: boolean,
     note: Note,
   },
 }
 
-export type NoteState = AddNoteSuccessAction["payload"] & RequestAction["payload"] & ErrorAction["payload"];
-export type AddNoteActionTypes = AddNoteSuccessAction | RequestAction | ErrorAction;
+export type NoteState = AddNoteAction["payload"] & RequestAction["payload"] & ErrorAction["payload"];
+export type AddNoteActionTypes = AddNoteAction | RequestAction | ErrorAction;
 
 interface ChangeNoteDateAction extends Action {
   type: ACTIONS.CHANGE_NOTE_WHEN,
@@ -212,26 +212,26 @@ export type ChangeNoteFormActionTypes = ChangeNoteDateAction
   | ChangeNoteTextAction
   ;
 
-interface EditNoteSuccessAction extends Action {
-  type: ACTIONS.EDIT_NOTE_SUCCESS,
+interface EditNoteAction extends Action {
+  type: ACTIONS.EDIT_NOTE,
   payload: {
     processing: boolean,
     note: Note,
   },
 }
 
-export type EditNoteActionTypes = EditNoteSuccessAction | RequestAction | ErrorAction;
+export type EditNoteActionTypes = EditNoteAction | RequestAction | ErrorAction;
 
-interface ListBookmarkSuccessAction extends Action {
-  type: ACTIONS.LIST_BOOKMARK_SUCCESS,
+interface ListBookmarkAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK,
   payload: {
     processing: boolean,
     bookmarks: Bookmark[],
     nextToken: string | null,
   },
 }
-interface ListBookmarkNextSuccessAction extends Action {
-  type: ACTIONS.LIST_BOOKMARK_NEXT_SUCCESS,
+interface ListBookmarkNextAction extends Action {
+  type: ACTIONS.LIST_BOOKMARK_NEXT,
   payload: {
     nextLoading: boolean,
     bookmarks: Bookmark[],
@@ -239,15 +239,15 @@ interface ListBookmarkNextSuccessAction extends Action {
   },
 }
 
-export type BookmarksState = ListBookmarkSuccessAction["payload"]
-  & ListBookmarkNextSuccessAction["payload"]
+export type BookmarksState = ListBookmarkAction["payload"]
+  & ListBookmarkNextAction["payload"]
   & RequestAction["payload"]
   & ErrorAction["payload"]
   & RequestNextAction["payload"]
   & ErrorNextAction["payload"]
   ;
-export type ListBookmarkActionTypes = ListBookmarkSuccessAction
-  | ListBookmarkNextSuccessAction
+export type ListBookmarkActionTypes = ListBookmarkAction
+  | ListBookmarkNextAction
   | RequestAction
   | ErrorAction
   | RequestNextAction

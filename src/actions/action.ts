@@ -115,13 +115,13 @@ function errorNext(error: string): ErrorNextAction {
   };
 }
 
-function searchFilmsSuccess(response: { films: Film[], hasNext: boolean }): SearchFilmsActionTypes {
+function searchFilmsSuccess(films: Film[], hasNext: boolean): SearchFilmsActionTypes {
   return {
-    type: ACTIONS.SEARCH_FILMS_SUCCESS,
+    type: ACTIONS.SEARCH_FILMS,
     payload: {
       processing: false,
-      films: response.films,
-      hasNext: response.hasNext,
+      films,
+      hasNext,
     },
   };
 }
@@ -131,7 +131,7 @@ export function searchFilms(title: string): ThunkSearchFilmsAction {
     dispatch(request());
     try {
       const { films, hasNext } = await API.searchByTitle(title);
-      dispatch(searchFilmsSuccess({ films, hasNext }));
+      dispatch(searchFilmsSuccess(films, hasNext));
     } catch (err) {
       dispatch(error(err.message));
     }
@@ -142,7 +142,7 @@ type ThunkSearchFilmsNextAction = ThunkAction<Promise<void>, FilmsState, undefin
 
 function searchFilmsNextSuccess(response: { films: Film[], hasNext: boolean, page: number }): SearchFilmsNextActionTypes {
   return {
-    type: ACTIONS.SEARCH_FILMS_NEXT_SUCCESS,
+    type: ACTIONS.SEARCH_FILMS_NEXT,
     payload: {
       nextLoading: false,
       films: response.films,
@@ -177,7 +177,7 @@ type ThunkSearchFilmDetailsAction = ThunkAction<Promise<void>, FilmDetailsState,
 
 function searchFilmDetailsSuccess(film: FilmDetail, bookmark?: Bookmark): SearchFilmDetailsActionTypes {
   return {
-    type: ACTIONS.SEARCH_FILM_DETAILS_SUCCESS,
+    type: ACTIONS.SEARCH_FILM_DETAILS,
     payload: {
       processing: false,
       film,
@@ -205,7 +205,7 @@ type ThunkAddBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefin
 
 function addBookmarkSuccess(bookmark: Bookmark): AddBookmarkActionTypes {
   return {
-    type: ACTIONS.ADD_BOOKMARK_SUCCESS,
+    type: ACTIONS.ADD_BOOKMARK,
     payload: {
       processing: false,
       bookmark,
@@ -235,7 +235,7 @@ type ThunkRemoveBookmarkAction = ThunkAction<Promise<void>, BookmarksState, unde
 
 function removeBookmarkSuccess(): RemoveBookmarkActionTypes {
   return {
-    type: ACTIONS.REMOVE_BOOKMARK_SUCCESS,
+    type: ACTIONS.REMOVE_BOOKMARK,
     payload: {
       processing: false,
       bookmark: undefined,
@@ -258,7 +258,7 @@ type ThunkGetBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefin
 
 function getBookmarkSuccess(bookmark: Bookmark): GetBookmarkActionTypes {
   return {
-    type: ACTIONS.GET_BOOKMARK_SUCCESS,
+    type: ACTIONS.GET_BOOKMARK,
     payload: {
       processing: false,
       bookmark,
@@ -281,7 +281,7 @@ type ThunkAddNoteAction = ThunkAction<Promise<void>, NoteState, undefined, AddNo
 
 function addNoteSuccess(note: Note): AddNoteActionTypes {
   return {
-    type: ACTIONS.ADD_NOTE_SUCCESS,
+    type: ACTIONS.ADD_NOTE,
     payload: {
       processing: false,
       note,
@@ -347,7 +347,7 @@ type ThunkEditNoteAction = ThunkAction<Promise<void>, NoteState, undefined, Edit
 
 function editNoteSuccess(note: Note): EditNoteActionTypes {
   return {
-    type: ACTIONS.EDIT_NOTE_SUCCESS,
+    type: ACTIONS.EDIT_NOTE,
     payload: {
       processing: false,
       note,
@@ -370,7 +370,7 @@ type ThunkListBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefi
 
 function listBookmarkSuccess(bookmarks: Bookmark[], nextToken: string | null): ListBookmarkActionTypes {
   return {
-    type: ACTIONS.LIST_BOOKMARK_SUCCESS,
+    type: ACTIONS.LIST_BOOKMARK,
     payload: {
       processing: false,
       bookmarks,
@@ -392,7 +392,7 @@ export function listBookmark(owner: string): ThunkListBookmarkAction {
 }
 function listBookmarkNextSuccess(bookmarks: Bookmark[], nextToken: string | null): ListBookmarkActionTypes {
   return {
-    type: ACTIONS.LIST_BOOKMARK_NEXT_SUCCESS,
+    type: ACTIONS.LIST_BOOKMARK_NEXT,
     payload: {
       nextLoading: false,
       bookmarks,

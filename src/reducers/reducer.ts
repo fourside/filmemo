@@ -52,12 +52,12 @@ const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | S
     case ACTIONS.ERROR:
     case ACTIONS.REQUEST_NEXT:
     case ACTIONS.ERROR_NEXT:
-    case ACTIONS.SEARCH_FILMS_SUCCESS:
+    case ACTIONS.SEARCH_FILMS:
       return {
         ...state,
         ...action.payload,
       };
-    case ACTIONS.SEARCH_FILMS_NEXT_SUCCESS:
+    case ACTIONS.SEARCH_FILMS_NEXT:
       const films = state.films.concat(action.payload.films);
       return {
         ...state,
@@ -93,10 +93,10 @@ const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetails
   switch(action.type) {
     case ACTIONS.REQUEST:
     case ACTIONS.ERROR:
-    case ACTIONS.SEARCH_FILM_DETAILS_SUCCESS:
-    case ACTIONS.ADD_BOOKMARK_SUCCESS:
-    case ACTIONS.REMOVE_BOOKMARK_SUCCESS:
-    case ACTIONS.GET_BOOKMARK_SUCCESS:
+    case ACTIONS.SEARCH_FILM_DETAILS:
+    case ACTIONS.ADD_BOOKMARK:
+    case ACTIONS.REMOVE_BOOKMARK:
+    case ACTIONS.GET_BOOKMARK:
       return {
         ...state,
         ...action.payload,
@@ -122,8 +122,8 @@ const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
     case ACTIONS.REQUEST:
     case ACTIONS.ERROR:
-    case ACTIONS.ADD_NOTE_SUCCESS:
-    case ACTIONS.EDIT_NOTE_SUCCESS:
+    case ACTIONS.ADD_NOTE:
+    case ACTIONS.EDIT_NOTE:
       return {
         ...state,
         ...action.payload,
@@ -157,12 +157,12 @@ const listBookmarkReducer = (state = initBookmarkListState, action: ListBookmark
     case ACTIONS.ERROR:
     case ACTIONS.REQUEST_NEXT:
     case ACTIONS.ERROR_NEXT:
-    case ACTIONS.LIST_BOOKMARK_SUCCESS:
+    case ACTIONS.LIST_BOOKMARK:
       return {
         ...state,
         ...action.payload,
       };
-    case ACTIONS.LIST_BOOKMARK_NEXT_SUCCESS:
+    case ACTIONS.LIST_BOOKMARK_NEXT:
       const bookmarks = state.bookmarks.concat(action.payload.bookmarks);
       return {
         ...state,
