@@ -76,11 +76,11 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
       return;
     }
     if (!note.id) {
-      addNote(note, props.bookmarkId);
+      await addNote(note, props.bookmarkId);
     } else {
       const noteCopy = Object.assign({}, note);
       delete noteCopy.owner;
-      editNote(noteCopy);
+      await editNote(noteCopy);
     }
     props.onSubmit();
   };
