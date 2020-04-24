@@ -1,11 +1,8 @@
 import { connect, ConnectedProps } from "react-redux";
-import { User } from "../model/User";
 import { App } from "../App";
 import { clearUser, signedIn } from "../actions/action";
 
-const mapState = (user: User) => ({
-  user
-});
+const mapState = () => ({});
 const mapDispatch = {
   signedIn,
   clearUser,

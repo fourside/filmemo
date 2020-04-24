@@ -17,7 +17,6 @@ import { ActionCard } from "./ActionCard";
 import { NoteForm } from "../containers/NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
-import { useUser, useFilmDetails } from "../reducers/reducer";
 import { Props } from "../containers/FilmPage";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,15 +43,13 @@ const useStyles = makeStyles((theme: Theme) =>
 const IMDB_URL = "https://www.imdb.com/title/";
 
 const FilmPage: React.FC<Props> = (props) => {
-  const { saerchFilmDetails, addBookmark, removeBookmark, getBookmark } = props;
+  const { saerchFilmDetails, addBookmark, removeBookmark, getBookmark, user, filmDetails } = props;
   const { imdbID } = useParams<{ imdbID: string} >();
   const [expanded, setExpanded] = useState({
     form: false,
     card: true,
   });
   const classes = useStyles();
-  const user = useUser();
-  const filmDetails = useFilmDetails();
 
   useEffect(() => {
     saerchFilmDetails(imdbID);

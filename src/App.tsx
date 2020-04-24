@@ -18,7 +18,7 @@ export const App: React.FC<Props> = (props) => {
         history.push("/signin");
       }
     })();
-  }, [history, signedIn]);
+  }, [signedIn, history]);
 
   useEffect(() => {
     Hub.listen("auth", (capsule) => {

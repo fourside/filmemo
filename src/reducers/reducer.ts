@@ -196,13 +196,8 @@ export const rootReducer = combineReducers({
   error: errorReducer,
 });
 
-type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>
 
 const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useUser = () => useTypedSelector(state => state.user);
-export const useFilms = () => useTypedSelector(state => state.films);
-export const useTitle = () => useTypedSelector(state => state.title);
-export const useFilmDetails = () => useTypedSelector(state => state.filmDetails);
-export const useNote = () => useTypedSelector(state => state.note);
-export const useBookmarks = () => useTypedSelector(state => state.bookmarks);
 export const useError = () => useTypedSelector(state => state.error);

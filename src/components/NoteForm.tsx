@@ -14,7 +14,6 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 import DateFnsUtils from "@date-io/date-fns";
 import { formatDate, validate } from "../model/Note";
 import { ContainerProps } from "../containers/NoteForm";
-import { useNote } from "../reducers/reducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,12 +41,12 @@ interface Props {
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const [valid, setValid] = useState(false);
   const classes = useStyles();
-  const { addNote, editNote } = props;
-  const noteForm = useNote();
+  const { addNote, editNote , noteForm } = props;
+  const { note } = noteForm;
 
   useEffect(() => {
-    setValid(validate(noteForm.note));
-  }, [noteForm.note]);
+    setValid(validate(note));
+  }, [note]);
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
     const rating = value ?? 0;
@@ -76,7 +75,6 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
     if (!valid) {
       return;
     }
-    const { note } = noteForm;
     if (!note.id) {
       addNote(note, props.bookmarkId);
     } else {
@@ -87,7 +85,6 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
     props.onSubmit();
   };
 
-  const { note } = noteForm;
   return (
     <Collapse in={props.expanded} timeout="auto" unmountOnExit className={classes.root}>
       <form onSubmit={handleSubmit} className={classes.form}>

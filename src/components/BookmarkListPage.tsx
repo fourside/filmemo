@@ -5,30 +5,21 @@ import Typography from "@material-ui/core/Typography";
 import { Loading } from "./Loading";
 import { BookmarkTile } from "./BookmarkTile";
 import { useIntersect } from "../hooks/useIntersect";
-import { useUser, useBookmarks } from "../reducers/reducer";
 import { Props } from "../containers/BookmarkListPage";
 
 const BookmarkListPage: React.FC<Props> = (props) => {
-  const state = useBookmarks();
-  const user = useUser();
-  const { listBookmark, listBookmarkNext } = props;
+  const { listBookmark, listBookmarkNext, state, user } = props;
   const { intersecting, ref } = useIntersect();
 
   useEffect(() => {
-    if (!user.owner) {
-      return;
+    if (user.owner) {
+      listBookmark(user.owner);
     }
-    listBookmark(user.owner);
   }, [user.owner, listBookmark]);
 
   useEffect(() => {
-    if (intersecting) {
-      if (state.nextLoading) {
-        return;
-      }
-      if (state.nextToken) {
-        listBookmarkNext(user.owner, state.nextToken);
-      }
+    if (intersecting && !state.nextLoading && state.nextToken) {
+      listBookmarkNext(user.owner, state.nextToken);
     }
   }, [intersecting, state.nextLoading, state.nextToken, listBookmarkNext, user.owner]);
 

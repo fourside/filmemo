@@ -5,16 +5,13 @@ import { SearchForm } from "./SearchForm";
 import { FilmList } from "./FilmList";
 import { useIntersect } from "../hooks/useIntersect";
 import { Loading } from "./Loading";
-import { useFilms, useTitle } from "../reducers/reducer";
 import { Props } from "../containers/UserPage";
 
 const UserPage: React.FC<Props> = (props) => {
-  const films = useFilms();
   const history = useHistory();
   const { searchTitle } = useParams<{ searchTitle?: string }>();
-  const title = useTitle();
   const { intersecting, ref } = useIntersect();
-  const { searchTitleInput, searchFilms } = props;
+  const { searchTitleInput, searchFilms, films, title } = props;
 
   useEffect(() => {
     if (searchTitle) {
