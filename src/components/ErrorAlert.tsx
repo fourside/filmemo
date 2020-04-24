@@ -1,11 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import { ErrorContext } from "../context/ErrorContext";
+import { useError } from "../reducers/reducer";
 
 export const ErrorAlert: React.FC = () => {
   const [open, setOpen] = useState(true);
-  const { error } = useContext(ErrorContext);
+  const error = useError();
 
   if (!error) {
     return null;

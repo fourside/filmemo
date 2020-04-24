@@ -1,9 +1,8 @@
-import React, { useEffect, useContext, ChangeEvent } from "react";
+import React, { useEffect, ChangeEvent } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import { SearchForm } from "./SearchForm";
 import { FilmList } from "./FilmList";
-import { ErrorContext } from "../context/ErrorContext";
 import { useIntersect } from "../hooks/useIntersect";
 import { Loading } from "./Loading";
 import { useFilms, useTitle } from "../reducers/reducer";
@@ -14,15 +13,8 @@ const UserPage: React.FC<Props> = (props) => {
   const history = useHistory();
   const { searchTitle } = useParams<{ searchTitle?: string }>();
   const title = useTitle();
-  const { setError } = useContext(ErrorContext);
   const { intersecting, ref } = useIntersect();
   const { searchTitleInput, searchFilms } = props;
-
-  useEffect(() => {
-    if (films.error) {
-      setError(films.error);
-    }
-  }, [films.error, setError]);
 
   useEffect(() => {
     if (searchTitle) {

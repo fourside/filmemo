@@ -1,10 +1,9 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import GridList from "@material-ui/core/GridList";
 import Typography from "@material-ui/core/Typography";
 import { Loading } from "./Loading";
 import { BookmarkTile } from "./BookmarkTile";
-import { ErrorContext } from "../context/ErrorContext";
 import { useIntersect } from "../hooks/useIntersect";
 import { useUser, useBookmarks } from "../reducers/reducer";
 import { Props } from "../containers/BookmarkListPage";
@@ -12,7 +11,6 @@ import { Props } from "../containers/BookmarkListPage";
 const BookmarkListPage: React.FC<Props> = (props) => {
   const state = useBookmarks();
   const user = useUser();
-  const { setError } = useContext(ErrorContext);
   const { listBookmark, listBookmarkNext } = props;
   const { intersecting, ref } = useIntersect();
 
@@ -33,12 +31,6 @@ const BookmarkListPage: React.FC<Props> = (props) => {
       }
     }
   }, [intersecting, state.nextLoading, state.nextToken, listBookmarkNext, user.owner]);
-
-  useEffect(() => {
-    if (state.error) {
-      setError(state.error);
-    }
-  }, [state.error, setError]);
 
   if (state.processing) {
     return <Loading />;

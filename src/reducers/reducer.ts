@@ -14,6 +14,8 @@ import {
   EditNoteActionTypes,
   ChangeNoteFormActionTypes,
   ListBookmarkActionTypes,
+  ErrorAction,
+  ErrorNextAction,
   FilmsState,
   FilmDetailsState,
   NoteState,
@@ -174,6 +176,16 @@ const listBookmarkReducer = (state = initBookmarkListState, action: ListBookmark
   }
 };
 
+const errorReducer = (state = "", action: ErrorAction | ErrorNextAction) => {
+  switch (action.type) {
+    case ACTIONS.ERROR:
+    case ACTIONS.ERROR_NEXT:
+      return action.payload.error;
+    default:
+      return state;
+  }
+};
+
 export const rootReducer = combineReducers({
   user: userReducer,
   films: filmsReducer,
@@ -181,6 +193,7 @@ export const rootReducer = combineReducers({
   filmDetails: filmDetailsReducer,
   note: noteReducer,
   bookmarks: listBookmarkReducer,
+  error: errorReducer,
 });
 
 type RootState = ReturnType<typeof rootReducer>
@@ -192,3 +205,4 @@ export const useTitle = () => useTypedSelector(state => state.title);
 export const useFilmDetails = () => useTypedSelector(state => state.filmDetails);
 export const useNote = () => useTypedSelector(state => state.note);
 export const useBookmarks = () => useTypedSelector(state => state.bookmarks);
+export const useError = () => useTypedSelector(state => state.error);

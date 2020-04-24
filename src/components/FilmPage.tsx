@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -14,7 +14,6 @@ import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
-import { ErrorContext } from "../context/ErrorContext";
 import { NoteForm } from "../containers/NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
@@ -51,7 +50,6 @@ const FilmPage: React.FC<Props> = (props) => {
     form: false,
     card: true,
   });
-  const { setError } = useContext(ErrorContext);
   const classes = useStyles();
   const user = useUser();
   const filmDetails = useFilmDetails();
@@ -59,12 +57,6 @@ const FilmPage: React.FC<Props> = (props) => {
   useEffect(() => {
     saerchFilmDetails(imdbID);
   }, [saerchFilmDetails, imdbID]);
-
-  useEffect(() => {
-    if (filmDetails.error) {
-      setError(filmDetails.error);
-    }
-  }, [filmDetails.error, setError]);
 
   const handleAddBookmark = async () => {
     if (!filmDetails.film) {
