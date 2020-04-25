@@ -49,8 +49,12 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
 
   const handleChangeDate = (date: Date | null) => {
     if (date) {
-      const when = formatDate(date);
-      props.changeNoteWhen(when);
+      try {
+        const when = formatDate(date);
+        props.changeNoteWhen(when);
+      } catch (err) {
+        console.log(err.message);
+      }
     }
   };
 
