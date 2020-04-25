@@ -285,6 +285,9 @@ export function mutateNote(noteParams: Note, bookmarkId: string): ThunkMutateNot
       const paramsCopy = Object.assign({}, noteParams);
       delete paramsCopy.owner;
       let note: Required<Note>;
+      if (!paramsCopy.text) {
+        delete paramsCopy.text; // appsync raise an error by passing empty string
+      }
       if (!paramsCopy.id) {
         note = await API.createNote({ ...paramsCopy, bookmarkId });
         await API.relateBookmark(bookmarkId, note.id);
