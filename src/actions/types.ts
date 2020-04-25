@@ -51,14 +51,10 @@ export type UserActionTypes = SignInRequestAction | SignInSuccessAction | SignOu
 
 export interface RequestAction extends Action {
   type: ACTIONS.REQUEST,
-  payload: {
-    processing: boolean,
-  },
 }
 export interface ErrorAction extends Action {
   type: ACTIONS.ERROR,
   payload: {
-    processing: boolean,
     error: string,
   },
 }
@@ -78,7 +74,6 @@ export interface ErrorNextAction extends Action {
 interface SearchFilmsAction extends Action {
   type: ACTIONS.SEARCH_FILMS,
   payload: {
-    processing: boolean,
     films: Film[],
     hasNext: boolean,
   },
@@ -99,7 +94,6 @@ interface SearchFilmsNextAction extends Action {
 export type SearchFilmsNextActionTypes = SearchFilmsNextAction | RequestNextAction | ErrorNextAction;
 export type FilmsState = SearchFilmsAction["payload"]
   & SearchFilmsNextAction["payload"]
-  & RequestAction["payload"]
   & ErrorAction["payload"];
 
 interface SearchTitleInputAction extends Action {
@@ -113,7 +107,6 @@ export type SearchTitleInputActionTypes = SearchTitleInputAction;
 interface SearchFilmDetailsAction extends Action {
   type: ACTIONS.SEARCH_FILM_DETAILS,
   payload: {
-    processing: boolean,
     film?: FilmDetail,
     bookmark?: Bookmark,
   },
@@ -121,13 +114,11 @@ interface SearchFilmDetailsAction extends Action {
 
 export type SearchFilmDetailsActionTypes = SearchFilmDetailsAction | RequestAction | ErrorAction;
 export type FilmDetailsState = SearchFilmDetailsAction["payload"]
-  & RequestAction["payload"]
   & ErrorAction["payload"];
 
 interface AddBookmarkAction extends Action {
   type: ACTIONS.ADD_BOOKMARK,
   payload: {
-    processing: boolean,
     bookmark: Bookmark,
   },
 }
@@ -137,7 +128,6 @@ export type AddBookmarkActionTypes = AddBookmarkAction | RequestAction | ErrorAc
 interface RemoveBookmarkAction extends Action {
   type: ACTIONS.REMOVE_BOOKMARK,
   payload: {
-    processing: boolean,
     bookmark: undefined,
   },
 }
@@ -147,7 +137,6 @@ export type RemoveBookmarkActionTypes = RemoveBookmarkAction | RequestAction | E
 interface GetBookmarkAction extends Action {
   type: ACTIONS.GET_BOOKMARK,
   payload: {
-    processing: boolean,
     bookmark: Bookmark,
   },
 }
@@ -157,12 +146,11 @@ export type GetBookmarkActionTypes = GetBookmarkAction | RequestAction | ErrorAc
 interface AddNoteAction extends Action {
   type: ACTIONS.ADD_NOTE,
   payload: {
-    processing: boolean,
     note: Note,
   },
 }
 
-export type NoteState = AddNoteAction["payload"] & RequestAction["payload"] & ErrorAction["payload"];
+export type NoteState = AddNoteAction["payload"] & ErrorAction["payload"];
 export type AddNoteActionTypes = AddNoteAction | RequestAction | ErrorAction;
 
 interface ChangeNoteDateAction extends Action {
@@ -215,7 +203,6 @@ export type ChangeNoteFormActionTypes = ChangeNoteDateAction
 interface EditNoteAction extends Action {
   type: ACTIONS.EDIT_NOTE,
   payload: {
-    processing: boolean,
     note: Note,
   },
 }
@@ -225,7 +212,6 @@ export type EditNoteActionTypes = EditNoteAction | RequestAction | ErrorAction;
 interface ListBookmarkAction extends Action {
   type: ACTIONS.LIST_BOOKMARK,
   payload: {
-    processing: boolean,
     bookmarks: Bookmark[],
     nextToken: string | null,
   },
@@ -241,7 +227,6 @@ interface ListBookmarkNextAction extends Action {
 
 export type BookmarksState = ListBookmarkAction["payload"]
   & ListBookmarkNextAction["payload"]
-  & RequestAction["payload"]
   & ErrorAction["payload"]
   & RequestNextAction["payload"]
   & ErrorNextAction["payload"]

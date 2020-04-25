@@ -43,7 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
 const IMDB_URL = "https://www.imdb.com/title/";
 
 const FilmPage: React.FC<Props> = (props) => {
-  const { saerchFilmDetails, addBookmark, removeBookmark, getBookmark, user, filmDetails } = props;
+  const { saerchFilmDetails, addBookmark, removeBookmark, getBookmark, user, filmDetails, processing } = props;
   const { imdbID } = useParams<{ imdbID: string} >();
   const [expanded, setExpanded] = useState({
     form: false,
@@ -136,7 +136,7 @@ const FilmPage: React.FC<Props> = (props) => {
                 handleRemoveBookmark={handleRemoveBookmark}
                 handleExpand={handleFormExpand}
                 bookmark={filmDetails.bookmark}
-                processing={filmDetails.processing}
+                processing={processing}
               />
               {filmDetails.bookmark?.id && (
                 <NoteForm

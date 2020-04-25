@@ -11,7 +11,7 @@ const UserPage: React.FC<Props> = (props) => {
   const history = useHistory();
   const { searchTitle } = useParams<{ searchTitle?: string }>();
   const { intersecting, ref } = useIntersect();
-  const { searchTitleInput, searchFilms, films, title } = props;
+  const { searchTitleInput, searchFilms, films, title, processing } = props;
 
   useEffect(() => {
     if (searchTitle) {
@@ -21,14 +21,14 @@ const UserPage: React.FC<Props> = (props) => {
   }, [searchTitle, searchTitleInput, searchFilms]);
 
   useEffect(() => {
-    if (films.nextLoading || films.processing) {
+    if (films.nextLoading || processing) {
       return;
     }
     if (intersecting && films.hasNext) {
       const nextPage = films.page + 1;
       props.searchFilmsNext(title, nextPage);
     }
-  }, [intersecting, props, title, films.hasNext, films.page, films.nextLoading, films.processing]);
+  }, [intersecting, props, title, films.hasNext, films.page, films.nextLoading, processing]);
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -43,12 +43,12 @@ const UserPage: React.FC<Props> = (props) => {
   return (
     <Container maxWidth="lg">
       <SearchForm
-        processing={films.processing}
+        processing={processing}
         handleSubmit={handleSubmit}
         handleChangeTitle={handleChangeTitle}
         title={title}
       />
-      <FilmList processing={films.processing} films={films.films} />
+      <FilmList processing={processing} films={films.films} />
       {films.nextLoading && <Loading />}
       <div ref={ref} />
     </Container>

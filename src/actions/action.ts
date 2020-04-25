@@ -83,16 +83,12 @@ type ThunkSearchFilmsAction = ThunkAction<Promise<void>, FilmsState, undefined, 
 function request(): RequestAction {
   return {
     type: ACTIONS.REQUEST,
-    payload: {
-      processing: true,
-    },
   };
 }
 function error(error: string): ErrorAction {
   return {
     type: ACTIONS.ERROR,
     payload: {
-      processing: false,
       error,
     },
   };
@@ -119,7 +115,6 @@ function searchFilmsSuccess(films: Film[], hasNext: boolean): SearchFilmsActionT
   return {
     type: ACTIONS.SEARCH_FILMS,
     payload: {
-      processing: false,
       films,
       hasNext,
     },
@@ -179,7 +174,6 @@ function searchFilmDetailsSuccess(film: FilmDetail, bookmark?: Bookmark): Search
   return {
     type: ACTIONS.SEARCH_FILM_DETAILS,
     payload: {
-      processing: false,
       film,
       bookmark,
     },
@@ -207,7 +201,6 @@ function addBookmarkSuccess(bookmark: Bookmark): AddBookmarkActionTypes {
   return {
     type: ACTIONS.ADD_BOOKMARK,
     payload: {
-      processing: false,
       bookmark,
     },
   };
@@ -237,7 +230,6 @@ function removeBookmarkSuccess(): RemoveBookmarkActionTypes {
   return {
     type: ACTIONS.REMOVE_BOOKMARK,
     payload: {
-      processing: false,
       bookmark: undefined,
     },
   };
@@ -260,7 +252,6 @@ function getBookmarkSuccess(bookmark: Bookmark): GetBookmarkActionTypes {
   return {
     type: ACTIONS.GET_BOOKMARK,
     payload: {
-      processing: false,
       bookmark,
     },
   };
@@ -283,7 +274,6 @@ function addNoteSuccess(note: Note): AddNoteActionTypes {
   return {
     type: ACTIONS.ADD_NOTE,
     payload: {
-      processing: false,
       note,
     },
   };
@@ -349,7 +339,6 @@ function editNoteSuccess(note: Note): EditNoteActionTypes {
   return {
     type: ACTIONS.EDIT_NOTE,
     payload: {
-      processing: false,
       note,
     },
   };
@@ -372,7 +361,6 @@ function listBookmarkSuccess(bookmarks: Bookmark[], nextToken: string | null): L
   return {
     type: ACTIONS.LIST_BOOKMARK,
     payload: {
-      processing: false,
       bookmarks,
       nextToken,
     },

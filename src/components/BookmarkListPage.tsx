@@ -8,7 +8,7 @@ import { useIntersect } from "../hooks/useIntersect";
 import { Props } from "../containers/BookmarkListPage";
 
 const BookmarkListPage: React.FC<Props> = (props) => {
-  const { listBookmark, listBookmarkNext, state, user } = props;
+  const { listBookmark, listBookmarkNext, state, user, processing } = props;
   const { intersecting, ref } = useIntersect();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const BookmarkListPage: React.FC<Props> = (props) => {
     }
   }, [intersecting, state.nextLoading, state.nextToken, listBookmarkNext, user.owner]);
 
-  if (state.processing) {
+  if (processing) {
     return <Loading />;
   }
 

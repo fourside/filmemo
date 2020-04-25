@@ -41,7 +41,6 @@ const userReducer = (state = emptyUser, action: UserActionTypes) => {
 };
 
 const initFilmsState: FilmsState = {
-  processing: false,
   films: new Array<Film>(),
   page: 1,
   hasNext: false,
@@ -50,7 +49,6 @@ const initFilmsState: FilmsState = {
 };
 const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | SearchFilmsNextActionTypes) => {
   switch(action.type) {
-    case ACTIONS.REQUEST:
     case ACTIONS.ERROR:
     case ACTIONS.REQUEST_NEXT:
     case ACTIONS.ERROR_NEXT:
@@ -83,7 +81,6 @@ const titleReducer = (state = "", action: SearchTitleInputActionTypes) => {
 const initialFilmDetailsState: FilmDetailsState = {
   film: undefined,
   bookmark: undefined,
-  processing: false,
   error: "",
 };
 type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes
@@ -93,7 +90,6 @@ type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes
   ;
 const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetailsActionTyeps) => {
   switch(action.type) {
-    case ACTIONS.REQUEST:
     case ACTIONS.ERROR:
     case ACTIONS.SEARCH_FILM_DETAILS:
     case ACTIONS.ADD_BOOKMARK:
@@ -109,7 +105,6 @@ const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetails
 };
 
 const initialNoteState: NoteState = {
-  processing: false,
   note: {
     rating: 0,
     when: formatDate(),
@@ -122,7 +117,6 @@ const initialNoteState: NoteState = {
 type NoteActionTypes = AddNoteActionTypes | EditNoteActionTypes | ChangeNoteFormActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
-    case ACTIONS.REQUEST:
     case ACTIONS.ERROR:
     case ACTIONS.ADD_NOTE:
     case ACTIONS.EDIT_NOTE:
@@ -148,14 +142,12 @@ const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
 
 const initBookmarkListState: BookmarksState = {
   bookmarks: new Array<Bookmark>(),
-  processing: false,
   nextToken: null,
   error: "",
   nextLoading: false,
 };
 const listBookmarkReducer = (state = initBookmarkListState, action: ListBookmarkActionTypes) => {
   switch(action.type) {
-    case ACTIONS.REQUEST:
     case ACTIONS.ERROR:
     case ACTIONS.REQUEST_NEXT:
     case ACTIONS.ERROR_NEXT:

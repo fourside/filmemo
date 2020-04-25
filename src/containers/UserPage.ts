@@ -7,6 +7,7 @@ const mapState = (state: RootState) => {
   return {
     title: state.title,
     films: state.films,
+    processing: state.processing,
   };
 };
 const mapDispatch = {
