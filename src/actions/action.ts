@@ -9,10 +9,9 @@ import {
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
-  AddNoteActionTypes,
   NoteState,
   ChangeNoteFormActionTypes,
-  EditNoteActionTypes,
+  MutateNoteActionTypes,
   ListBookmarkActionTypes,
   BookmarksState,
   RequestAction,
@@ -268,26 +267,35 @@ export function getBookmark(imdbID: string): ThunkGetBookmarkAction {
   };
 }
 
-type ThunkAddNoteAction = ThunkAction<Promise<void>, NoteState, undefined, AddNoteActionTypes>;
+type ThunkMutateNoteAction = ThunkAction<Promise<boolean>, NoteState, undefined, MutateNoteActionTypes>;
 
-function addNoteSuccess(note: Note): AddNoteActionTypes {
+function mutateNoteSuccess(note: Note): MutateNoteActionTypes {
   return {
-    type: ACTIONS.ADD_NOTE,
+    type: ACTIONS.MUTATE_NOTE,
     payload: {
       note,
     },
   };
 }
-type NoteParams = Omit<Note, "owner">;
-export function addNote(noteParams: NoteParams, bookmarkId: string): ThunkAddNoteAction {
+
+export function mutateNote(noteParams: Note, bookmarkId: string): ThunkMutateNoteAction {
   return async (dispatch) => {
     dispatch(request());
     try {
-      const note = await API.createNote({ ...noteParams, bookmarkId });
-      await API.relateBookmark(bookmarkId, note.id);
-      dispatch(addNoteSuccess(note));
+      const paramsCopy = Object.assign({}, noteParams);
+      delete paramsCopy.owner;
+      let note: Required<Note>;
+      if (!paramsCopy.id) {
+        note = await API.createNote({ ...paramsCopy, bookmarkId });
+        await API.relateBookmark(bookmarkId, note.id);
+      } else {
+        note = await API.editNote(paramsCopy);
+      }
+      dispatch(mutateNoteSuccess(note));
+      return true;
     } catch (err) {
       dispatch(error(err.message));
+      return false;
     }
   };
 }
@@ -330,28 +338,6 @@ export function changeNoteText(text: string): ChangeNoteFormActionTypes {
         text,
       },
     },
-  };
-}
-
-type ThunkEditNoteAction = ThunkAction<Promise<void>, NoteState, undefined, EditNoteActionTypes>;
-
-function editNoteSuccess(note: Note): EditNoteActionTypes {
-  return {
-    type: ACTIONS.EDIT_NOTE,
-    payload: {
-      note,
-    },
-  };
-}
-export function editNote(noteParams: NoteParams): ThunkEditNoteAction {
-  return async (dispatch) => {
-    dispatch(request());
-    try {
-      const note = await API.editNote(noteParams);
-      dispatch(editNoteSuccess(note));
-    } catch (err) {
-      dispatch(error(err.message));
-    }
   };
 }
 

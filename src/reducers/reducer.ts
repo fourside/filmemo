@@ -10,8 +10,7 @@ import {
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
-  AddNoteActionTypes,
-  EditNoteActionTypes,
+  MutateNoteActionTypes,
   ChangeNoteFormActionTypes,
   ListBookmarkActionTypes,
   ErrorAction,
@@ -109,11 +108,10 @@ const initialNoteState: NoteState = {
     bookmarkId: "",
   },
 };
-type NoteActionTypes = AddNoteActionTypes | EditNoteActionTypes | ChangeNoteFormActionTypes;
+type NoteActionTypes = MutateNoteActionTypes | ChangeNoteFormActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
-    case ACTIONS.ADD_NOTE:
-    case ACTIONS.EDIT_NOTE:
+    case ACTIONS.MUTATE_NOTE:
       return {
         ...state,
         ...action.payload,

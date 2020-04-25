@@ -41,7 +41,7 @@ interface Props {
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const [valid, setValid] = useState(false);
   const classes = useStyles();
-  const { addNote, editNote , note, processing } = props;
+  const { mutateNote, note, processing } = props;
 
   useEffect(() => {
     setValid(validate(note));
@@ -74,14 +74,10 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
     if (!valid) {
       return;
     }
-    if (!note.id) {
-      await addNote(note, props.bookmarkId);
-    } else {
-      const noteCopy = Object.assign({}, note);
-      delete noteCopy.owner;
-      await editNote(noteCopy);
+    const isSuccess = await mutateNote(note, props.bookmarkId);
+    if (isSuccess) {
+      props.onSubmit();
     }
-    props.onSubmit();
   };
 
   return (

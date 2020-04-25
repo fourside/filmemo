@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import { addNote, changeNoteRating, changeNoteWhen, changeNoteWhere, changeNoteText, editNote } from "../actions/action";
+import { changeNoteRating, changeNoteWhen, changeNoteWhere, changeNoteText, mutateNote } from "../actions/action";
 import { NoteForm as NoteFormComponent } from "../components/NoteForm";
 import { RootState } from "../reducers/reducer";
 
@@ -11,8 +11,7 @@ const mapState = (state: RootState) => {
   };
 };
 const mapDispatch = {
-  addNote,
-  editNote,
+  mutateNote,
   changeNoteRating,
   changeNoteWhen,
   changeNoteWhere,

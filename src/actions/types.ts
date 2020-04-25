@@ -27,8 +27,7 @@ export enum ACTIONS {
   CHANGE_NOTE_WHEN = "CHANGE_NOTE_WHEN",
   CHANGE_NOTE_WHERE = "CHANGE_NOTE_WHERE",
   CHANGE_NOTE_TEXT = "CHANGE_NOTE_TEXT",
-  ADD_NOTE = "ADD_NOTE",
-  EDIT_NOTE = "EDIT_NOTE",
+  MUTATE_NOTE = "MUTATE_NOTE",
 }
 
 interface SignInRequestAction extends Action {
@@ -140,16 +139,6 @@ interface GetBookmarkAction extends Action {
 
 export type GetBookmarkActionTypes = GetBookmarkAction | RequestAction | ErrorAction;
 
-interface AddNoteAction extends Action {
-  type: ACTIONS.ADD_NOTE,
-  payload: {
-    note: Note,
-  },
-}
-
-export type NoteState = AddNoteAction["payload"];
-export type AddNoteActionTypes = AddNoteAction | RequestAction | ErrorAction;
-
 interface ChangeNoteDateAction extends Action {
   type: ACTIONS.CHANGE_NOTE_WHEN,
   payload: {
@@ -197,14 +186,15 @@ export type ChangeNoteFormActionTypes = ChangeNoteDateAction
   | ChangeNoteTextAction
   ;
 
-interface EditNoteAction extends Action {
-  type: ACTIONS.EDIT_NOTE,
+interface MutateNoteAction extends Action {
+  type: ACTIONS.MUTATE_NOTE,
   payload: {
     note: Note,
   },
 }
 
-export type EditNoteActionTypes = EditNoteAction | RequestAction | ErrorAction;
+export type MutateNoteActionTypes = MutateNoteAction | RequestAction | ErrorAction;
+export type NoteState = MutateNoteAction["payload"];
 
 interface ListBookmarkAction extends Action {
   type: ACTIONS.LIST_BOOKMARK,
