@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
-import { signInGoogle } from "../amplify/Auth";
+import { Props } from "../containers/SignInPage";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -16,13 +16,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
-const SignInPage: React.FC = () => {
+const SignInPage: React.FC<Props> = (props) => {
   const classes = useStyles();
   return (
     <Container maxWidth="md" className={classes.root}>
       <Typography variant="h5" gutterBottom>Sign in</Typography>
       <Button
-        onClick={signInGoogle}
+        onClick={props.signIn}
         variant="contained"
         color="primary"
         className={classes.button}

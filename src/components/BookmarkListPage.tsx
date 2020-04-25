@@ -1,97 +1,29 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect } from "react";
 import Container from "@material-ui/core/Container";
 import GridList from "@material-ui/core/GridList";
 import Typography from "@material-ui/core/Typography";
-import { Bookmark } from "../model/Bookmark";
-import { listBookmarks } from "../amplify/API";
 import { Loading } from "./Loading";
 import { BookmarkTile } from "./BookmarkTile";
-import { ErrorContext } from "../context/ErrorContext";
-import { UserContext } from "../context/UserContext";
 import { useIntersect } from "../hooks/useIntersect";
+import { Props } from "../containers/BookmarkListPage";
 
-interface State {
-  bookmarks?: Bookmark[];
-  processing: boolean;
-  nextToken: string | null;
-}
-const BookmarkListPage: React.FC = () => {
-  const [state, setState] = useState<State>({
-    bookmarks: undefined,
-    processing: false,
-    nextToken: null,
-  });
-  const [nextLoading, setNextLoading] = useState(false);
-  const { user } = useContext(UserContext);
-  const { setError } = useContext(ErrorContext);
-
-  useEffect(() => {
-    if (!user.owner) {
-      return;
-    }
-    (async () => {
-      try {
-        setState(prev => {
-          return {
-            ...prev,
-            processing: true,
-          };
-        });
-        const { bookmarks, nextToken } = await listBookmarks(user.owner, null);
-        setState(prev => {
-          return {
-            ...prev,
-            bookmarks,
-            nextToken,
-            processing: false,
-          };
-        });
-      } catch (err) {
-        setError(err.message);
-        setState(prev => {
-          return {
-            ...prev,
-            processing: false,
-          };
-        });
-      }
-    })();
-  }, [user.owner, setError]);
-
-  const fetchNextBookmarks = useCallback(() => {
-    if (nextLoading) {
-      return;
-    }
-    if (state.nextToken) {
-      (async () => {
-        try {
-          setNextLoading(true);
-          const { bookmarks, nextToken } = await listBookmarks(user.owner, state.nextToken);
-          const stateBookmarks = state.bookmarks ?? [];
-          setState(prev => {
-            return {
-              ...prev,
-              nextToken,
-              bookmarks: stateBookmarks.concat(bookmarks),
-            };
-          });
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setNextLoading(false);
-        }
-      })();
-    }
-  }, [nextLoading, setError, user.owner, state.nextToken, state.bookmarks]);
-
+const BookmarkListPage: React.FC<Props> = (props) => {
+  const { listBookmark, listBookmarkNext, state, user, processing } = props;
   const { intersecting, ref } = useIntersect();
-  useEffect(() => {
-    if (intersecting) {
-      fetchNextBookmarks();
-    }
-  }, [intersecting, fetchNextBookmarks]);
 
-  if (state.processing) {
+  useEffect(() => {
+    if (user.owner) {
+      listBookmark(user.owner);
+    }
+  }, [user.owner, listBookmark]);
+
+  useEffect(() => {
+    if (intersecting && !state.nextLoading && state.nextToken) {
+      listBookmarkNext(user.owner, state.nextToken);
+    }
+  }, [intersecting, state.nextLoading, state.nextToken, listBookmarkNext, user.owner]);
+
+  if (processing) {
     return <Loading />;
   }
 
@@ -116,7 +48,7 @@ const BookmarkListPage: React.FC = () => {
           <BookmarkTile bookmark={bookmark} key={bookmark.id} />
         ))}
       </GridList>
-      {nextLoading && <Loading />}
+      {state.nextLoading && <Loading />}
       <div ref={ref} />
     </Container>
   );

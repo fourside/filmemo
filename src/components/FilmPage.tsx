@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -11,18 +11,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { searchById } from "../amplify/API";
-import { createBookmark, getBookmark, deleteBookmark } from "../amplify/API";
-import { FilmDetail } from "../model/Film";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
-import { Bookmark } from "../model/Bookmark";
-import { ErrorContext } from "../context/ErrorContext";
-import { UserContext } from "../context/UserContext";
-import { NoteForm } from "./NoteForm";
+import { NoteForm } from "../containers/NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
+import { Props } from "../containers/FilmPage";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -46,121 +41,39 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 const IMDB_URL = "https://www.imdb.com/title/";
-interface Props extends RouteComponentProps<{ imdbID: string }> {
-}
-interface State {
-  film?: FilmDetail;
-  bookmark?: Bookmark;
-  processing: boolean;
-}
+
 const FilmPage: React.FC<Props> = (props) => {
-  const { imdbID } = props.match.params;
-  const [state, setState] = useState<State>({
-    film: undefined,
-    bookmark: undefined,
-    processing: false,
-  });
+  const { saerchFilmDetails, addBookmark, removeBookmark, getBookmark, user, filmDetails, processing } = props;
+  const { imdbID } = useParams<{ imdbID: string} >();
   const [expanded, setExpanded] = useState({
     form: false,
     card: true,
   });
-
   const classes = useStyles();
-  const { user } = useContext(UserContext);
-  const { setError } = useContext(ErrorContext);
 
   useEffect(() => {
-    (async () => {
-      setState(prev => {
-        return {
-          ...prev,
-          processing: true,
-        };
-      });
-      try {
-        const results = await Promise.all([
-          searchById(imdbID),
-          getBookmark(imdbID),
-        ]);
-        setState(prev => {
-          return {
-            ...prev,
-            film: results[0],
-            bookmark: results[1],
-            processing: false,
-          };
-        });
-      } catch (err) {
-        setError(err.message);
-        setState(prev => {
-          return {
-            ...prev,
-            processing: false,
-          };
-        });
-      }
-    })();
-  }, [imdbID, setError]);
+    saerchFilmDetails(imdbID);
+  }, [saerchFilmDetails, imdbID]);
 
   const handleAddBookmark = async () => {
-    if (!state.film) {
+    if (!filmDetails.film) {
       return;
     }
-    try {
-      setState({
-        ...state,
-        processing: true,
-      });
-      const params = {
-        imdbID,
-        title: state.film.Title,
-        posterURL: state.film.Poster,
-        owner: user.owner,
-        createdAt: new Date(),
-      };
-      const bookmark = await createBookmark(params);
-      setState({
-        ...state,
-        bookmark,
-        processing: false,
-      });
-    } catch (err) {
-      setError(err.message);
-      setState({
-        ...state,
-        processing: false,
-      });
-    }
+    const params = {
+      imdbID,
+      title: filmDetails.film.Title,
+      posterURL: filmDetails.film.Poster,
+      owner: user.owner,
+      createdAt: new Date(),
+    };
+    addBookmark(params);
   };
 
-  const handleRemoveBookmark = async () => {
-    if (!state.bookmark?.id) {
+  const handleRemoveBookmark = () => {
+    if (!filmDetails.bookmark?.id) {
       return;
     }
-    try {
-      setState({
-        ...state,
-        processing: true,
-      });
-      await deleteBookmark(state.bookmark.id);
-      setState({
-        ...state,
-        bookmark: undefined,
-        processing: false,
-      });
-      if (expanded.form) {
-        setExpanded({
-          ...expanded,
-          form: false,
-        });
-      }
-    } catch (err) {
-      setError(err.message);
-      setState({
-        ...state,
-        processing: false,
-      });
-    }
+    removeBookmark(filmDetails.bookmark.id);
   };
 
   const handleFormExpand = () => {
@@ -171,31 +84,11 @@ const FilmPage: React.FC<Props> = (props) => {
   };
 
   const handleOnSubmit = () => {
-    (async () => {
-      setState({
-        ...state,
-        processing: true,
-      });
-      try {
-        const bookmark = await getBookmark(imdbID);
-        setState({
-          ...state,
-          bookmark,
-          processing: false,
-        });
-      } catch (err) {
-        setError(err.message);
-        setState({
-          ...state,
-          processing: false,
-        });
-      } finally {
-        setExpanded({
-          card: true,
-          form: false,
-        });
-      }
-    })();
+    getBookmark(imdbID);
+    setExpanded({
+      card: true,
+      form: false,
+    });
   };
 
   const handleEditNote = () => {
@@ -212,7 +105,7 @@ const FilmPage: React.FC<Props> = (props) => {
     });
   };
 
-  if (!state.film) {
+  if (!filmDetails.film) {
     return <Loading />;
   }
 
@@ -221,48 +114,47 @@ const FilmPage: React.FC<Props> = (props) => {
       <Card className={classes.card}>
         <Grid container>
           <Grid item xs={12} sm={4}>
-            <Poster src={state.film.Poster} alt={state.film.Title} className={classes.cover} />
+            <Poster src={filmDetails.film.Poster} alt={filmDetails.film.Title} className={classes.cover} />
           </Grid>
           <Grid item xs={12} sm={8}>
             <CardContent className={classes.content}>
               <Typography component="h5" variant="h5">
-                {state.film.Title}
+                {filmDetails.film.Title}
               </Typography>
               <Card className={classes.details} elevation={0}>
-                <DetailItem title={"Released"} value={state.film.Released} />
-                <DetailItem title={"Genre"} value={state.film.Genre} />
-                <DetailItem title={"Director"} value={state.film.Director} />
-                <DetailItem title={"Writer"} value={state.film.Writer} />
-                <DetailItem title={"Actors"} value={state.film.Actors} />
-                <DetailItem title={"Runtime"} value={state.film.Runtime} />
-                <DetailItem title={"Production"} value={state.film.Production} />
-                <DetailItem title={"Imdb Rating"} value={state.film.imdbRating} />
+                <DetailItem title={"Released"} value={filmDetails.film.Released} />
+                <DetailItem title={"Genre"} value={filmDetails.film.Genre} />
+                <DetailItem title={"Director"} value={filmDetails.film.Director} />
+                <DetailItem title={"Writer"} value={filmDetails.film.Writer} />
+                <DetailItem title={"Actors"} value={filmDetails.film.Actors} />
+                <DetailItem title={"Runtime"} value={filmDetails.film.Runtime} />
+                <DetailItem title={"Production"} value={filmDetails.film.Production} />
+                <DetailItem title={"Imdb Rating"} value={filmDetails.film.imdbRating} />
               </Card>
               <ActionCard
                 handleAddBookmark={handleAddBookmark}
                 handleRemoveBookmark={handleRemoveBookmark}
                 handleExpand={handleFormExpand}
-                bookmark={state.bookmark}
-                processing={state.processing}
+                bookmark={filmDetails.bookmark}
+                processing={processing}
               />
-              {state.bookmark?.id && (
+              {filmDetails.bookmark?.id && (
                 <NoteForm
                   expanded={expanded.form}
-                  bookmarkId={state.bookmark.id}
-                  note={state.bookmark?.note}
+                  bookmarkId={filmDetails.bookmark.id}
                   onSubmit={handleOnSubmit}
                   handleCancel={handleFormCancel}
                 />
               )}
-              {state.bookmark?.note && (
+              {filmDetails.bookmark?.note && (
                 <NoteCard
-                  note={state.bookmark.note}
+                  note={filmDetails.bookmark.note}
                   expanded={expanded.card}
                   handleEditNote={handleEditNote}
                 />
               )}
               <Typography variant="body1">
-                <Link href={`${IMDB_URL}${state.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
+                <Link href={`${IMDB_URL}${filmDetails.film.imdbID}/`} target="_blank" rel="noopener noreferrer">
                   <FontAwesomeIcon icon={faImdb} size="lg" /> <FontAwesomeIcon icon={faExternalLinkAlt} /> IMDb
                 </Link>
               </Typography>

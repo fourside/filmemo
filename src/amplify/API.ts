@@ -86,7 +86,7 @@ export async function listBookmarks(owner: string, nextToken: string | null) {
 export async function createNote(note: Note) {
   const input = { ...note };
   const result = await graphql<NoteResponse>(mutations.createNote, { input });
-  return result.data?.createNote as Note;
+  return result.data?.createNote as Required<Note>;
 }
 
 export async function relateBookmark(bookmarkId: string, noteId: string) {
@@ -101,7 +101,7 @@ export async function relateBookmark(bookmarkId: string, noteId: string) {
 export async function editNote(note: Note) {
   const input = { ...note };
   const result = await graphql<NoteResponse>(mutations.updateNote, { input });
-  return result.data?.updateNote as Note;
+  return result.data?.updateNote as Required<Note>;
 }
 
 async function graphql<T>(query: string, variables: any) {
