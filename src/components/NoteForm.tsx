@@ -41,8 +41,7 @@ interface Props {
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const [valid, setValid] = useState(false);
   const classes = useStyles();
-  const { addNote, editNote , noteForm, processing } = props;
-  const { note } = noteForm;
+  const { addNote, editNote , note, processing } = props;
 
   useEffect(() => {
     setValid(validate(note));
