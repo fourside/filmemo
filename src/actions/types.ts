@@ -92,9 +92,7 @@ interface SearchFilmsNextAction extends Action {
 }
 
 export type SearchFilmsNextActionTypes = SearchFilmsNextAction | RequestNextAction | ErrorNextAction;
-export type FilmsState = SearchFilmsAction["payload"]
-  & SearchFilmsNextAction["payload"]
-  & ErrorAction["payload"];
+export type FilmsState = SearchFilmsAction["payload"] & SearchFilmsNextAction["payload"];
 
 interface SearchTitleInputAction extends Action {
   type: ACTIONS.SEARCH_TITLE_INPUT,
@@ -113,8 +111,7 @@ interface SearchFilmDetailsAction extends Action {
 }
 
 export type SearchFilmDetailsActionTypes = SearchFilmDetailsAction | RequestAction | ErrorAction;
-export type FilmDetailsState = SearchFilmDetailsAction["payload"]
-  & ErrorAction["payload"];
+export type FilmDetailsState = SearchFilmDetailsAction["payload"];
 
 interface AddBookmarkAction extends Action {
   type: ACTIONS.ADD_BOOKMARK,
@@ -150,7 +147,7 @@ interface AddNoteAction extends Action {
   },
 }
 
-export type NoteState = AddNoteAction["payload"] & ErrorAction["payload"];
+export type NoteState = AddNoteAction["payload"];
 export type AddNoteActionTypes = AddNoteAction | RequestAction | ErrorAction;
 
 interface ChangeNoteDateAction extends Action {
@@ -227,7 +224,6 @@ interface ListBookmarkNextAction extends Action {
 
 export type BookmarksState = ListBookmarkAction["payload"]
   & ListBookmarkNextAction["payload"]
-  & ErrorAction["payload"]
   & RequestNextAction["payload"]
   & ErrorNextAction["payload"]
   ;

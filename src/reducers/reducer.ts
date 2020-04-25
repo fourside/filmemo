@@ -45,11 +45,9 @@ const initFilmsState: FilmsState = {
   page: 1,
   hasNext: false,
   nextLoading: false,
-  error: "",
 };
 const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | SearchFilmsNextActionTypes) => {
   switch(action.type) {
-    case ACTIONS.ERROR:
     case ACTIONS.REQUEST_NEXT:
     case ACTIONS.ERROR_NEXT:
     case ACTIONS.SEARCH_FILMS:
@@ -81,7 +79,6 @@ const titleReducer = (state = "", action: SearchTitleInputActionTypes) => {
 const initialFilmDetailsState: FilmDetailsState = {
   film: undefined,
   bookmark: undefined,
-  error: "",
 };
 type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes
   | AddBookmarkActionTypes
@@ -90,7 +87,6 @@ type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes
   ;
 const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetailsActionTyeps) => {
   switch(action.type) {
-    case ACTIONS.ERROR:
     case ACTIONS.SEARCH_FILM_DETAILS:
     case ACTIONS.ADD_BOOKMARK:
     case ACTIONS.REMOVE_BOOKMARK:
@@ -112,12 +108,10 @@ const initialNoteState: NoteState = {
     text: "",
     bookmarkId: "",
   },
-  error: "",
 };
 type NoteActionTypes = AddNoteActionTypes | EditNoteActionTypes | ChangeNoteFormActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
-    case ACTIONS.ERROR:
     case ACTIONS.ADD_NOTE:
     case ACTIONS.EDIT_NOTE:
       return {
@@ -148,7 +142,6 @@ const initBookmarkListState: BookmarksState = {
 };
 const listBookmarkReducer = (state = initBookmarkListState, action: ListBookmarkActionTypes) => {
   switch(action.type) {
-    case ACTIONS.ERROR:
     case ACTIONS.REQUEST_NEXT:
     case ACTIONS.ERROR_NEXT:
     case ACTIONS.LIST_BOOKMARK:
