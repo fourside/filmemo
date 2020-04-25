@@ -1,4 +1,4 @@
-import React, { FormEvent, ChangeEvent ,useState, useEffect } from "react";
+import React, { FormEvent, ChangeEvent } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
@@ -12,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { formatDate, validate } from "../model/Note";
+import { formatDate } from "../model/Note";
 import { ContainerProps } from "../containers/NoteForm";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -39,13 +39,8 @@ interface Props {
   handleCancel: () => void;
 }
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
-  const [valid, setValid] = useState(false);
   const classes = useStyles();
-  const { mutateNote, note, processing } = props;
-
-  useEffect(() => {
-    setValid(validate(note));
-  }, [note]);
+  const { mutateNote, note, processing, valid } = props;
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
     const rating = value ?? 0;

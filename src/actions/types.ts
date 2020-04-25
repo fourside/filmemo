@@ -139,14 +139,6 @@ interface GetBookmarkAction extends Action {
 
 export type GetBookmarkActionTypes = GetBookmarkAction | RequestAction | ErrorAction;
 
-interface ChangeNoteDateAction extends Action {
-  type: ACTIONS.CHANGE_NOTE_WHEN,
-  payload: {
-    note: {
-      when: string,
-    },
-  },
-}
 interface ChangeNoteRatingAction extends Action {
   type: ACTIONS.CHANGE_NOTE_RATING,
   payload: {
@@ -179,8 +171,7 @@ interface ChangeNoteTextAction extends Action {
     },
   },
 }
-export type ChangeNoteFormActionTypes = ChangeNoteDateAction
-  | ChangeNoteRatingAction
+export type ChangeNoteFormActionTypes = ChangeNoteRatingAction
   | ChangeNoteWhenAction
   | ChangeNoteWhereAction
   | ChangeNoteTextAction

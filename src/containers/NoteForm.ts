@@ -4,10 +4,10 @@ import { NoteForm as NoteFormComponent } from "../components/NoteForm";
 import { RootState } from "../reducers/reducer";
 
 const mapState = (state: RootState) => {
-  const note = state.filmDetails?.bookmark?.note ?? state.note.note;
   return {
     processing: state.processing,
-    note,
+    note: state.note.note,
+    valid: state.note.valid,
   };
 };
 const mapDispatch = {

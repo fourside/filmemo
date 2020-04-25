@@ -22,7 +22,7 @@ import {
 } from "../actions/types";
 import { emptyUser } from "../model/User";
 import { Film } from "../model/Film";
-import { formatDate } from "../model/Note";
+import { formatDate, validate } from "../model/Note";
 import { Bookmark } from "../model/Bookmark";
 
 const userReducer = (state = emptyUser, action: UserActionTypes) => {
@@ -99,7 +99,7 @@ const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetails
   }
 };
 
-const initialNoteState: NoteState = {
+const initialNoteState: NoteState & { valid: boolean } = {
   note: {
     rating: 0,
     when: formatDate(),
@@ -107,6 +107,7 @@ const initialNoteState: NoteState = {
     text: "",
     bookmarkId: "",
   },
+  valid: false,
 };
 type NoteActionTypes = MutateNoteActionTypes | ChangeNoteFormActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
@@ -120,12 +121,17 @@ const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
     case ACTIONS.CHANGE_NOTE_WHEN:
     case ACTIONS.CHANGE_NOTE_WHERE:
     case ACTIONS.CHANGE_NOTE_TEXT:
-      return {
+      const next = {
         ...state,
         note: {
           ...state.note,
           ...action.payload.note,
         },
+      };
+      const valid = validate(next.note);
+      return {
+        ...next,
+        valid,
       };
     default:
       return state;
