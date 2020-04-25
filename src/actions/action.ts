@@ -20,6 +20,7 @@ import {
   ErrorNextAction,
   FilmDetailsState,
   FilmsState,
+  GetNoteActionTypes,
 } from "./types";
 import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
@@ -167,7 +168,7 @@ export function searchTitleInput(title: string): SearchTitleInputActionTypes {
   };
 }
 
-type ThunkSearchFilmDetailsAction = ThunkAction<Promise<void>, FilmDetailsState, undefined, SearchFilmDetailsActionTypes>;
+type ThunkSearchFilmDetailsAction = ThunkAction<Promise<void>, FilmDetailsState, undefined, SearchFilmDetailsActionTypes | GetNoteActionTypes>;
 
 function searchFilmDetailsSuccess(film: FilmDetail, bookmark?: Bookmark): SearchFilmDetailsActionTypes {
   return {
@@ -188,6 +189,9 @@ export function saerchFilmDetails(imdbID: string): ThunkSearchFilmDetailsAction 
         API.getBookmark(imdbID),
       ]);
       dispatch(searchFilmDetailsSuccess(filmDetails, bookmark));
+      if (bookmark?.note) {
+        dispatch(getNoteSuccess(bookmark.note));
+      }
     } catch (err) {
       dispatch(error(err.message));
     }
@@ -245,7 +249,7 @@ export function removeBookmark(bookmarkId: string): ThunkRemoveBookmarkAction {
   };
 }
 
-type ThunkGetBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, GetBookmarkActionTypes>;
+type ThunkGetBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, GetBookmarkActionTypes | GetNoteActionTypes>;
 
 function getBookmarkSuccess(bookmark: Bookmark): GetBookmarkActionTypes {
   return {
@@ -261,6 +265,9 @@ export function getBookmark(imdbID: string): ThunkGetBookmarkAction {
     try {
       const bookmark = await API.getBookmark(imdbID);
       dispatch(getBookmarkSuccess(bookmark));
+      if (bookmark.note) {
+        dispatch(getNoteSuccess(bookmark.note));
+      }
     } catch (err) {
       dispatch(error(err.message));
     }
@@ -272,6 +279,15 @@ type ThunkMutateNoteAction = ThunkAction<Promise<boolean>, NoteState, undefined,
 function mutateNoteSuccess(note: Note): MutateNoteActionTypes {
   return {
     type: ACTIONS.MUTATE_NOTE,
+    payload: {
+      note,
+    },
+  };
+}
+
+function getNoteSuccess(note: Note): GetNoteActionTypes {
+  return {
+    type: ACTIONS.GET_NOTE,
     payload: {
       note,
     },

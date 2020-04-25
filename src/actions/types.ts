@@ -27,6 +27,7 @@ export enum ACTIONS {
   CHANGE_NOTE_WHEN = "CHANGE_NOTE_WHEN",
   CHANGE_NOTE_WHERE = "CHANGE_NOTE_WHERE",
   CHANGE_NOTE_TEXT = "CHANGE_NOTE_TEXT",
+  GET_NOTE = "GET_NOTE",
   MUTATE_NOTE = "MUTATE_NOTE",
 }
 
@@ -183,8 +184,15 @@ interface MutateNoteAction extends Action {
     note: Note,
   },
 }
+interface GetNoteAction extends Action {
+  type: ACTIONS.GET_NOTE,
+  payload: {
+    note: Note,
+  },
+}
 
 export type MutateNoteActionTypes = MutateNoteAction | RequestAction | ErrorAction;
+export type GetNoteActionTypes = GetNoteAction;
 export type NoteState = MutateNoteAction["payload"];
 
 interface ListBookmarkAction extends Action {

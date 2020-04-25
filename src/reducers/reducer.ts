@@ -19,6 +19,7 @@ import {
   FilmDetailsState,
   NoteState,
   BookmarksState,
+  GetNoteActionTypes,
 } from "../actions/types";
 import { emptyUser } from "../model/User";
 import { Film } from "../model/Film";
@@ -109,10 +110,11 @@ const initialNoteState: NoteState & { valid: boolean } = {
   },
   valid: false,
 };
-type NoteActionTypes = MutateNoteActionTypes | ChangeNoteFormActionTypes;
+type NoteActionTypes = MutateNoteActionTypes | ChangeNoteFormActionTypes | GetNoteActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
     case ACTIONS.MUTATE_NOTE:
+    case ACTIONS.GET_NOTE:
       return {
         ...state,
         ...action.payload,
