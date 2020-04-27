@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -11,13 +12,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
+import { saerchFilmDetails, addBookmark, removeBookmark, getBookmark } from "../actions/action";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
 import { NoteForm } from "../containers/NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
-import { Props } from "../containers/FilmPage";
+import { RootState } from "../reducers/reducer";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,18 +44,25 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 const IMDB_URL = "https://www.imdb.com/title/";
 
-const FilmPage: React.FC<Props> = (props) => {
-  const { saerchFilmDetails, addBookmark, removeBookmark, getBookmark, user, filmDetails, processing } = props;
+const FilmPage: React.FC = () => {
   const { imdbID } = useParams<{ imdbID: string} >();
   const [expanded, setExpanded] = useState({
     form: false,
     card: true,
   });
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { user, filmDetails, processing } = useSelector((state: RootState) => {
+    return {
+      user: state.user,
+      filmDetails: state.filmDetails,
+      processing: state.processing,
+    };
+  });
 
   useEffect(() => {
-    saerchFilmDetails(imdbID);
-  }, [saerchFilmDetails, imdbID]);
+    dispatch(saerchFilmDetails(imdbID));
+  }, [dispatch, imdbID]);
 
   const handleAddBookmark = async () => {
     if (!filmDetails.film) {
@@ -66,14 +75,14 @@ const FilmPage: React.FC<Props> = (props) => {
       owner: user.owner,
       createdAt: new Date(),
     };
-    addBookmark(params);
+    dispatch(addBookmark(params));
   };
 
   const handleRemoveBookmark = () => {
     if (!filmDetails.bookmark?.id) {
       return;
     }
-    removeBookmark(filmDetails.bookmark.id);
+    dispatch(removeBookmark(filmDetails.bookmark.id));
   };
 
   const handleFormExpand = () => {
@@ -84,7 +93,7 @@ const FilmPage: React.FC<Props> = (props) => {
   };
 
   const handleOnSubmit = () => {
-    getBookmark(imdbID);
+    dispatch(getBookmark(imdbID));
     setExpanded({
       card: true,
       form: false,

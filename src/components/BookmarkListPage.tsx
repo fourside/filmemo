@@ -1,27 +1,36 @@
 import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import Container from "@material-ui/core/Container";
 import GridList from "@material-ui/core/GridList";
 import Typography from "@material-ui/core/Typography";
 import { Loading } from "./Loading";
 import { BookmarkTile } from "./BookmarkTile";
 import { useIntersect } from "../hooks/useIntersect";
-import { Props } from "../containers/BookmarkListPage";
+import { listBookmark, listBookmarkNext } from "../actions/action";
+import { RootState } from "../reducers/reducer";
 
-const BookmarkListPage: React.FC<Props> = (props) => {
-  const { listBookmark, listBookmarkNext, state, user, processing } = props;
+const BookmarkListPage: React.FC = () => {
   const { intersecting, ref } = useIntersect();
+  const dispatch = useDispatch();
+  const { user , state, processing } = useSelector((state: RootState) => {
+    return {
+      user: state.user,
+      state: state.bookmarks,
+      processing: state.processing,
+    };
+  });
 
   useEffect(() => {
     if (user.owner) {
-      listBookmark(user.owner);
+      dispatch(listBookmark(user.owner));
     }
-  }, [user.owner, listBookmark]);
+  }, [dispatch, user.owner]);
 
   useEffect(() => {
     if (intersecting && !state.nextLoading && state.nextToken) {
-      listBookmarkNext(user.owner, state.nextToken);
+      dispatch(listBookmarkNext(user.owner, state.nextToken));
     }
-  }, [intersecting, state.nextLoading, state.nextToken, listBookmarkNext, user.owner]);
+  }, [dispatch, intersecting, state.nextLoading, state.nextToken, user.owner]);
 
   if (processing) {
     return <Loading />;
