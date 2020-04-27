@@ -1,24 +1,33 @@
 import React, { useEffect, ChangeEvent } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
 import { SearchForm } from "./SearchForm";
 import { FilmList } from "./FilmList";
 import { useIntersect } from "../hooks/useIntersect";
 import { Loading } from "./Loading";
-import { Props } from "../containers/UserPage";
+import { RootState } from "../reducers/reducer";
+import { searchFilms, searchFilmsNext, searchTitleInput } from "../actions/action";
 
-const UserPage: React.FC<Props> = (props) => {
+const UserPage: React.FC = () => {
   const history = useHistory();
   const { searchTitle } = useParams<{ searchTitle?: string }>();
   const { intersecting, ref } = useIntersect();
-  const { searchTitleInput, searchFilms, films, title, processing } = props;
+  const dispatch = useDispatch();
+  const { title, films, processing } = useSelector((state: RootState) => {
+    return {
+      title: state.title,
+      films: state.films,
+      processing: state.processing,
+    };
+  });
 
   useEffect(() => {
     if (searchTitle) {
-      searchTitleInput(searchTitle);
-      searchFilms(searchTitle);
+      dispatch(searchTitleInput(searchTitle));
+      dispatch(searchFilms(searchTitle));
     }
-  }, [searchTitle, searchTitleInput, searchFilms]);
+  }, [searchTitle, dispatch]);
 
   useEffect(() => {
     if (films.nextLoading || processing) {
@@ -26,18 +35,18 @@ const UserPage: React.FC<Props> = (props) => {
     }
     if (intersecting && films.hasNext) {
       const nextPage = films.page + 1;
-      props.searchFilmsNext(title, nextPage);
+      dispatch(searchFilmsNext(title, nextPage));
     }
-  }, [intersecting, props, title, films.hasNext, films.page, films.nextLoading, processing]);
+  }, [dispatch, intersecting, title, films.hasNext, films.page, films.nextLoading, processing]);
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    props.searchTitleInput(value);
+    dispatch(searchTitleInput(value));
   };
 
   const handleSubmit = async () => {
     history.push(`/title/${title}`);
-    props.searchFilms(title);
+    dispatch(searchFilms(title));
   };
 
   return (
