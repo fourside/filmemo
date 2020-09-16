@@ -5,7 +5,7 @@ export type Note = {
   rating: number;
   where: string;
   when: string;
-  text: string;
+  text?: string;
   bookmarkId: string;
   owner?: string;
 };

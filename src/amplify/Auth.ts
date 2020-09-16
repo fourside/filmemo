@@ -19,6 +19,7 @@ export async function getLoginUser() {
     if (err === "No current user") {
       return emptyUser;
     }
+    console.log(err);
     throw new Error(err); // may be buggie...
   }
 
