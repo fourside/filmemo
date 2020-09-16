@@ -7,3 +7,6 @@
 
 ## released
 - [filmemo](https://filmemo.fourside.dev/)
+
+## dev
+- set HTTPS=true && yarn start
