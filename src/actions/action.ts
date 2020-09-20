@@ -4,13 +4,11 @@ import {
   UserActionTypes,
   SearchFilmsActionTypes,
   SearchFilmsNextActionTypes,
-  SearchTitleInputActionTypes,
   SearchFilmDetailsActionTypes,
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
   NoteState,
-  ChangeNoteFormActionTypes,
   MutateNoteActionTypes,
   ListBookmarkActionTypes,
   BookmarksState,
@@ -156,15 +154,6 @@ export function searchFilmsNext(title: string, nextPage: number): ThunkSearchFil
     } catch (err) {
       dispatch(errorNext(err.message));
     }
-  };
-}
-
-export function searchTitleInput(title: string): SearchTitleInputActionTypes {
-  return {
-    type: ACTIONS.SEARCH_TITLE_INPUT,
-    payload: {
-      title
-    },
   };
 }
 
@@ -316,47 +305,6 @@ export function mutateNote(noteParams: Note, bookmarkId: string): ThunkMutateNot
       dispatch(error(err.message));
       return false;
     }
-  };
-}
-
-export function changeNoteRating(rating: number): ChangeNoteFormActionTypes {
-  return {
-    type: ACTIONS.CHANGE_NOTE_RATING,
-    payload: {
-      note: {
-        rating,
-      },
-    },
-  };
-}
-export function changeNoteWhen(when: string): ChangeNoteFormActionTypes {
-  return {
-    type: ACTIONS.CHANGE_NOTE_WHEN,
-    payload: {
-      note: {
-        when,
-      },
-    },
-  };
-}
-export function changeNoteWhere(where: string): ChangeNoteFormActionTypes {
-  return {
-    type: ACTIONS.CHANGE_NOTE_WHERE,
-    payload: {
-      note: {
-        where,
-      },
-    },
-  };
-}
-export function changeNoteText(text: string): ChangeNoteFormActionTypes {
-  return {
-    type: ACTIONS.CHANGE_NOTE_TEXT,
-    payload: {
-      note: {
-        text,
-      },
-    },
   };
 }
 

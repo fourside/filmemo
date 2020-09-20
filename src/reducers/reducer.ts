@@ -5,13 +5,11 @@ import {
   UserActionTypes,
   SearchFilmsActionTypes,
   SearchFilmsNextActionTypes,
-  SearchTitleInputActionTypes,
   SearchFilmDetailsActionTypes,
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
   MutateNoteActionTypes,
-  ChangeNoteFormActionTypes,
   ListBookmarkActionTypes,
   ErrorAction,
   ErrorNextAction,
@@ -23,7 +21,7 @@ import {
 } from "../actions/types";
 import { emptyUser } from "../model/User";
 import { Film } from "../model/Film";
-import { formatDate, validate } from "../model/Note";
+import { formatDate } from "../model/Note";
 import { Bookmark } from "../model/Bookmark";
 
 const userReducer = (state = emptyUser, action: UserActionTypes) => {
@@ -67,15 +65,6 @@ const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | S
   }
 };
 
-const titleReducer = (state = "", action: SearchTitleInputActionTypes) => {
-  switch(action.type) {
-    case ACTIONS.SEARCH_TITLE_INPUT:
-      return action.payload.title;
-    default:
-      return state;
-  }
-};
-
 const initialFilmDetailsState: FilmDetailsState = {
   film: undefined,
   bookmark: undefined,
@@ -100,17 +89,16 @@ const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetails
   }
 };
 
-const initialNoteState: NoteState & { valid: boolean } = {
+const initialNoteState: NoteState = {
   note: {
     rating: 0,
     when: formatDate(),
     where: "",
     text: "",
     bookmarkId: "",
-  },
-  valid: false,
+  }
 };
-type NoteActionTypes = MutateNoteActionTypes | ChangeNoteFormActionTypes | GetNoteActionTypes;
+type NoteActionTypes = MutateNoteActionTypes | GetNoteActionTypes;
 const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
   switch(action.type) {
     case ACTIONS.MUTATE_NOTE:
@@ -118,22 +106,6 @@ const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
       return {
         ...state,
         ...action.payload,
-      };
-    case ACTIONS.CHANGE_NOTE_RATING:
-    case ACTIONS.CHANGE_NOTE_WHEN:
-    case ACTIONS.CHANGE_NOTE_WHERE:
-    case ACTIONS.CHANGE_NOTE_TEXT:
-      const next = {
-        ...state,
-        note: {
-          ...state.note,
-          ...action.payload.note,
-        },
-      };
-      const valid = validate(next.note);
-      return {
-        ...next,
-        valid,
       };
     default:
       return state;
@@ -189,7 +161,6 @@ const processingReducer = (state =  false, action: Action) => {
 export const rootReducer = combineReducers({
   user: userReducer,
   films: filmsReducer,
-  title: titleReducer,
   filmDetails: filmDetailsReducer,
   note: noteReducer,
   bookmarks: listBookmarkReducer,

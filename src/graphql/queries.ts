@@ -1,5 +1,5 @@
-// tslint:disable
-// eslint-disable
+/* tslint:disable */
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 export const getBookmark = /* GraphQL */ `
@@ -18,8 +18,11 @@ export const getBookmark = /* GraphQL */ `
         when
         where
         text
+        createdAt
+        updatedAt
         owner
       }
+      updatedAt
     }
   }
 `;
@@ -44,8 +47,11 @@ export const listBookmarks = /* GraphQL */ `
           when
           where
           text
+          createdAt
+          updatedAt
           owner
         }
+        updatedAt
       }
       nextToken
     }
@@ -60,6 +66,8 @@ export const getNote = /* GraphQL */ `
       when
       where
       text
+      createdAt
+      updatedAt
       owner
     }
   }
@@ -78,6 +86,8 @@ export const listNotes = /* GraphQL */ `
         when
         where
         text
+        createdAt
+        updatedAt
         owner
       }
       nextToken
@@ -113,8 +123,11 @@ export const bookmarksByImdbId = /* GraphQL */ `
           when
           where
           text
+          createdAt
+          updatedAt
           owner
         }
+        updatedAt
       }
       nextToken
     }
@@ -151,8 +164,11 @@ export const bookmarksSortedByTimestamp = /* GraphQL */ `
           when
           where
           text
+          createdAt
+          updatedAt
           owner
         }
+        updatedAt
       }
       nextToken
     }

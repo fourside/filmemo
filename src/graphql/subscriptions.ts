@@ -1,5 +1,5 @@
-// tslint:disable
-// eslint-disable
+/* tslint:disable */
+/* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
 export const onCreateBookmark = /* GraphQL */ `
@@ -18,8 +18,11 @@ export const onCreateBookmark = /* GraphQL */ `
         when
         where
         text
+        createdAt
+        updatedAt
         owner
       }
+      updatedAt
     }
   }
 `;
@@ -39,8 +42,11 @@ export const onUpdateBookmark = /* GraphQL */ `
         when
         where
         text
+        createdAt
+        updatedAt
         owner
       }
+      updatedAt
     }
   }
 `;
@@ -60,8 +66,11 @@ export const onDeleteBookmark = /* GraphQL */ `
         when
         where
         text
+        createdAt
+        updatedAt
         owner
       }
+      updatedAt
     }
   }
 `;
@@ -74,6 +83,8 @@ export const onCreateNote = /* GraphQL */ `
       when
       where
       text
+      createdAt
+      updatedAt
       owner
     }
   }
@@ -87,6 +98,8 @@ export const onUpdateNote = /* GraphQL */ `
       when
       where
       text
+      createdAt
+      updatedAt
       owner
     }
   }
@@ -100,6 +113,8 @@ export const onDeleteNote = /* GraphQL */ `
       when
       where
       text
+      createdAt
+      updatedAt
       owner
     }
   }
