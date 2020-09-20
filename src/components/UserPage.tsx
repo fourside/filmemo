@@ -1,4 +1,4 @@
-import React, { useEffect, ChangeEvent } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import Container from "@material-ui/core/Container";
@@ -7,24 +7,24 @@ import { FilmList } from "./FilmList";
 import { useIntersect } from "../hooks/useIntersect";
 import { Loading } from "./Loading";
 import { RootState } from "../reducers/reducer";
-import { searchFilms, searchFilmsNext, searchTitleInput } from "../actions/action";
+import { searchFilms, searchFilmsNext } from "../actions/action";
 
 const UserPage: React.FC = () => {
   const history = useHistory();
   const { searchTitle } = useParams<{ searchTitle?: string }>();
   const { intersecting, ref } = useIntersect();
   const dispatch = useDispatch();
-  const { title, films, processing } = useSelector((state: RootState) => {
+  const { films, processing } = useSelector((state: RootState) => {
     return {
-      title: state.title,
       films: state.films,
       processing: state.processing,
     };
   });
+  const [title, setTitle] = useState("");
 
   useEffect(() => {
     if (searchTitle) {
-      dispatch(searchTitleInput(searchTitle));
+      setTitle(searchTitle);
       dispatch(searchFilms(searchTitle));
     }
   }, [searchTitle, dispatch]);
@@ -41,7 +41,7 @@ const UserPage: React.FC = () => {
 
   const handleChangeTitle = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    dispatch(searchTitleInput(value));
+    setTitle(value);
   };
 
   const handleSubmit = async () => {

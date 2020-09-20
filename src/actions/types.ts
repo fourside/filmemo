@@ -16,17 +16,12 @@ export enum ACTIONS {
   ERROR_NEXT = "ERROR_NEXT",
   SEARCH_FILMS = "SEARCH_FILMS",
   SEARCH_FILMS_NEXT = "SEARCH_FILMS_NEXT",
-  SEARCH_TITLE_INPUT = "SEARCH_TITLE_INPUT",
   SEARCH_FILM_DETAILS = "SEARCH_FILM_DETAILS",
   LIST_BOOKMARK = "LIST_BOOKMARK",
   LIST_BOOKMARK_NEXT = "LIST_BOOKMARK_NEXT",
   ADD_BOOKMARK = "ADD_BOOKMARK",
   REMOVE_BOOKMARK = "REMOVE_BOOKMARK",
   GET_BOOKMARK = "GET_BOOKMARK",
-  CHANGE_NOTE_RATING = "CHANGE_NOTE_RATING",
-  CHANGE_NOTE_WHEN = "CHANGE_NOTE_WHEN",
-  CHANGE_NOTE_WHERE = "CHANGE_NOTE_WHERE",
-  CHANGE_NOTE_TEXT = "CHANGE_NOTE_TEXT",
   GET_NOTE = "GET_NOTE",
   MUTATE_NOTE = "MUTATE_NOTE",
 }
@@ -94,14 +89,6 @@ interface SearchFilmsNextAction extends Action {
 export type SearchFilmsNextActionTypes = SearchFilmsNextAction | RequestNextAction | ErrorNextAction;
 export type FilmsState = SearchFilmsAction["payload"] & SearchFilmsNextAction["payload"];
 
-interface SearchTitleInputAction extends Action {
-  type: ACTIONS.SEARCH_TITLE_INPUT,
-  payload: {
-    title: string,
-  },
-}
-export type SearchTitleInputActionTypes = SearchTitleInputAction;
-
 interface SearchFilmDetailsAction extends Action {
   type: ACTIONS.SEARCH_FILM_DETAILS,
   payload: {
@@ -139,44 +126,6 @@ interface GetBookmarkAction extends Action {
 }
 
 export type GetBookmarkActionTypes = GetBookmarkAction | RequestAction | ErrorAction;
-
-interface ChangeNoteRatingAction extends Action {
-  type: ACTIONS.CHANGE_NOTE_RATING,
-  payload: {
-    note: {
-      rating: number,
-    },
-  },
-}
-interface ChangeNoteWhenAction extends Action {
-  type: ACTIONS.CHANGE_NOTE_WHEN,
-  payload: {
-    note: {
-      when: string,
-    },
-  },
-}
-interface ChangeNoteWhereAction extends Action {
-  type: ACTIONS.CHANGE_NOTE_WHERE,
-  payload: {
-    note: {
-      where: string,
-    },
-  },
-}
-interface ChangeNoteTextAction extends Action {
-  type: ACTIONS.CHANGE_NOTE_TEXT,
-  payload: {
-    note: {
-      text: string,
-    },
-  },
-}
-export type ChangeNoteFormActionTypes = ChangeNoteRatingAction
-  | ChangeNoteWhenAction
-  | ChangeNoteWhereAction
-  | ChangeNoteTextAction
-  ;
 
 interface MutateNoteAction extends Action {
   type: ACTIONS.MUTATE_NOTE,

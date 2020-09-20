@@ -1,4 +1,4 @@
-import React, { FormEvent, ChangeEvent } from "react";
+import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
@@ -12,7 +12,7 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { formatDate } from "../model/Note";
+import { formatDate, Note, validate } from "../model/Note";
 import { ContainerProps } from "../containers/NoteForm";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -32,26 +32,47 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   }),
 );
+
 interface Props {
   expanded: boolean;
   bookmarkId: string;
   onSubmit: () => void;
   handleCancel: () => void;
 }
+const initialNoteState = {
+  rating: 0,
+  when: formatDate(),
+  where: "",
+  text: "",
+  bookmarkId: "",
+};
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const classes = useStyles();
-  const { mutateNote, note, processing, valid } = props;
+  const { mutateNote, processing } = props;
+  const [note, setNote] = useState<Note>(props.note ?? initialNoteState);
+  const [valid, setValid] = useState(false);
+
+  useEffect(() => {
+    const isValid = validate(note);
+    setValid(isValid);
+  }, [note]);
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
     const rating = value ?? 0;
-    props.changeNoteRating(rating);
+    setNote({
+      ...note,
+      rating,
+    });
   };
 
   const handleChangeDate = (date: Date | null) => {
     if (date) {
       try {
         const when = formatDate(date);
-        props.changeNoteWhen(when);
+        setNote({
+          ...note,
+          when,
+        });
       } catch (err) {
         console.log(err.message);
       }
@@ -60,12 +81,18 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
 
   const handleChangeWhere = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    props.changeNoteWhere(value);
+    setNote({
+      ...note,
+      where: value,
+    });
   };
 
   const handleChangeText = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
-    props.changeNoteText(value);
+    setNote({
+      ...note,
+      text: value,
+    });
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
