@@ -1,10 +1,9 @@
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { ChangeEvent, useEffect } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
 import Rating from "@material-ui/lab/Rating";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import RoomIcon from "@material-ui/icons/Room";
 import FormControl from "@material-ui/core/FormControl";
@@ -12,9 +11,11 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
-import { formatDate, Note, validate } from "../model/Note";
+import { formatDate, Note } from "../model/Note";
 import { ContainerProps } from "../containers/NoteForm";
 import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers";
+import * as yup from "yup";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -34,6 +35,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+const schema = yup.object().shape({
+  where: yup.string().required("Required"),
+});
+
 interface Props {
   expanded: boolean;
   bookmarkId: string;
@@ -43,9 +48,9 @@ interface Props {
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const classes = useStyles();
   const { mutateNote, processing } = props;
-  const [valid, setValid] = useState(true);
-  const { register, handleSubmit, control, setValue, reset, watch } = useForm({
+  const { register, handleSubmit, control, setValue, setError, clearErrors, reset, watch, formState, errors } = useForm({
     mode: "onBlur",
+    resolver: yupResolver(schema),
   });
   const ratingValue = watch("rating");
   const whenValue = watch("when");
@@ -64,9 +69,12 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
       try {
         const when = formatDate(date);
         setValue("when", when);
+        clearErrors("when");
       } catch (err) {
-        console.log(err.message);
+        setError("when", { message: "Invalid date" });
       }
+    } else {
+      setError("when", { message: "Required" });
     }
   };
 
@@ -110,6 +118,8 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
                 KeyboardButtonProps={{
                   "aria-label": "change date to see this",
                 }}
+                error={!!errors.when}
+                helperText={errors.when?.message}
               />
             </MuiPickersUtilsProvider>
           }
@@ -118,26 +128,32 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
         />
 
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor="where">Where did you see this?</InputLabel>
-          <Input
+          <TextField
             id="where"
             name="where"
+            label="Where did you see this?"
             inputRef={register}
-            startAdornment={
-              <InputAdornment position="end">
-                <RoomIcon />
-              </InputAdornment>
-            }
+            error={!!errors.where}
+            helperText={errors.where?.message}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="end">
+                  <RoomIcon />
+                </InputAdornment>
+              )
+            }}
           />
         </FormControl>
 
         <FormControl fullWidth className={classes.formControl}>
-          <InputLabel htmlFor="text">what feel about this</InputLabel>
-          <Input
+          <TextField
             id="text"
             name="text"
             multiline
+            label="what feel about this"
             inputRef={register}
+            error={!!errors.text}
+            helperText={errors.text?.message}
           />
         </FormControl>
 
@@ -147,7 +163,7 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
           size="small"
           color="primary"
           className={classes.button}
-          disabled={!valid || processing}
+          disabled={!formState.isValid || processing}
         >
           {processing && <CircularProgress size={16} />}
           {!processing && "submit"}
