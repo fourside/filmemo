@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, ChangeEvent, useEffect } from "react";
+import React, { useState, ChangeEvent, useEffect } from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
@@ -14,6 +14,7 @@ import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/picker
 import DateFnsUtils from "@date-io/date-fns";
 import { formatDate, Note, validate } from "../model/Note";
 import { ContainerProps } from "../containers/NoteForm";
+import { useForm, Controller } from "react-hook-form";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,67 +40,37 @@ interface Props {
   onSubmit: () => void;
   handleCancel: () => void;
 }
-const initialNoteState = {
-  rating: 0,
-  when: formatDate(),
-  where: "",
-  text: "",
-  bookmarkId: "",
-};
 export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const classes = useStyles();
   const { mutateNote, processing } = props;
-  const [note, setNote] = useState<Note>(props.note ?? initialNoteState);
-  const [valid, setValid] = useState(false);
+  const [valid, setValid] = useState(true);
+  const { register, handleSubmit, control, setValue, reset, watch } = useForm({
+    mode: "onBlur",
+  });
+  const ratingValue = watch("rating");
+  const whenValue = watch("when");
 
   useEffect(() => {
-    const isValid = validate(note);
-    setValid(isValid);
-  }, [note]);
+    reset(props.note);
+  }, [reset, props.note]);
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
     const rating = value ?? 0;
-    setNote({
-      ...note,
-      rating,
-    });
+    setValue("rating", rating);
   };
 
   const handleChangeDate = (date: Date | null) => {
     if (date) {
       try {
         const when = formatDate(date);
-        setNote({
-          ...note,
-          when,
-        });
+        setValue("when", when);
       } catch (err) {
         console.log(err.message);
       }
     }
   };
 
-  const handleChangeWhere = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setNote({
-      ...note,
-      where: value,
-    });
-  };
-
-  const handleChangeText = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setNote({
-      ...note,
-      text: value,
-    });
-  };
-
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!valid) {
-      return;
-    }
+  const onSubmit = async (note: Note) => {
     const isSuccess = await mutateNote(note, props.bookmarkId);
     if (isSuccess) {
       props.onSubmit();
@@ -108,38 +79,50 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
 
   return (
     <Collapse in={props.expanded} timeout="auto" unmountOnExit className={classes.root}>
-      <form onSubmit={handleSubmit} className={classes.form}>
-        <FormControl className={classes.formControl}>
-          <Typography component="legend" variant="caption" display="block">Rating</Typography>
-          <Rating name="rating" defaultValue={note.rating} precision={0.5} onChange={handleChangeRating} />
-        </FormControl>
+      <form onSubmit={handleSubmit(onSubmit)} className={classes.form}>
+        <Controller
+          as={
+            <FormControl className={classes.formControl}>
+              <Typography component="legend" variant="caption" display="block">Rating</Typography>
+              <Rating name="rating" defaultValue={ratingValue} precision={0.5} onChange={handleChangeRating} />
+            </FormControl>
+          }
+          name="rating"
+          control={control}
+        />
 
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            className={classes.formControl}
-            disableToolbar
-            variant="inline"
-            format="yyyy/MM/dd"
-            margin="normal"
-            id="when"
-            label="When did you see this?"
-            value={note.when}
-            disableFuture={true}
-            autoOk={true}
-            onChange={handleChangeDate}
-            KeyboardButtonProps={{
-              "aria-label": "change date to see this",
-            }}
-          />
-        </MuiPickersUtilsProvider>
+        <Controller
+          as={
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                className={classes.formControl}
+                disableToolbar
+                variant="inline"
+                format="yyyy/MM/dd"
+                margin="normal"
+                id="when"
+                name="when"
+                label="When did you see this?"
+                value={whenValue}
+                disableFuture={true}
+                autoOk={true}
+                onChange={handleChangeDate}
+                KeyboardButtonProps={{
+                  "aria-label": "change date to see this",
+                }}
+              />
+            </MuiPickersUtilsProvider>
+          }
+          name="when"
+          control={control}
+        />
 
         <FormControl className={classes.formControl}>
           <InputLabel htmlFor="where">Where did you see this?</InputLabel>
           <Input
             id="where"
             name="where"
-            value={note.where}
-            onChange={handleChangeWhere}
+            inputRef={register}
             startAdornment={
               <InputAdornment position="end">
                 <RoomIcon />
@@ -154,8 +137,7 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
             id="text"
             name="text"
             multiline
-            value={note.text}
-            onChange={handleChangeText}
+            inputRef={register}
           />
         </FormControl>
 
