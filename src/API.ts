@@ -8,7 +8,7 @@ export type CreateBookmarkInput = {
   title: string,
   posterURL: string,
   owner: string,
-  createdAt: string,
+  createdAt?: string | null,
   bookmarkNoteId?: string | null,
 };
 
@@ -199,8 +199,11 @@ export type CreateBookmarkMutation = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -226,8 +229,11 @@ export type UpdateBookmarkMutation = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -253,8 +259,11 @@ export type DeleteBookmarkMutation = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -272,6 +281,8 @@ export type CreateNoteMutation = {
     when: string,
     where: string,
     text: string | null,
+    createdAt: string,
+    updatedAt: string,
     owner: string | null,
   } | null,
 };
@@ -290,6 +301,8 @@ export type UpdateNoteMutation = {
     when: string,
     where: string,
     text: string | null,
+    createdAt: string,
+    updatedAt: string,
     owner: string | null,
   } | null,
 };
@@ -308,6 +321,8 @@ export type DeleteNoteMutation = {
     when: string,
     where: string,
     text: string | null,
+    createdAt: string,
+    updatedAt: string,
     owner: string | null,
   } | null,
 };
@@ -333,8 +348,11 @@ export type GetBookmarkQuery = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -363,8 +381,11 @@ export type ListBookmarksQuery = {
         when: string,
         where: string,
         text: string | null,
+        createdAt: string,
+        updatedAt: string,
         owner: string | null,
       } | null,
+      updatedAt: string,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -383,6 +404,8 @@ export type GetNoteQuery = {
     when: string,
     where: string,
     text: string | null,
+    createdAt: string,
+    updatedAt: string,
     owner: string | null,
   } | null,
 };
@@ -404,6 +427,8 @@ export type ListNotesQuery = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null > | null,
     nextToken: string | null,
@@ -437,8 +462,11 @@ export type BookmarksByImdbIdQuery = {
         when: string,
         where: string,
         text: string | null,
+        createdAt: string,
+        updatedAt: string,
         owner: string | null,
       } | null,
+      updatedAt: string,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -472,8 +500,11 @@ export type BookmarksSortedByTimestampQuery = {
         when: string,
         where: string,
         text: string | null,
+        createdAt: string,
+        updatedAt: string,
         owner: string | null,
       } | null,
+      updatedAt: string,
     } | null > | null,
     nextToken: string | null,
   } | null,
@@ -500,8 +531,11 @@ export type OnCreateBookmarkSubscription = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -526,8 +560,11 @@ export type OnUpdateBookmarkSubscription = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -552,8 +589,11 @@ export type OnDeleteBookmarkSubscription = {
       when: string,
       where: string,
       text: string | null,
+      createdAt: string,
+      updatedAt: string,
       owner: string | null,
     } | null,
+    updatedAt: string,
   } | null,
 };
 
@@ -570,6 +610,8 @@ export type OnCreateNoteSubscription = {
     when: string,
     where: string,
     text: string | null,
+    createdAt: string,
+    updatedAt: string,
     owner: string | null,
   } | null,
 };
@@ -587,6 +629,8 @@ export type OnUpdateNoteSubscription = {
     when: string,
     where: string,
     text: string | null,
+    createdAt: string,
+    updatedAt: string,
     owner: string | null,
   } | null,
 };
@@ -604,6 +648,8 @@ export type OnDeleteNoteSubscription = {
     when: string,
     where: string,
     text: string | null,
+    createdAt: string,
+    updatedAt: string,
     owner: string | null,
   } | null,
 };
