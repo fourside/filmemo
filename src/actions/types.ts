@@ -1,5 +1,4 @@
 import { Action } from "redux";
-import { FilmDetail } from "../model/Film";
 import { Bookmark } from "../model/Bookmark";
 import { Note } from "../model/Note";
 
@@ -8,12 +7,8 @@ export enum ACTIONS {
   REQUEST_NEXT = "REQUEST_NEXT",
   ERROR = "ERROR",
   ERROR_NEXT = "ERROR_NEXT",
-  SEARCH_FILM_DETAILS = "SEARCH_FILM_DETAILS",
   LIST_BOOKMARK = "LIST_BOOKMARK",
   LIST_BOOKMARK_NEXT = "LIST_BOOKMARK_NEXT",
-  ADD_BOOKMARK = "ADD_BOOKMARK",
-  REMOVE_BOOKMARK = "REMOVE_BOOKMARK",
-  GET_BOOKMARK = "GET_BOOKMARK",
   GET_NOTE = "GET_NOTE",
   MUTATE_NOTE = "MUTATE_NOTE",
 }
@@ -40,44 +35,6 @@ export interface ErrorNextAction extends Action {
     error: string,
   },
 }
-
-interface SearchFilmDetailsAction extends Action {
-  type: ACTIONS.SEARCH_FILM_DETAILS,
-  payload: {
-    film?: FilmDetail,
-    bookmark?: Bookmark,
-  },
-}
-
-export type SearchFilmDetailsActionTypes = SearchFilmDetailsAction | RequestAction | ErrorAction;
-export type FilmDetailsState = SearchFilmDetailsAction["payload"];
-
-interface AddBookmarkAction extends Action {
-  type: ACTIONS.ADD_BOOKMARK,
-  payload: {
-    bookmark: Bookmark,
-  },
-}
-
-export type AddBookmarkActionTypes = AddBookmarkAction | RequestAction | ErrorAction;
-
-interface RemoveBookmarkAction extends Action {
-  type: ACTIONS.REMOVE_BOOKMARK,
-  payload: {
-    bookmark: undefined,
-  },
-}
-
-export type RemoveBookmarkActionTypes = RemoveBookmarkAction | RequestAction | ErrorAction;
-
-interface GetBookmarkAction extends Action {
-  type: ACTIONS.GET_BOOKMARK,
-  payload: {
-    bookmark: Bookmark,
-  },
-}
-
-export type GetBookmarkActionTypes = GetBookmarkAction | RequestAction | ErrorAction;
 
 interface MutateNoteAction extends Action {
   type: ACTIONS.MUTATE_NOTE,

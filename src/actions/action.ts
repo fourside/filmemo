@@ -1,10 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import {
   ACTIONS,
-  SearchFilmDetailsActionTypes,
-  AddBookmarkActionTypes,
-  RemoveBookmarkActionTypes,
-  GetBookmarkActionTypes,
   NoteState,
   MutateNoteActionTypes,
   ListBookmarkActionTypes,
@@ -13,10 +9,8 @@ import {
   ErrorAction,
   RequestNextAction,
   ErrorNextAction,
-  FilmDetailsState,
   GetNoteActionTypes,
 } from "./types";
-import { FilmDetail } from "../model/Film";
 import * as API from "../amplify/API";
 import { Bookmark } from "../model/Bookmark";
 import { Note } from "../model/Note";
@@ -49,112 +43,6 @@ function errorNext(error: string): ErrorNextAction {
       nextLoading: false,
       error,
     },
-  };
-}
-
-type ThunkSearchFilmDetailsAction = ThunkAction<Promise<void>, FilmDetailsState, undefined, SearchFilmDetailsActionTypes | GetNoteActionTypes>;
-
-function searchFilmDetailsSuccess(film: FilmDetail, bookmark?: Bookmark): SearchFilmDetailsActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILM_DETAILS,
-    payload: {
-      film,
-      bookmark,
-    },
-  };
-}
-
-export function saerchFilmDetails(imdbID: string): ThunkSearchFilmDetailsAction {
-  return async (dispatch) => {
-    dispatch(request());
-    try {
-      const [filmDetails, bookmark] = await Promise.all([
-        API.searchById(imdbID),
-        API.getBookmark(imdbID),
-      ]);
-      dispatch(searchFilmDetailsSuccess(filmDetails, bookmark));
-      if (bookmark?.note) {
-        dispatch(getNoteSuccess(bookmark.note));
-      }
-    } catch (err) {
-      dispatch(error(err.message));
-    }
-  };
-}
-
-type ThunkAddBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, AddBookmarkActionTypes>;
-
-function addBookmarkSuccess(bookmark: Bookmark): AddBookmarkActionTypes {
-  return {
-    type: ACTIONS.ADD_BOOKMARK,
-    payload: {
-      bookmark,
-    },
-  };
-}
-type AddBookmarkParams = {
-  imdbID: string;
-  title: string;
-  posterURL: string
-  owner: string;
-  createdAt: Date;
-};
-export function addBookmark(params: AddBookmarkParams): ThunkAddBookmarkAction {
-  return async (dispatch) => {
-    dispatch(request());
-    try {
-      const bookmark = await API.createBookmark(params);
-      dispatch(addBookmarkSuccess(bookmark));
-    } catch (err) {
-      dispatch(error(err.message));
-    }
-  };
-}
-
-type ThunkRemoveBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, RemoveBookmarkActionTypes>;
-
-function removeBookmarkSuccess(): RemoveBookmarkActionTypes {
-  return {
-    type: ACTIONS.REMOVE_BOOKMARK,
-    payload: {
-      bookmark: undefined,
-    },
-  };
-}
-export function removeBookmark(bookmarkId: string): ThunkRemoveBookmarkAction {
-  return async (dispatch) => {
-    dispatch(request());
-    try {
-      await API.deleteBookmark(bookmarkId);
-      dispatch(removeBookmarkSuccess());
-    } catch (err) {
-      dispatch(error(err.message));
-    }
-  };
-}
-
-type ThunkGetBookmarkAction = ThunkAction<Promise<void>, BookmarksState, undefined, GetBookmarkActionTypes | GetNoteActionTypes>;
-
-function getBookmarkSuccess(bookmark: Bookmark): GetBookmarkActionTypes {
-  return {
-    type: ACTIONS.GET_BOOKMARK,
-    payload: {
-      bookmark,
-    },
-  };
-}
-export function getBookmark(imdbID: string): ThunkGetBookmarkAction {
-  return async (dispatch) => {
-    dispatch(request());
-    try {
-      const bookmark = await API.getBookmark(imdbID);
-      dispatch(getBookmarkSuccess(bookmark));
-      if (bookmark.note) {
-        dispatch(getNoteSuccess(bookmark.note));
-      }
-    } catch (err) {
-      dispatch(error(err.message));
-    }
   };
 }
 

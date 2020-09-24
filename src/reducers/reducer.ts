@@ -2,13 +2,8 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import {
   ACTIONS,
-  SearchFilmDetailsActionTypes,
-  AddBookmarkActionTypes,
-  RemoveBookmarkActionTypes,
-  GetBookmarkActionTypes,
   MutateNoteActionTypes,
   ListBookmarkActionTypes,
-  FilmDetailsState,
   NoteState,
   BookmarksState,
   GetNoteActionTypes,
@@ -19,30 +14,7 @@ import { userReducer } from "../features/user/userSlice";
 import { processingReducer } from "../features/processing/processlingSlice";
 import { errorReducer } from "../features/error/errorSlice";
 import { filmsReducer } from "../features/films/filmsSlice";
-
-const initialFilmDetailsState: FilmDetailsState = {
-  film: undefined,
-  bookmark: undefined,
-};
-type FilmDetailsActionTyeps = SearchFilmDetailsActionTypes
-  | AddBookmarkActionTypes
-  | RemoveBookmarkActionTypes
-  | GetBookmarkActionTypes
-  ;
-const filmDetailsReducer = (state = initialFilmDetailsState, action: FilmDetailsActionTyeps) => {
-  switch(action.type) {
-    case ACTIONS.SEARCH_FILM_DETAILS:
-    case ACTIONS.ADD_BOOKMARK:
-    case ACTIONS.REMOVE_BOOKMARK:
-    case ACTIONS.GET_BOOKMARK:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    default:
-      return state;
-  }
-};
+import { filmDetailsReducer } from "../features/filmDetails/filmDetailsSlice";
 
 const initialNoteState: NoteState = {
   note: {
