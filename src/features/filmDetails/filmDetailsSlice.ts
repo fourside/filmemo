@@ -5,6 +5,7 @@ import { Bookmark } from "../../model/Bookmark";
 import * as API from "../../amplify/API";
 import { request, done } from "../processing/processlingSlice";
 import { error, clearError } from "../error/errorSlice";
+import { getNote } from "../note/noteSlice";
 
 type FilmDetailsState = {
   film?: FilmDetail,
@@ -67,7 +68,7 @@ export function saerchFilmDetails(imdbID: string): ThunkSearchFilmDetailsAction 
       ]);
       dispatch(searchFilmDetails({ film, bookmark }));
       if (bookmark.note) {
-      //   dispatch(getNoteSuccess(bookmark.note));
+        dispatch(getNote(bookmark.note));
       }
     } catch (err) {
       dispatch(error(err.message));
@@ -87,7 +88,7 @@ export function getBookmark(imdbID: string): ThunkBookmarkAction {
       const bookmark = await API.getBookmark(imdbID);
       dispatch(getBookmarkSuccess({ bookmark }));
       if (bookmark.note) {
-        // dispatch(getNoteSuccess(bookmark.note));
+        dispatch(getNote(bookmark.note));
       }
     } catch (err) {
       dispatch(error(err.message));

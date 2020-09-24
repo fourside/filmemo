@@ -2,42 +2,16 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import {
   ACTIONS,
-  MutateNoteActionTypes,
   ListBookmarkActionTypes,
-  NoteState,
   BookmarksState,
-  GetNoteActionTypes,
 } from "../actions/types";
-import { formatDate } from "../model/Note";
 import { Bookmark } from "../model/Bookmark";
 import { userReducer } from "../features/user/userSlice";
 import { processingReducer } from "../features/processing/processlingSlice";
 import { errorReducer } from "../features/error/errorSlice";
 import { filmsReducer } from "../features/films/filmsSlice";
 import { filmDetailsReducer } from "../features/filmDetails/filmDetailsSlice";
-
-const initialNoteState: NoteState = {
-  note: {
-    rating: 0,
-    when: formatDate(),
-    where: "",
-    text: "",
-    bookmarkId: "",
-  }
-};
-type NoteActionTypes = MutateNoteActionTypes | GetNoteActionTypes;
-const noteReducer = (state = initialNoteState, action: NoteActionTypes) => {
-  switch(action.type) {
-    case ACTIONS.MUTATE_NOTE:
-    case ACTIONS.GET_NOTE:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    default:
-      return state;
-  }
-};
+import { noteReducer } from "../features/note/noteSlice";
 
 const initBookmarkListState: BookmarksState = {
   bookmarks: new Array<Bookmark>(),

@@ -16,7 +16,7 @@ import { saerchFilmDetails, addBookmark, removeBookmark, getBookmark } from "../
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
-import { NoteForm } from "../containers/NoteForm";
+import { NoteForm } from "./NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
 import { RootState } from "../reducers/reducer";

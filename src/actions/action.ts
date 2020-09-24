@@ -1,19 +1,15 @@
 import { ThunkAction } from "redux-thunk";
 import {
   ACTIONS,
-  NoteState,
-  MutateNoteActionTypes,
   ListBookmarkActionTypes,
   BookmarksState,
   RequestAction,
   ErrorAction,
   RequestNextAction,
   ErrorNextAction,
-  GetNoteActionTypes,
 } from "./types";
 import * as API from "../amplify/API";
 import { Bookmark } from "../model/Bookmark";
-import { Note } from "../model/Note";
 
 function request(): RequestAction {
   return {
@@ -43,51 +39,6 @@ function errorNext(error: string): ErrorNextAction {
       nextLoading: false,
       error,
     },
-  };
-}
-
-type ThunkMutateNoteAction = ThunkAction<Promise<boolean>, NoteState, undefined, MutateNoteActionTypes>;
-
-function mutateNoteSuccess(note: Note): MutateNoteActionTypes {
-  return {
-    type: ACTIONS.MUTATE_NOTE,
-    payload: {
-      note,
-    },
-  };
-}
-
-function getNoteSuccess(note: Note): GetNoteActionTypes {
-  return {
-    type: ACTIONS.GET_NOTE,
-    payload: {
-      note,
-    },
-  };
-}
-
-export function mutateNote(noteParams: Note, bookmarkId: string): ThunkMutateNoteAction {
-  return async (dispatch) => {
-    dispatch(request());
-    try {
-      const paramsCopy = Object.assign({}, noteParams);
-      delete paramsCopy.owner;
-      let note: Required<Note>;
-      if (!paramsCopy.text) {
-        delete paramsCopy.text; // appsync raise an error by passing empty string
-      }
-      if (!paramsCopy.id) {
-        note = await API.createNote({ ...paramsCopy, bookmarkId });
-        await API.relateBookmark(bookmarkId, note.id);
-      } else {
-        note = await API.editNote(paramsCopy);
-      }
-      dispatch(mutateNoteSuccess(note));
-      return true;
-    } catch (err) {
-      dispatch(error(err.message));
-      return false;
-    }
   };
 }
 
