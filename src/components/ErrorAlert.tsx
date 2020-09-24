@@ -1,10 +1,13 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { useError } from "../reducers/reducer";
+import { clearError } from "../features/error/errorSlice";
 
 export const ErrorAlert: React.FC = () => {
   const [open, setOpen] = useState(true);
+  const dispatch = useDispatch();
   const error = useError();
 
   if (!error) {
@@ -15,6 +18,7 @@ export const ErrorAlert: React.FC = () => {
     if (reason === "clickaway") {
       return;
     }
+    dispatch(clearError());
     setOpen(false);
   };
 
