@@ -7,7 +7,7 @@ import { FilmList } from "./FilmList";
 import { useIntersect } from "../hooks/useIntersect";
 import { Loading } from "./Loading";
 import { RootState } from "../reducers/reducer";
-import { searchFilms, searchFilmsNext } from "../actions/action";
+import { searchFilms, searchFilmsNext } from "../features/films/filmsSlice";
 
 const UserPage: React.FC = () => {
   const history = useHistory();

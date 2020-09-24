@@ -1,40 +1,40 @@
 import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 import { Hub } from "@aws-amplify/core";
-import { useHistory } from "react-router-dom";
 import "./App.css";
 import { Routes } from "./components/Routes";
 import { Header } from "./components/Header";
 import { ErrorAlert } from "./components/ErrorAlert";
-import { Props } from "./containers/App";
+import { clearUser, signedIn } from "./features/user/userSlice";
+import { useUser } from "./reducers/reducer";
 
-export const App: React.FC<Props> = (props) => {
+export const App: React.FC = () => {
   const history = useHistory();
-  const { signedIn, clearUser } = props;
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const user = useUser();
 
   useEffect(() => {
-    (async () => {
-      const user = await signedIn();
-      if (user && !user.id) {
-        history.push("/signin");
-      }
-    })();
-  }, [signedIn, history]);
+    dispatch(signedIn());
+    if (location.pathname !== "/signin" && user.authed === "unauthed") {
+      history.push("/signin");
+    } else if (location.pathname === "/signin" && user.authed === "authed") {
+      history.push("/");
+    }
+  }, [dispatch, user.authed, history, location.pathname]);
 
   useEffect(() => {
     Hub.listen("auth", (capsule) => {
       const { event } = capsule.payload;
       switch (event) {
-        case "signIn":
-          signedIn();
-          history.push("/");
-          break;
         case "signOut":
-          clearUser();
+          dispatch(clearUser());
           history.push("/signin");
           break;
       }
     });
-  }, [history, signedIn, clearUser]);
+  }, [dispatch, history]);
 
   return (
     <div className="App">

@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
@@ -12,10 +13,11 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { MuiPickersUtilsProvider, KeyboardDatePicker } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { formatDate, Note } from "../model/Note";
-import { ContainerProps } from "../containers/NoteForm";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
+import { RootState } from "../reducers/reducer";
+import { mutateNote } from "../features/note/noteSlice";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,9 +47,15 @@ interface Props {
   onSubmit: () => void;
   handleCancel: () => void;
 }
-export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
+export const NoteForm: React.FC<Props> = (props) => {
   const classes = useStyles();
-  const { mutateNote, processing } = props;
+  const dispatch = useDispatch();
+  const { note, processing } = useSelector((state: RootState) => {
+    return {
+      note: state.note,
+      processing: state.processing,
+    };
+  });
   const { register, handleSubmit, control, setValue, setError, clearErrors, reset, watch, formState, errors } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
@@ -56,8 +64,8 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
   const whenValue = watch("when");
 
   useEffect(() => {
-    reset(props.note);
-  }, [reset, props.note]);
+    reset(note);
+  }, [reset, note]);
 
   const handleChangeRating = (event: ChangeEvent<{}>, value: number | null) => {
     const rating = value ?? 0;
@@ -78,11 +86,8 @@ export const NoteForm: React.FC<Props & ContainerProps> = (props) => {
     }
   };
 
-  const onSubmit = async (note: Note) => {
-    const isSuccess = await mutateNote(note, props.bookmarkId);
-    if (isSuccess) {
-      props.onSubmit();
-    }
+  const onSubmit = async (noteForm: Note) => {
+    dispatch(mutateNote(noteForm, props.bookmarkId, props.onSubmit));
   };
 
   return (

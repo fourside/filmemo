@@ -12,11 +12,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImdb } from "@fortawesome/free-brands-svg-icons";
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 
-import { saerchFilmDetails, addBookmark, removeBookmark, getBookmark } from "../actions/action";
+import { saerchFilmDetails, addBookmark, removeBookmark, getBookmark } from "../features/filmDetails/filmDetailsSlice";
 import { DetailItem } from "./DetailItem";
 import { Loading } from "./Loading";
 import { ActionCard } from "./ActionCard";
-import { NoteForm } from "../containers/NoteForm";
+import { NoteForm } from "./NoteForm";
 import { NoteCard } from "./NoteCard";
 import { Poster } from "./Poster";
 import { RootState } from "../reducers/reducer";
