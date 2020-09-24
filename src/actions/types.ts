@@ -1,15 +1,9 @@
 import { Action } from "redux";
-import { User } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
 import { Bookmark } from "../model/Bookmark";
 import { Note } from "../model/Note";
 
 export enum ACTIONS {
-  SIGN_IN_REQUEST = "SIGN_IN_REQUEST",
-  SIGN_IN_SUCCESS = "SIGN_IN_SUCCESS",
-  SIGN_IN_FAILURE = "SIGN_IN_FAILURE",
-  SIGN_OUT_REQUEST = "SIGN_OUT_REQUEST",
-  SIGNED_OUT = "SIGNED_OUT",
   REQUEST = "REQUEST",
   REQUEST_NEXT = "REQUEST_NEXT",
   ERROR = "ERROR",
@@ -25,24 +19,6 @@ export enum ACTIONS {
   GET_NOTE = "GET_NOTE",
   MUTATE_NOTE = "MUTATE_NOTE",
 }
-
-interface SignInRequestAction extends Action {
-  type: ACTIONS.SIGN_IN_REQUEST,
-}
-interface SignInSuccessAction extends Action {
-  type: ACTIONS.SIGN_IN_SUCCESS,
-  payload: User,
-}
-interface SignOutRequestAction extends Action {
-  type: ACTIONS.SIGN_OUT_REQUEST,
-  payload: User,
-}
-interface SignedOutAction extends Action {
-  type: ACTIONS.SIGNED_OUT,
-  payload: User,
-}
-
-export type UserActionTypes = SignInRequestAction | SignInSuccessAction | SignOutRequestAction | SignedOutAction;
 
 export interface RequestAction extends Action {
   type: ACTIONS.REQUEST,

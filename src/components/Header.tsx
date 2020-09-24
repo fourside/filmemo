@@ -11,7 +11,7 @@ import { LoginUserMenu } from "./LoginUserMenu";
 import { HeaderLogo } from "./HeaderLogo";
 import { MobileMenu } from "./MobileMenu";
 import { useUser } from "../reducers/reducer";
-import { signOut } from "../actions/action";
+import { signOut } from "../features/user/userSlice";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

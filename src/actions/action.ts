@@ -1,7 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import {
   ACTIONS,
-  UserActionTypes,
   SearchFilmsActionTypes,
   SearchFilmsNextActionTypes,
   SearchFilmDetailsActionTypes,
@@ -20,61 +19,10 @@ import {
   FilmsState,
   GetNoteActionTypes,
 } from "./types";
-import { User, emptyUser } from "../model/User";
 import { Film, FilmDetail } from "../model/Film";
-import * as Auth from "../amplify/Auth";
 import * as API from "../amplify/API";
 import { Bookmark } from "../model/Bookmark";
 import { Note } from "../model/Note";
-
-function signInRequest(): UserActionTypes {
-  return { type: ACTIONS.SIGN_IN_REQUEST };
-}
-
-function signInSuccess(user: User): UserActionTypes {
-  return {
-    type: ACTIONS.SIGN_IN_SUCCESS,
-    payload: user,
-  };
-}
-
-export function signOutRequest(): UserActionTypes {
-  return {
-    type: ACTIONS.SIGN_OUT_REQUEST,
-    payload: emptyUser,
-  };
-}
-
-type ThunkUserAction = ThunkAction<Promise<void | User>, User, undefined, UserActionTypes>;
-
-export function signIn(): ThunkUserAction {
-  return async function(dispatch) {
-    dispatch(signInRequest());
-    await Auth.signInGoogle();
-  };
-}
-
-export function signedIn(): ThunkUserAction {
-  return async (dispatch) => {
-    const user = await Auth.getLoginUser();
-    dispatch(signInSuccess(user));
-    return user;
-  };
-}
-
-export function signOut(): ThunkUserAction {
-  return async (dispatch) => {
-    await Auth.signOut();
-    dispatch(signOutRequest());
-  };
-}
-
-export function clearUser(): UserActionTypes {
-  return {
-    type: ACTIONS.SIGNED_OUT,
-    payload: emptyUser,
-  };
-}
 
 type ThunkSearchFilmsAction = ThunkAction<Promise<void>, FilmsState, undefined, SearchFilmsActionTypes>;
 

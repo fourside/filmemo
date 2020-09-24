@@ -1,8 +1,8 @@
-import { combineReducers, Action } from "redux";
+import { combineReducers } from "@reduxjs/toolkit";
+import { Action } from "redux";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import {
   ACTIONS,
-  UserActionTypes,
   SearchFilmsActionTypes,
   SearchFilmsNextActionTypes,
   SearchFilmDetailsActionTypes,
@@ -19,24 +19,10 @@ import {
   BookmarksState,
   GetNoteActionTypes,
 } from "../actions/types";
-import { emptyUser } from "../model/User";
 import { Film } from "../model/Film";
 import { formatDate } from "../model/Note";
 import { Bookmark } from "../model/Bookmark";
-
-const userReducer = (state = emptyUser, action: UserActionTypes) => {
-  switch(action.type) {
-    case ACTIONS.SIGN_IN_REQUEST:
-      return state;
-    case ACTIONS.SIGN_IN_SUCCESS:
-      return action.payload;
-    case ACTIONS.SIGN_OUT_REQUEST:
-    case ACTIONS.SIGNED_OUT:
-      return action.payload;
-    default:
-      return state;
-  }
-};
+import { userReducer } from "../features/user/userSlice";
 
 const initFilmsState: FilmsState = {
   films: new Array<Film>(),
