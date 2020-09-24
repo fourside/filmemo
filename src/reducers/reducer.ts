@@ -10,8 +10,6 @@ import {
   GetBookmarkActionTypes,
   MutateNoteActionTypes,
   ListBookmarkActionTypes,
-  ErrorAction,
-  ErrorNextAction,
   FilmsState,
   FilmDetailsState,
   NoteState,
@@ -23,6 +21,7 @@ import { formatDate } from "../model/Note";
 import { Bookmark } from "../model/Bookmark";
 import { userReducer } from "../features/user/userSlice";
 import { processingReducer } from "../features/processing/processlingSlice";
+import { errorReducer } from "../features/error/errorSlice";
 
 const initFilmsState: FilmsState = {
   films: new Array<Film>(),
@@ -120,16 +119,6 @@ const listBookmarkReducer = (state = initBookmarkListState, action: ListBookmark
         ...action.payload,
         bookmarks,
       };
-    default:
-      return state;
-  }
-};
-
-const errorReducer = (state = "", action: ErrorAction | ErrorNextAction) => {
-  switch (action.type) {
-    case ACTIONS.ERROR:
-    case ACTIONS.ERROR_NEXT:
-      return action.payload.error;
     default:
       return state;
   }
