@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { Loading } from "./Loading";
 import { BookmarkTile } from "./BookmarkTile";
 import { useIntersect } from "../hooks/useIntersect";
-import { listBookmark, listBookmarkNext } from "../actions/action";
+import { listBookmark, listBookmarkNext } from "../features/bookmarks/listBookmarkSlice";
 import { RootState } from "../reducers/reducer";
 
 const BookmarkListPage: React.FC = () => {
