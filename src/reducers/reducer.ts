@@ -2,53 +2,23 @@ import { combineReducers } from "@reduxjs/toolkit";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import {
   ACTIONS,
-  SearchFilmsActionTypes,
-  SearchFilmsNextActionTypes,
   SearchFilmDetailsActionTypes,
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
   GetBookmarkActionTypes,
   MutateNoteActionTypes,
   ListBookmarkActionTypes,
-  FilmsState,
   FilmDetailsState,
   NoteState,
   BookmarksState,
   GetNoteActionTypes,
 } from "../actions/types";
-import { Film } from "../model/Film";
 import { formatDate } from "../model/Note";
 import { Bookmark } from "../model/Bookmark";
 import { userReducer } from "../features/user/userSlice";
 import { processingReducer } from "../features/processing/processlingSlice";
 import { errorReducer } from "../features/error/errorSlice";
-
-const initFilmsState: FilmsState = {
-  films: new Array<Film>(),
-  page: 1,
-  hasNext: false,
-  nextLoading: false,
-};
-const filmsReducer = (state = initFilmsState, action: SearchFilmsActionTypes | SearchFilmsNextActionTypes) => {
-  switch(action.type) {
-    case ACTIONS.REQUEST_NEXT:
-    case ACTIONS.ERROR_NEXT:
-    case ACTIONS.SEARCH_FILMS:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case ACTIONS.SEARCH_FILMS_NEXT:
-      const films = state.films.concat(action.payload.films);
-      return {
-        ...state,
-        ...action.payload,
-        films,
-      };
-    default:
-      return state;
-  }
-};
+import { filmsReducer } from "../features/films/filmsSlice";
 
 const initialFilmDetailsState: FilmDetailsState = {
   film: undefined,

@@ -1,8 +1,6 @@
 import { ThunkAction } from "redux-thunk";
 import {
   ACTIONS,
-  SearchFilmsActionTypes,
-  SearchFilmsNextActionTypes,
   SearchFilmDetailsActionTypes,
   AddBookmarkActionTypes,
   RemoveBookmarkActionTypes,
@@ -16,15 +14,12 @@ import {
   RequestNextAction,
   ErrorNextAction,
   FilmDetailsState,
-  FilmsState,
   GetNoteActionTypes,
 } from "./types";
-import { Film, FilmDetail } from "../model/Film";
+import { FilmDetail } from "../model/Film";
 import * as API from "../amplify/API";
 import { Bookmark } from "../model/Bookmark";
 import { Note } from "../model/Note";
-
-type ThunkSearchFilmsAction = ThunkAction<Promise<void>, FilmsState, undefined, SearchFilmsActionTypes>;
 
 function request(): RequestAction {
   return {
@@ -54,54 +49,6 @@ function errorNext(error: string): ErrorNextAction {
       nextLoading: false,
       error,
     },
-  };
-}
-
-function searchFilmsSuccess(films: Film[], hasNext: boolean): SearchFilmsActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILMS,
-    payload: {
-      films,
-      hasNext,
-    },
-  };
-}
-
-export function searchFilms(title: string): ThunkSearchFilmsAction {
-  return async (dispatch) => {
-    dispatch(request());
-    try {
-      const { films, hasNext } = await API.searchByTitle(title);
-      dispatch(searchFilmsSuccess(films, hasNext));
-    } catch (err) {
-      dispatch(error(err.message));
-    }
-  };
-}
-
-type ThunkSearchFilmsNextAction = ThunkAction<Promise<void>, FilmsState, undefined, SearchFilmsNextActionTypes>;
-
-function searchFilmsNextSuccess(response: { films: Film[], hasNext: boolean, page: number }): SearchFilmsNextActionTypes {
-  return {
-    type: ACTIONS.SEARCH_FILMS_NEXT,
-    payload: {
-      nextLoading: false,
-      films: response.films,
-      hasNext: response.hasNext,
-      page: response.page,
-    },
-  };
-}
-
-export function searchFilmsNext(title: string, nextPage: number): ThunkSearchFilmsNextAction {
-  return async (dispatch) => {
-    dispatch(requestNext());
-    try {
-      const { films, hasNext } = await API.searchByTitle(title, nextPage);
-      dispatch(searchFilmsNextSuccess({ films, hasNext, page: nextPage }));
-    } catch (err) {
-      dispatch(errorNext(err.message));
-    }
   };
 }
 

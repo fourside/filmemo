@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { Film, FilmDetail } from "../model/Film";
+import { FilmDetail } from "../model/Film";
 import { Bookmark } from "../model/Bookmark";
 import { Note } from "../model/Note";
 
@@ -8,8 +8,6 @@ export enum ACTIONS {
   REQUEST_NEXT = "REQUEST_NEXT",
   ERROR = "ERROR",
   ERROR_NEXT = "ERROR_NEXT",
-  SEARCH_FILMS = "SEARCH_FILMS",
-  SEARCH_FILMS_NEXT = "SEARCH_FILMS_NEXT",
   SEARCH_FILM_DETAILS = "SEARCH_FILM_DETAILS",
   LIST_BOOKMARK = "LIST_BOOKMARK",
   LIST_BOOKMARK_NEXT = "LIST_BOOKMARK_NEXT",
@@ -42,28 +40,6 @@ export interface ErrorNextAction extends Action {
     error: string,
   },
 }
-interface SearchFilmsAction extends Action {
-  type: ACTIONS.SEARCH_FILMS,
-  payload: {
-    films: Film[],
-    hasNext: boolean,
-  },
-}
-
-export type SearchFilmsActionTypes = SearchFilmsAction | RequestAction | ErrorAction;
-
-interface SearchFilmsNextAction extends Action {
-  type: ACTIONS.SEARCH_FILMS_NEXT,
-  payload: {
-    nextLoading: boolean,
-    films: Film[],
-    hasNext: boolean,
-    page: number,
-  },
-}
-
-export type SearchFilmsNextActionTypes = SearchFilmsNextAction | RequestNextAction | ErrorNextAction;
-export type FilmsState = SearchFilmsAction["payload"] & SearchFilmsNextAction["payload"];
 
 interface SearchFilmDetailsAction extends Action {
   type: ACTIONS.SEARCH_FILM_DETAILS,
