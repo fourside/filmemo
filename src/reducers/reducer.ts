@@ -1,5 +1,4 @@
 import { combineReducers } from "@reduxjs/toolkit";
-import { Action } from "redux";
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import {
   ACTIONS,
@@ -23,6 +22,7 @@ import { Film } from "../model/Film";
 import { formatDate } from "../model/Note";
 import { Bookmark } from "../model/Bookmark";
 import { userReducer } from "../features/user/userSlice";
+import { processingReducer } from "../features/processing/processlingSlice";
 
 const initFilmsState: FilmsState = {
   films: new Array<Film>(),
@@ -132,15 +132,6 @@ const errorReducer = (state = "", action: ErrorAction | ErrorNextAction) => {
       return action.payload.error;
     default:
       return state;
-  }
-};
-
-const processingReducer = (state =  false, action: Action) => {
-  switch (action.type) {
-    case ACTIONS.REQUEST:
-      return true;
-    default:
-      return false;
   }
 };
 
